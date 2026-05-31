@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finance Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-mark">X</span>
+      </div>
+      <nav class="side-nav" aria-label="Sections">
+        <a href="#" class="active"><span class="ico">🏠</span> OVERVIEW</a>
+        <a href="#"><span class="ico">📈</span> INCOME STATEMENT</a>
+        <a href="#"><span class="ico">⚖️</span> BALANCE SHEET</a>
+        <a href="#"><span class="ico">💰</span> CASH FLOW</a>
+        <a href="#"><span class="ico">🎯</span> BUDGET VS ACTUAL</a>
+        <a href="#"><span class="ico">📄</span> REPORTS</a>
+        <a href="#"><span class="ico">⚙️</span> SETTINGS</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Top bar -->
+      <header class="topbar">
+        <h1>FINANCE DASHBOARD</h1>
+        <div class="topbar-controls">
+          <label class="control">
+            <span>Fiscal Year</span>
+            <select id="fiscalYear">
+              <option>2024</option>
+              <option>2023</option>
+              <option>2022</option>
+            </select>
+          </label>
+          <label class="control">
+            <span>Month</span>
+            <select id="month">
+              <option>May</option>
+              <option>Jan</option><option>Feb</option><option>Mar</option>
+              <option>Apr</option><option>Jun</option><option>Jul</option>
+              <option>Aug</option><option>Sep</option><option>Oct</option>
+              <option>Nov</option><option>Dec</option>
+            </select>
+          </label>
+          <div class="as-of">Data as of: <strong>31-May-2024</strong></div>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- KPI cards -->
+        <section class="kpis" id="kpis"></section>
+
+        <!-- Charts row 1 -->
+        <section class="row row-2">
+          <div class="panel">
+            <h2 class="panel-title">REVENUE VS EXPENSES</h2>
+            <div class="chart-box"><canvas id="revVsExp"></canvas></div>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">EXPENSES BY CATEGORY (MTD)</h2>
+            <div class="donut-wrap">
+              <div class="chart-box donut"><canvas id="expByCat"></canvas></div>
+              <ul class="legend" id="catLegend"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bottom row -->
+        <section class="row row-3">
+          <div class="panel">
+            <h2 class="panel-title">PROFIT &amp; LOSS SUMMARY (MTD)</h2>
+            <table class="data-table" id="plTable"></table>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">CASH FLOW SUMMARY (YTD)</h2>
+            <table class="data-table" id="cfTable"></table>
+          </div>
+          <div class="panel">
+            <h2 class="panel-title">BUDGET VS ACTUAL (MTD)</h2>
+            <div class="chart-box"><canvas id="budgetActual"></canvas></div>
+          </div>
+        </section>
+
+        <!-- Takeaway -->
+        <section class="takeaway">
+          <span class="bulb">💡</span>
+          <p><strong>Key Takeaway:</strong> Revenue and net profit are above last year. Continue monitoring expenses to maintain profitability.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="dashboard.js" defer></script>
+</body>
+</html>
