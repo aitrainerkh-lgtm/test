@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CamStore 365 — Financial Dashboard 2023–2026</title>
+  <meta name="description" content="Financial dashboard for CamStore 365 — revenue, profitability, balance sheet and cash flow, 2023 to 2025 (balance sheet through May 2026)." />
+  <style>
+    :root {
+      color-scheme: light dark;
+      /* chrome & ink — light */
+      --page:        #f9f9f7;
+      --surface:     #fcfcfb;
+      --ink:         #0b0b0b;
+      --ink-2:       #52514e;
+      --muted:       #898781;
+      --grid:        #e1e0d9;
+      --axis:        #c3c2b7;
+      --border:      rgba(11,11,11,0.10);
+      --good:        #006300;
+      --bad:         #b3261e;
+      /* categorical slots — light */
+      --s1: #2a78d6;  /* blue    */
+      --s2: #1baf7a;  /* aqua    */
+      --s3: #eda100;  /* yellow  */
+      --s4: #008300;  /* green   */
+      --s5: #4a3aa7;  /* violet  */
+      --seq: #256abf; /* single-hue magnitude */
+      --shadow: 0 1px 2px rgba(11,11,11,.05), 0 8px 24px rgba(11,11,11,.05);
+    }
+    :root[data-theme="dark"] {
+      --page:        #0d0d0d;
+      --surface:     #1a1a19;
+      --ink:         #ffffff;
+      --ink-2:       #c3c2b7;
+      --muted:       #898781;
+      --grid:        #2c2c2a;
+      --axis:        #383835;
+      --border:      rgba(255,255,255,0.10);
+      --good:        #0ca30c;
+      --bad:         #e66767;
+      --s1: #3987e5;
+      --s2: #199e70;
+      --s3: #c98500;
+      --s4: #008300;
+      --s5: #9085e9;
+      --seq: #3987e5;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --page:        #0d0d0d;
+        --surface:     #1a1a19;
+        --ink:         #ffffff;
+        --ink-2:       #c3c2b7;
+        --grid:        #2c2c2a;
+        --axis:        #383835;
+        --border:      rgba(255,255,255,0.10);
+        --good:        #0ca30c;
+        --bad:         #e66767;
+        --s1: #3987e5;
+        --s2: #199e70;
+        --s3: #c98500;
+        --s4: #008300;
+        --s5: #9085e9;
+        --seq: #3987e5;
+        --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 28px 20px 72px; }
+
+    /* Header */
+    .top {
+      display: flex; flex-wrap: wrap; align-items: flex-end;
+      justify-content: space-between; gap: 16px; margin-bottom: 8px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 11px; flex: none;
+      background: linear-gradient(135deg, var(--s1), var(--s2));
+      display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 18px;
+      box-shadow: var(--shadow);
+    }
+    h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+    .sub { color: var(--ink-2); font-size: .875rem; margin-top: 2px; }
+    .controls { display: flex; align-items: center; gap: 8px; }
+    .btn {
+      font: inherit; font-size: .8125rem; font-weight: 500;
+      color: var(--ink-2); background: var(--surface);
+      border: 1px solid var(--border); border-radius: 9px;
+      padding: 8px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:hover { color: var(--ink); border-color: var(--axis); }
+
+    .disclaimer {
+      margin: 18px 0 26px; padding: 11px 14px; border-radius: 10px;
+      background: color-mix(in srgb, var(--s3) 12%, var(--surface));
+      border: 1px solid var(--border); color: var(--ink-2); font-size: .8125rem;
+    }
+
+    /* KPI tiles */
+    .kpis {
+      display: grid; gap: 14px; margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+    }
+    .tile {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px 16px 14px; box-shadow: var(--shadow);
+    }
+    .tile .label { font-size: .75rem; color: var(--muted); font-weight: 500; letter-spacing: .01em; }
+    .tile .val { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em; margin: 6px 0 4px; }
+    .tile .foot { font-size: .78rem; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+    .delta { font-weight: 600; display: inline-flex; align-items: center; gap: 2px; }
+    .delta.up { color: var(--good); }
+    .delta.down { color: var(--bad); }
+    .delta .arrow { font-size: .7em; }
+
+    /* Chart cards */
+    .grid2 { display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 780px) { .grid2 { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 18px 18px 14px; box-shadow: var(--shadow);
+      margin-bottom: 20px; min-width: 0;
+    }
+    .card h2 { font-size: 1.02rem; margin: 0; letter-spacing: -0.01em; }
+    .card .note { font-size: .8125rem; color: var(--ink-2); margin: 3px 0 14px; }
+    .chart-scroll { overflow-x: auto; }
+    svg.chart { width: 100%; height: auto; display: block; font-family: inherit; }
+    svg.chart text { font-family: inherit; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 12px 2px 2px; }
+    .legend .item { display: flex; align-items: center; gap: 7px; font-size: .8rem; color: var(--ink-2); }
+    .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+
+    /* Data tables (accessibility / relief) */
+    details.data { margin-top: 12px; }
+    details.data > summary {
+      cursor: pointer; font-size: .78rem; color: var(--muted); font-weight: 500;
+      list-style: none; display: inline-flex; align-items: center; gap: 6px; user-select: none;
+    }
+    details.data > summary::-webkit-details-marker { display: none; }
+    details.data > summary::before { content: "▸"; font-size: .7em; transition: transform .15s; }
+    details.data[open] > summary::before { transform: rotate(90deg); }
+    .tbl-scroll { overflow-x: auto; margin-top: 10px; }
+    table { border-collapse: collapse; width: 100%; font-size: .8rem; font-variant-numeric: tabular-nums; }
+    th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+    th:first-child, td:first-child { text-align: left; }
+    thead th { color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--axis); }
+    tbody tr:last-child td { border-bottom: none; }
+    tr.total td { font-weight: 700; color: var(--ink); border-top: 1px solid var(--axis); }
+
+    .section-label {
+      font-size: .72rem; letter-spacing: .09em; text-transform: uppercase;
+      color: var(--muted); font-weight: 600; margin: 34px 2px 14px;
+    }
+
+    /* Tooltip */
+    #tip {
+      position: fixed; z-index: 50; pointer-events: none; opacity: 0;
+      transition: opacity .1s; background: var(--surface); color: var(--ink);
+      border: 1px solid var(--border); border-radius: 9px; padding: 8px 11px;
+      box-shadow: var(--shadow); font-size: .78rem; max-width: 240px;
+      transform: translate(-50%, calc(-100% - 12px));
+    }
+    #tip .t-title { font-weight: 600; margin-bottom: 4px; }
+    #tip .t-row { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+    #tip .t-row .sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+    #tip .t-row .v { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 600; }
+    .hoverable { transition: opacity .1s; }
+    .hoverable:hover { opacity: .82; }
+
+    footer.pagefoot { margin-top: 40px; color: var(--muted); font-size: .78rem; text-align: center; }
+    a { color: var(--s1); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo">C</div>
+        <div>
+          <h1>CamStore 365 — Financial Dashboard</h1>
+          <div class="sub">Retail · Wholesale · Online &nbsp;•&nbsp; FY2023–FY2025 (Balance Sheet through May 2026) · USD</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn" id="themeBtn" type="button" aria-label="Toggle color theme">
+          <span id="themeIcon">◐</span><span id="themeTxt">Theme</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Management draft estimates</strong> modeled by Business Plan Cambodia from the CamStore 365 Business Plan 2026.
+      Tax applied at a 20% GDT estimate. The planned $150,000 financing facility is a 2026 forward event and is <em>not</em> reflected. Replace with audited records before any bank, investor, GDT, or licensing submission.
+    </div>
+
+    <!-- KPI TILES -->
+    <div class="kpis" id="kpis"></div>
+
+    <!-- REVENUE -->
+    <div class="section-label">Revenue &amp; Growth</div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Revenue by channel</h2>
+        <p class="note">Total revenue nearly doubled from $228k to $420k, led by wholesale.</p>
+        <div class="chart-scroll"><div id="chart-revenue"></div></div>
+        <div class="legend" id="legend-revenue"></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-revenue"></div></details>
+      </div>
+      <div class="card">
+        <h2>Profitability trend</h2>
+        <p class="note">Revenue, gross profit and net profit after tax, FY2023–FY2025.</p>
+        <div class="chart-scroll"><div id="chart-profit"></div></div>
+        <div class="legend" id="legend-profit"></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-profit"></div></details>
+      </div>
+    </div>
+
+    <!-- P&L bridge + OpEx -->
+    <div class="section-label">Income Statement</div>
+    <div class="grid2">
+      <div class="card">
+        <h2>2025 profit bridge</h2>
+        <p class="note">From $420k revenue to $33.6k net profit after tax.</p>
+        <div class="chart-scroll"><div id="chart-bridge"></div></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-bridge"></div></details>
+      </div>
+      <div class="card">
+        <h2>2025 operating expenses</h2>
+        <p class="note">$126k total. Staff salary and store rental dominate.</p>
+        <div class="chart-scroll"><div id="chart-opex"></div></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-opex"></div></details>
+      </div>
+    </div>
+
+    <!-- BALANCE SHEET -->
+    <div class="section-label">Balance Sheet</div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Asset composition</h2>
+        <p class="note">Inventory is the largest asset — consistent with an importer holding 45–90 days of stock.</p>
+        <div class="chart-scroll"><div id="chart-assets"></div></div>
+        <div class="legend" id="legend-assets"></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-assets"></div></details>
+      </div>
+      <div class="card">
+        <h2>How assets are funded</h2>
+        <p class="note">Equity funds a growing share; no interest-bearing debt is drawn.</p>
+        <div class="chart-scroll"><div id="chart-funding"></div></div>
+        <div class="legend" id="legend-funding"></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-funding"></div></details>
+      </div>
+    </div>
+
+    <!-- CASH FLOW -->
+    <div class="section-label">Cash Flow</div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Cash flow by activity</h2>
+        <p class="note">Operations fund all investing and owner drawings; cash still grows each year.</p>
+        <div class="chart-scroll"><div id="chart-cashact"></div></div>
+        <div class="legend" id="legend-cashact"></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-cashact"></div></details>
+      </div>
+      <div class="card">
+        <h2>Cash &amp; bank balance</h2>
+        <p class="note">Closing cash ties to the balance sheet; extended to May 2026.</p>
+        <div class="chart-scroll"><div id="chart-cashbal"></div></div>
+        <details class="data"><summary>Data table</summary><div class="tbl-scroll" id="tbl-cashbal"></div></details>
+      </div>
+    </div>
+
+    <footer class="pagefoot">
+      CamStore 365 · Prepared by Business Plan Cambodia · Confidential management draft · Generated 3 July 2026
+    </footer>
+  </div>
+
+  <div id="tip" role="tooltip" aria-hidden="true"></div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* ---------------- DATA ---------------- */
+    const YEARS3 = ["2023", "2024", "2025"];
+    const YEARS4 = ["2023", "2024", "2025", "2026 (May)"];
+
+    const revenue = {
+      Retail:    [132000, 169000, 210000],
+      Wholesale: [80000, 119000, 168000],
+      Online:    [16000, 24000, 42000],
+    };
+    const totalRevenue = [228000, 312000, 420000];
+    const grossProfit  = [91000, 125000, 168000];
+    const npat         = [19200, 27200, 33600];
+    const grossMargin  = [0.399, 0.401, 0.400];
+
+    const opex2025 = [
+      ["Staff Salary", 52000], ["Store Rental", 24000], ["Marketing", 11000],
+      ["Delivery & Packing", 8500], ["Depreciation", 8500], ["Inventory Loss", 8000],
+      ["Utilities", 6000], ["Administration", 5000], ["Store Maintenance", 3000],
+    ];
+
+    const bridge2025 = [
+      { label: "Revenue",       value: 420000, type: "start" },
+      { label: "COGS",          value: -252000, type: "neg" },
+      { label: "Gross Profit",  value: 168000, type: "subtotal" },
+      { label: "Operating Exp", value: -126000, type: "neg" },
+      { label: "Profit Pre-Tax",value: 42000,  type: "subtotal" },
+      { label: "Tax (20%)",     value: -8400,  type: "neg" },
+      { label: "Net Profit",    value: 33600,  type: "end" },
+    ];
+
+    const assets = {
+      "Cash & Bank": [20000, 26900, 32700, 39400],
+      "Receivables": [4000, 6000, 9000, 10000],
+      "Inventory":   [22500, 33000, 48000, 52000],
+      "Prepaid & Deposits": [4500, 5000, 6000, 6000],
+      "Property & Equip (net)": [23000, 26500, 30000, 31000],
+    };
+    const totalAssets = [74000, 97400, 125700, 138400];
+
+    const funding = {
+      "Liabilities": [18300, 26500, 36200, 38900],
+      "Equity":      [55700, 70900, 89500, 99500],
+    };
+
+    const cashAct = {
+      "Operating":  [21000, 28900, 32800],
+      "Investing":  [-8000, -10000, -12000],
+      "Financing":  [-8000, -12000, -15000],
+    };
+    const cashBalance = [20000, 26900, 32700, 39400]; // 2023,2024,2025,2026 May
+
+    /* ---------------- HELPERS ---------------- */
+    const SVGNS = "http://www.w3.org/2000/svg";
+    const CSS = getComputedStyle(document.documentElement);
+    const SERIES = ["--s1", "--s2", "--s3", "--s4", "--s5"];
+    const col = v => `var(${v})`;
+
+    const fmt = n => (n < 0 ? "-$" : "$") + Math.abs(n).toLocaleString("en-US");
+    const fmtK = n => {
+      const a = Math.abs(n);
+      const s = a >= 1000 ? "$" + (a / 1000).toFixed(a % 1000 === 0 ? 0 : 1) + "k" : "$" + a;
+      return (n < 0 ? "-" : "") + s;
+    };
+    const pct = x => (x * 100).toFixed(1) + "%";
+
+    function el(tag, attrs, kids) {
+      const e = document.createElementNS(SVGNS, tag);
+      if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+      if (kids) kids.forEach(c => e.appendChild(c));
+      return e;
+    }
+    function svgRoot(w, h) {
+      const s = el("svg", { class: "chart", viewBox: `0 0 ${w} ${h}`, role: "img", preserveAspectRatio: "xMidYMid meet" });
+      s.style.minWidth = Math.min(w, 340) + "px";
+      return s;
+    }
+    function txt(x, y, s, opts) {
+      opts = opts || {};
+      const t = el("text", {
+        x, y, fill: opts.fill || "var(--muted)",
+        "font-size": opts.size || 11.5,
+        "text-anchor": opts.anchor || "start",
+        "font-weight": opts.weight || 400,
+      });
+      if (opts.baseline) t.setAttribute("dominant-baseline", opts.baseline);
+      t.textContent = s;
+      return t;
+    }
+
+    // Tooltip
+    const tip = document.getElementById("tip");
+    function showTip(html, evt) {
+      tip.innerHTML = html;
+      tip.style.opacity = "1";
+      tip.setAttribute("aria-hidden", "false");
+      moveTip(evt);
+    }
+    function moveTip(evt) {
+      tip.style.left = evt.clientX + "px";
+      tip.style.top = evt.clientY + "px";
+    }
+    function hideTip() { tip.style.opacity = "0"; tip.setAttribute("aria-hidden", "true"); }
+    function bindTip(node, html) {
+      node.classList.add("hoverable");
+      node.addEventListener("mouseenter", e => showTip(html, e));
+      node.addEventListener("mousemove", moveTip);
+      node.addEventListener("mouseleave", hideTip);
+    }
+    function tipRows(title, rows) {
+      let h = `<div class="t-title">${title}</div>`;
+      rows.forEach(r => {
+        h += `<div class="t-row">${r.c ? `<span class="sw" style="background:${r.c}"></span>` : ""}<span>${r.k}</span><span class="v">${r.v}</span></div>`;
+      });
+      return h;
+    }
+
+    // "nice" axis max
+    function niceMax(v) {
+      if (v <= 0) return 10;
+      const mag = Math.pow(10, Math.floor(Math.log10(v)));
+      const n = v / mag;
+      const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+      return step * mag;
+    }
+    function gridLines(g, x0, x1, yFor, ticks, W) {
+      ticks.forEach(t => {
+        const y = yFor(t);
+        g.appendChild(el("line", { x1: x0, y1: y, x2: x1, y2: y, stroke: "var(--grid)", "stroke-width": 1 }));
+        g.appendChild(txt(x0 - 8, y, fmtK(t), { anchor: "end", baseline: "middle" }));
+      });
+    }
+    function makeTicks(max, n) {
+      const arr = [];
+      for (let i = 0; i <= n; i++) arr.push((max / n) * i);
+      return arr;
+    }
+
+    /* ---------------- LEGEND & TABLE ---------------- */
+    function legend(id, items) {
+      const box = document.getElementById(id);
+      items.forEach(it => {
+        const d = document.createElement("div");
+        d.className = "item";
+        d.innerHTML = `<span class="swatch" style="background:${it.c}"></span>${it.k}`;
+        box.appendChild(d);
+      });
+    }
+    function table(id, head, rows, totalRow) {
+      const wrap = document.getElementById(id);
+      let h = "<table><thead><tr>";
+      head.forEach((c, i) => h += `<th${i === 0 ? "" : ""}>${c}</th>`);
+      h += "</tr></thead><tbody>";
+      rows.forEach(r => {
+        h += `<tr${r.total ? ' class="total"' : ""}>`;
+        r.cells.forEach(c => h += `<td>${c}</td>`);
+        h += "</tr>";
+      });
+      h += "</tbody></table>";
+      wrap.innerHTML = h;
+    }
+
+    /* ---------------- STACKED BAR ---------------- */
+    function stackedBar(mountId, cats, seriesObj, keys, colors, opts) {
+      opts = opts || {};
+      const W = 560, H = 340, m = { t: 16, r: 14, b: 40, l: 52 };
+      const svg = svgRoot(W, H);
+      const iw = W - m.l - m.r, ih = H - m.t - m.b;
+      const n = cats.length;
+      const totals = cats.map((_, i) => keys.reduce((s, k) => s + seriesObj[k][i], 0));
+      const max = niceMax(Math.max(...totals));
+      const yFor = v => m.t + ih - (v / max) * ih;
+      const g = el("g", {});
+      const ticks = makeTicks(max, 4);
+      gridLines(g, m.l, m.l + iw, yFor, ticks, W);
+
+      const bw = Math.min(72, (iw / n) * 0.56);
+      cats.forEach((cat, i) => {
+        const cx = m.l + (iw / n) * (i + 0.5);
+        let acc = 0;
+        keys.forEach((k, ki) => {
+          const val = seriesObj[k][i];
+          const y0 = yFor(acc), y1 = yFor(acc + val);
+          const hgt = Math.max(0, y0 - y1 - 2);
+          const rect = el("rect", {
+            x: cx - bw / 2, y: y1, width: bw, height: hgt,
+            rx: 4, fill: colors[ki],
+          });
+          bindTip(rect, tipRows(cat, keys.map((kk, kj) => ({
+            c: colors[kj], k: kk, v: fmt(seriesObj[kk][i]),
+          })).concat([{ k: "<b>Total</b>", v: "<b>" + fmt(totals[i]) + "</b>" }])));
+          g.appendChild(rect);
+          acc += val;
+        });
+        g.appendChild(txt(cx, m.t + ih + 18, cat, { anchor: "middle", fill: "var(--ink-2)", size: 11.5 }));
+        g.appendChild(txt(cx, yFor(totals[i]) - 7, fmtK(totals[i]), { anchor: "middle", fill: "var(--ink)", weight: 600, size: 11.5 }));
+      });
+      svg.appendChild(g);
+      document.getElementById(mountId).appendChild(svg);
+    }
+
+    /* ---------------- GROUPED BAR ---------------- */
+    function groupedBar(mountId, cats, seriesObj, keys, colors, opts) {
+      opts = opts || {};
+      const W = 560, H = 340, m = { t: 16, r: 14, b: 40, l: 52 };
+      const svg = svgRoot(W, H);
+      const iw = W - m.l - m.r, ih = H - m.t - m.b;
+      const n = cats.length, s = keys.length;
+      let mn = 0, mx = 0;
+      cats.forEach((_, i) => keys.forEach(k => { mx = Math.max(mx, seriesObj[k][i]); mn = Math.min(mn, seriesObj[k][i]); }));
+      const posMax = niceMax(mx);
+      const negMax = mn < 0 ? niceMax(-mn) : 0;
+      const total = posMax + negMax;
+      const yFor = v => m.t + ih - ((v + negMax) / total) * ih;
+      const g = el("g", {});
+      // gridlines
+      const ticks = [];
+      const stepN = 4;
+      for (let i = 0; i <= stepN; i++) ticks.push(-negMax + (total / stepN) * i);
+      ticks.forEach(t => {
+        const y = yFor(t);
+        g.appendChild(el("line", { x1: m.l, y1: y, x2: m.l + iw, y2: y, stroke: t === 0 ? "var(--axis)" : "var(--grid)", "stroke-width": 1 }));
+        g.appendChild(txt(m.l - 8, y, fmtK(t), { anchor: "end", baseline: "middle" }));
+      });
+      const groupW = (iw / n) * 0.72;
+      const bw = Math.min(46, groupW / s - 3);
+      cats.forEach((cat, i) => {
+        const gx = m.l + (iw / n) * (i + 0.5) - groupW / 2;
+        keys.forEach((k, ki) => {
+          const val = seriesObj[k][i];
+          const x = gx + (groupW / s) * ki + (groupW / s - bw) / 2;
+          const yz = yFor(0), yv = yFor(val);
+          const y = Math.min(yz, yv), hgt = Math.max(1, Math.abs(yz - yv));
+          const rect = el("rect", { x, y, width: bw, height: hgt, rx: 4, fill: colors[ki] });
+          bindTip(rect, tipRows(cat, [{ c: colors[ki], k, v: fmt(val) }]));
+          g.appendChild(rect);
+        });
+        g.appendChild(txt(m.l + (iw / n) * (i + 0.5), m.t + ih + 18, cat, { anchor: "middle", fill: "var(--ink-2)", size: 11.5 }));
+      });
+      svg.appendChild(g);
+      document.getElementById(mountId).appendChild(svg);
+    }
+
+    /* ---------------- HORIZONTAL BAR (single series) ---------------- */
+    function hBar(mountId, rows, color) {
+      const W = 560, rowH = 30, m = { t: 8, r: 60, b: 8, l: 132 };
+      const H = m.t + m.b + rows.length * rowH;
+      const svg = svgRoot(W, H);
+      const iw = W - m.l - m.r;
+      const max = niceMax(Math.max(...rows.map(r => r[1])));
+      const g = el("g", {});
+      rows.forEach((r, i) => {
+        const y = m.t + i * rowH;
+        const w = (r[1] / max) * iw;
+        g.appendChild(txt(m.l - 10, y + rowH / 2, r[0], { anchor: "end", baseline: "middle", fill: "var(--ink-2)", size: 11.5 }));
+        const rect = el("rect", { x: m.l, y: y + 5, width: Math.max(1, w), height: rowH - 12, rx: 4, fill: color });
+        bindTip(rect, tipRows(r[0], [{ c: color, k: "Amount", v: fmt(r[1]) }]));
+        g.appendChild(rect);
+        g.appendChild(txt(m.l + w + 8, y + rowH / 2, fmtK(r[1]), { baseline: "middle", fill: "var(--ink)", weight: 600, size: 11 }));
+      });
+      svg.appendChild(g);
+      document.getElementById(mountId).appendChild(svg);
+    }
+
+    /* ---------------- WATERFALL ---------------- */
+    function waterfall(mountId, steps) {
+      const W = 560, H = 350, m = { t: 20, r: 14, b: 54, l: 52 };
+      const svg = svgRoot(W, H);
+      const iw = W - m.l - m.r, ih = H - m.t - m.b;
+      // compute running positions
+      let run = 0, maxTop = 0;
+      const layout = steps.map(s => {
+        let base, top;
+        if (s.type === "start" || s.type === "subtotal" || s.type === "end") {
+          base = 0; top = s.value; run = s.value;
+        } else { // neg / pos delta
+          base = run + s.value; top = run; run = base;
+        }
+        maxTop = Math.max(maxTop, top, base);
+        return { ...s, base, top };
+      });
+      const max = niceMax(maxTop);
+      const yFor = v => m.t + ih - (v / max) * ih;
+      const g = el("g", {});
+      makeTicks(max, 4).forEach(t => {
+        const y = yFor(t);
+        g.appendChild(el("line", { x1: m.l, y1: y, x2: m.l + iw, y2: y, stroke: "var(--grid)", "stroke-width": 1 }));
+        g.appendChild(txt(m.l - 8, y, fmtK(t), { anchor: "end", baseline: "middle" }));
+      });
+      const n = steps.length;
+      const bw = Math.min(52, (iw / n) * 0.62);
+      layout.forEach((s, i) => {
+        const cx = m.l + (iw / n) * (i + 0.5);
+        const yTop = yFor(Math.max(s.base, s.top));
+        const yBot = yFor(Math.min(s.base, s.top));
+        const hgt = Math.max(1, yBot - yTop);
+        let fill;
+        if (s.type === "start" || s.type === "subtotal") fill = col("--s1");
+        else if (s.type === "end") fill = col("--s4");
+        else fill = col("--s3");
+        const rect = el("rect", { x: cx - bw / 2, y: yTop, width: bw, height: hgt, rx: 4, fill });
+        bindTip(rect, tipRows(s.label, [{ k: s.type === "neg" ? "Change" : "Amount", v: fmt(s.value) }]));
+        g.appendChild(rect);
+        // connector
+        if (i < n - 1) {
+          const yEnd = yFor(s.type === "neg" || s.type === "pos" ? s.base : s.top);
+          g.appendChild(el("line", { x1: cx + bw / 2, y1: yEnd, x2: cx + (iw / n), y2: yEnd, stroke: "var(--axis)", "stroke-width": 1, "stroke-dasharray": "3 3" }));
+        }
+        g.appendChild(txt(cx, yTop - 6, fmtK(s.value), { anchor: "middle", fill: "var(--ink)", weight: 600, size: 10.5 }));
+        // label (wrap into 2 lines)
+        const words = s.label.split(" ");
+        const ly = m.t + ih + 16;
+        if (words.length > 1 && s.label.length > 8) {
+          g.appendChild(txt(cx, ly, words[0], { anchor: "middle", fill: "var(--ink-2)", size: 10 }));
+          g.appendChild(txt(cx, ly + 12, words.slice(1).join(" "), { anchor: "middle", fill: "var(--ink-2)", size: 10 }));
+        } else {
+          g.appendChild(txt(cx, ly + 6, s.label, { anchor: "middle", fill: "var(--ink-2)", size: 10 }));
+        }
+      });
+      svg.appendChild(g);
+      document.getElementById(mountId).appendChild(svg);
+    }
+
+    /* ---------------- LINE / AREA ---------------- */
+    function lineChart(mountId, cats, values, color) {
+      const W = 560, H = 320, m = { t: 20, r: 40, b: 40, l: 52 };
+      const svg = svgRoot(W, H);
+      const iw = W - m.l - m.r, ih = H - m.t - m.b;
+      const max = niceMax(Math.max(...values) * 1.08);
+      const n = cats.length;
+      const xFor = i => m.l + (n === 1 ? iw / 2 : (iw / (n - 1)) * i);
+      const yFor = v => m.t + ih - (v / max) * ih;
+      const g = el("g", {});
+      makeTicks(max, 4).forEach(t => {
+        const y = yFor(t);
+        g.appendChild(el("line", { x1: m.l, y1: y, x2: m.l + iw, y2: y, stroke: "var(--grid)", "stroke-width": 1 }));
+        g.appendChild(txt(m.l - 8, y, fmtK(t), { anchor: "end", baseline: "middle" }));
+      });
+      // area
+      let dArea = `M ${xFor(0)} ${yFor(0)}`;
+      values.forEach((v, i) => dArea += ` L ${xFor(i)} ${yFor(v)}`);
+      dArea += ` L ${xFor(n - 1)} ${yFor(0)} Z`;
+      g.appendChild(el("path", { d: dArea, fill: color, "fill-opacity": 0.12 }));
+      // line
+      let dLine = "";
+      values.forEach((v, i) => dLine += (i ? " L " : "M ") + xFor(i) + " " + yFor(v));
+      g.appendChild(el("path", { d: dLine, fill: "none", stroke: color, "stroke-width": 2, "stroke-linjoin": "round", "stroke-linecap": "round" }));
+      // points + labels
+      values.forEach((v, i) => {
+        const c = el("circle", { cx: xFor(i), cy: yFor(v), r: 4.5, fill: "var(--surface)", stroke: color, "stroke-width": 2 });
+        bindTip(c, tipRows(cats[i], [{ c: color, k: "Cash & Bank", v: fmt(v) }]));
+        g.appendChild(c);
+        g.appendChild(txt(xFor(i), yFor(v) - 12, fmtK(v), { anchor: "middle", fill: "var(--ink)", weight: 600, size: 11 }));
+        const anchor = i === 0 ? "start" : i === n - 1 ? "end" : "middle";
+        g.appendChild(txt(xFor(i), m.t + ih + 18, cats[i], { anchor, fill: "var(--ink-2)", size: 11 }));
+      });
+      svg.appendChild(g);
+      document.getElementById(mountId).appendChild(svg);
+    }
+
+    /* ---------------- BUILD KPIs ---------------- */
+    function delta(cur, prev) {
+      const d = (cur - prev) / prev;
+      const up = d >= 0;
+      return `<span class="delta ${up ? "up" : "down"}"><span class="arrow">${up ? "▲" : "▼"}</span>${pct(Math.abs(d))}</span> vs 2024`;
+    }
+    const kpiData = [
+      { label: "Total Revenue", val: fmt(420000), foot: delta(420000, 312000) },
+      { label: "Gross Profit", val: fmt(168000), foot: delta(168000, 125000) },
+      { label: "Net Profit After Tax", val: fmt(33600), foot: delta(33600, 27200) },
+      { label: "Operating Cash Flow", val: fmt(32800), foot: delta(32800, 28900) },
+      { label: "Total Assets", val: fmt(125700), foot: delta(125700, 97400) },
+      { label: "Total Equity", val: fmt(89500), foot: delta(89500, 70900) },
+    ];
+    const kb = document.getElementById("kpis");
+    kpiData.forEach(k => {
+      const d = document.createElement("div");
+      d.className = "tile";
+      d.innerHTML = `<div class="label">${k.label}</div><div class="val">${k.val}</div><div class="foot">${k.foot}</div>`;
+      kb.appendChild(d);
+    });
+
+    /* ---------------- RENDER CHARTS ---------------- */
+    const revKeys = ["Retail", "Wholesale", "Online"];
+    const revCols = [col("--s1"), col("--s2"), col("--s3")];
+    stackedBar("chart-revenue", YEARS3, revenue, revKeys, revCols);
+    legend("legend-revenue", revKeys.map((k, i) => ({ k, c: revCols[i] })));
+    table("tbl-revenue", ["USD", ...YEARS3],
+      revKeys.map(k => ({ cells: [k, ...revenue[k].map(fmt)] }))
+        .concat([{ total: true, cells: ["Total Revenue", ...totalRevenue.map(fmt)] }]));
+
+    const profKeys = ["Revenue", "Gross Profit", "Net Profit After Tax"];
+    const profCols = [col("--s1"), col("--s2"), col("--s4")];
+    groupedBar("chart-profit", YEARS3, { "Revenue": totalRevenue, "Gross Profit": grossProfit, "Net Profit After Tax": npat }, profKeys, profCols);
+    legend("legend-profit", profKeys.map((k, i) => ({ k, c: profCols[i] })));
+    table("tbl-profit", ["USD", ...YEARS3], [
+      { cells: ["Revenue", ...totalRevenue.map(fmt)] },
+      { cells: ["Gross Profit", ...grossProfit.map(fmt)] },
+      { cells: ["Gross Margin", ...grossMargin.map(pct)] },
+      { cells: ["Net Profit After Tax", ...npat.map(fmt)] },
+    ]);
+
+    waterfall("chart-bridge", bridge2025);
+    table("tbl-bridge", ["2025 line", "USD"], bridge2025.map(s => ({ total: s.type === "end", cells: [s.label, fmt(s.value)] })));
+
+    hBar("chart-opex", opex2025, col("--seq"));
+    table("tbl-opex", ["Expense", "2025"], opex2025.map(r => ({ cells: [r[0], fmt(r[1])] }))
+      .concat([{ total: true, cells: ["Total", fmt(126000)] }]));
+
+    const assetKeys = Object.keys(assets);
+    const assetCols = SERIES.map(col);
+    stackedBar("chart-assets", YEARS4, assets, assetKeys, assetCols);
+    legend("legend-assets", assetKeys.map((k, i) => ({ k, c: assetCols[i] })));
+    table("tbl-assets", ["USD", ...YEARS4],
+      assetKeys.map(k => ({ cells: [k, ...assets[k].map(fmt)] }))
+        .concat([{ total: true, cells: ["Total Assets", ...totalAssets.map(fmt)] }]));
+
+    const fundKeys = ["Liabilities", "Equity"];
+    const fundCols = [col("--s3"), col("--s2")];
+    stackedBar("chart-funding", YEARS4, funding, fundKeys, fundCols);
+    legend("legend-funding", fundKeys.map((k, i) => ({ k, c: fundCols[i] })));
+    table("tbl-funding", ["USD", ...YEARS4],
+      fundKeys.map(k => ({ cells: [k, ...funding[k].map(fmt)] }))
+        .concat([{ total: true, cells: ["Total Assets", ...totalAssets.map(fmt)] }]));
+
+    const actKeys = ["Operating", "Investing", "Financing"];
+    const actCols = [col("--s2"), col("--s3"), col("--s5")];
+    groupedBar("chart-cashact", YEARS3, cashAct, actKeys, actCols);
+    legend("legend-cashact", actKeys.map((k, i) => ({ k, c: actCols[i] })));
+    table("tbl-cashact", ["USD", ...YEARS3],
+      actKeys.map(k => ({ cells: [k, ...cashAct[k].map(fmt)] }))
+        .concat([{ total: true, cells: ["Net Change in Cash", ...[5000, 6900, 5800].map(fmt)] }]));
+
+    lineChart("chart-cashbal", YEARS4, cashBalance, col("--s1"));
+    table("tbl-cashbal", ["Period", "Cash & Bank"], YEARS4.map((y, i) => ({ cells: [y, fmt(cashBalance[i])] })));
+
+    /* ---------------- THEME TOGGLE ---------------- */
+    const root = document.documentElement;
+    const btn = document.getElementById("themeBtn");
+    const txtEl = document.getElementById("themeTxt");
+    btn.addEventListener("click", () => {
+      const cur = root.getAttribute("data-theme");
+      const sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      let next;
+      if (!cur) next = sysDark ? "light" : "dark";
+      else next = cur === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      txtEl.textContent = next === "dark" ? "Dark" : "Light";
+    });
+  })();
+  </script>
+</body>
+</html>
