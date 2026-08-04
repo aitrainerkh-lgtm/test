@@ -1,0 +1,12 @@
+{
+  "name": "ai-for-management-deck",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generator for the AI For Management corporate AI training deck",
+  "scripts": {
+    "build": "node build.js ../AI-For-Management-Training-Program.pptx"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}
