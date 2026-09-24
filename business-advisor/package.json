@@ -1,0 +1,25 @@
+{
+  "name": "business-advisor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Business Advisor - live Khmer voice advisor for business owners, powered by the Gemini Live API.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "vendor": "node scripts/build-vendor.mjs"
+  },
+  "engines": {
+    "node": ">=20.12"
+  },
+  "dependencies": {
+    "@google/genai": "2.24.0"
+  },
+  "devDependencies": {
+    "@fontsource/battambang": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/moul": "^5.3.0",
+    "esbuild": "^0.25.0",
+    "mammoth": "^1.9.0",
+    "pdfjs-dist": "^4.10.38"
+  }
+}
