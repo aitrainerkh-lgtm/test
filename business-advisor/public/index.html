@@ -24,6 +24,10 @@
         <h1>Business Advisor</h1>
         <p>ទីប្រឹក្សាអាជីវកម្មរបស់បង</p>
       </div>
+      <button class="icon-btn key-btn" id="keyBtn" type="button" aria-label="API Key">
+        <svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M11 12l8.5-8.5M16.5 6.5l2.5 2.5M14 9l2 2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <span class="key-dot" id="keyDot" hidden></span>
+      </button>
     </header>
 
     <main class="stage">
@@ -102,6 +106,36 @@
 
       <ul class="source-list" id="sourceList"></ul>
       <p class="empty" id="emptyNote">មិនទាន់មានប្រភពទេ។ Advisor នឹងផ្ដល់យោបល់ទូទៅ។</p>
+    </section>
+  </div>
+
+  <!-- API key (saved on this device only) -->
+  <div class="sheet-backdrop" id="keySheet" hidden>
+    <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="keyTitle">
+      <div class="sheet-head">
+        <h2 id="keyTitle">API Key</h2>
+        <button class="icon-btn" id="keyClose" type="button" aria-label="បិទ">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <p class="sheet-note" id="keyNote">ដាក់ Gemini API Key ម្ដងគត់ ដើម្បីឲ្យ Advisor អាចនិយាយបាន។</p>
+
+      <ol class="key-steps">
+        <li>ចូលទៅ <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a></li>
+        <li>ចុច <b>Create API key</b> រួច Copy</li>
+        <li>បិទភ្ជាប់ (Paste) នៅខាងក្រោម រួចចុច រក្សាទុក</li>
+      </ol>
+
+      <form class="paste-form" id="keyForm">
+        <input id="keyInput" type="password" autocomplete="off" spellcheck="false" placeholder="AIza..." aria-label="API Key">
+        <p class="key-status" id="keyStatus" hidden></p>
+        <div class="form-actions">
+          <button class="btn3d btn-small ghost" type="button" id="keyRemove">លុប Key</button>
+          <button class="btn3d btn-small" type="submit" id="keySave">រក្សាទុក</button>
+        </div>
+      </form>
+
+      <p class="tip">Key នេះរក្សាទុកតែក្នុងឧបករណ៍នេះប៉ុណ្ណោះ។ កុំចែករំលែក Key ឲ្យអ្នកផ្សេង។</p>
     </section>
   </div>
 

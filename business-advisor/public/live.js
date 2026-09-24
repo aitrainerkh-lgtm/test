@@ -5,12 +5,14 @@ import { START_MESSAGE } from './prompt.js';
 const CONNECT_TIMEOUT_MS = 15000;
 const IDLE_STOP_MS = 3 * 60 * 1000; // stop after 3 minutes of silence to save cost
 const MAX_RECONNECTS = 3;
+const DEFAULT_MODEL = 'gemini-3.8-live';
 
 export class LiveAdvisor extends EventTarget {
-  constructor({ getSystemInstruction, getAccessCode }) {
+  constructor({ getSystemInstruction, getAccessCode, getApiKey }) {
     super();
     this.getSystemInstruction = getSystemInstruction;
     this.getAccessCode = getAccessCode;
+    this.getApiKey = getApiKey;
     this.state = 'idle';
     this.gen = 0;
     this.sources = new Set();
@@ -109,14 +111,23 @@ export class LiveAdvisor extends EventTarget {
     } catch {
       throw Object.assign(new Error('offline'), { code: 'offline' });
     }
-    const body = await res.json().catch(() => ({}));
+    const body = await res.json().catch(() => null);
+    // No token server (for example GitHub Pages): the owner must add an API key in the app.
+    if (!body || body.error === 'missing_api_key') throw Object.assign(new Error('need_key'), { code: 'need_key' });
     if (!res.ok) throw Object.assign(new Error(body.error || 'token_failed'), { code: body.error || 'token_failed' });
     return body;
   }
 
-  async connect() {
+  // Uses the API key saved on this device, or else a single-use token from the server.
+  async createClient() {
+    const apiKey = this.getApiKey();
+    if (apiKey) return { ai: new GoogleGenAI({ apiKey }), model: DEFAULT_MODEL, voice: '' };
     const { token, model, voice } = await this.fetchToken();
-    const ai = new GoogleGenAI({ apiKey: token, httpOptions: { apiVersion: 'v1alpha' } });
+    return { ai: new GoogleGenAI({ apiKey: token, httpOptions: { apiVersion: 'v1alpha' } }), model, voice };
+  }
+
+  async connect() {
+    const { ai, model, voice } = await this.createClient();
 
     const config = {
       responseModalities: [Modality.AUDIO],
@@ -143,7 +154,8 @@ export class LiveAdvisor extends EventTarget {
         onclose: (e) => {
           if (gen !== this.gen) return;
           if (!ready) {
-            rejectEarly(Object.assign(new Error(`closed ${e?.code} ${e?.reason || ''}`), { code: 'connect_failed' }));
+            const badKey = /api key|api_key|permission|unauthori[sz]ed/i.test(e?.reason || '');
+            rejectEarly(Object.assign(new Error(`closed ${e?.code} ${e?.reason || ''}`), { code: badKey ? 'bad_key' : 'connect_failed' }));
           } else {
             this.onDrop(e);
           }

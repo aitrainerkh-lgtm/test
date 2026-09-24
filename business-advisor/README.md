@@ -11,33 +11,33 @@ Powered by the Gemini Live API (model `gemini-3.8-live`). Branding: AI For Busin
 
 ---
 
-## How it works
+## Put the app online: choose one way
 
-```
-Phone browser  ──(1) ask for a short-lived token──▶  Your server (/api/token)
-                                                       holds GEMINI_API_KEY
-Phone browser  ◀──(2) single-use token, 30 minutes──
-Phone browser  ══(3) live voice, direct to Google══▶  Gemini Live API
-```
+### Way 1 (easiest): GitHub Pages + key button in the app
 
-- Your API key stays on the server. The phone only gets a single-use token that expires.
-- Sources are saved on the user's own phone (browser storage). They are not uploaded to your server. They are sent to Gemini only during a talk.
-- A talk stops by itself after 3 minutes of silence, to save cost.
+No server and no settings files. The API key is typed into the app.
 
----
+1. In GitHub, open this repository, then go to **Settings → Pages**.
+2. Under **Source**, choose **GitHub Actions**.
+3. Merge the Business Advisor pull request. GitHub publishes the app in about 1 minute at:
+   `https://aitrainerkh-lgtm.github.io/test/`
+4. Open the link on the phone. Tap the **key button** (top right, with the orange dot).
+5. Get a key at https://aistudio.google.com/apikey, paste it and tap **រក្សាទុក**.
+6. Tap **ចាប់ផ្ដើមនិយាយ** and talk.
 
-## Set up (one time, about 15 minutes)
+Important for Way 1:
 
-### Step 1. Get a Gemini API key
+- The key is saved only on that phone or computer. Each device needs the key once.
+- Anyone who has your key can use your Gemini account. For trainees, type the key on their phone yourself,
+  or ask each trainee to create their own free key in AI Studio.
+- Create a separate key only for this app, so you can delete it after the training.
 
-1. Go to https://aistudio.google.com/apikey
-2. Create an API key. Copy it.
-3. Turn on billing for the Google Cloud project if you expect regular use. Check current prices on the Gemini API pricing page before sharing the app widely.
+### Way 2 (safer for sharing): Vercel server keeps the key
 
-### Step 2. Put the app online (Vercel, free plan)
+The key stays on the server and is never on the phone. The phone only gets a single-use token that expires.
 
 1. Create a free account at https://vercel.com and connect your GitHub account.
-2. Click **Add New → Project**, and choose this GitHub repository.
+2. Click **Add New → Project** and choose this repository.
 3. Set **Root Directory** to `business-advisor`.
 4. Open **Environment Variables** and add:
 
@@ -46,13 +46,15 @@ Phone browser  ══(3) live voice, direct to Google══▶  Gemini Live API
    | `GEMINI_API_KEY` | your API key |
    | `ACCESS_CODE` | a code you choose, for example `ABC2026` (recommended) |
 
-5. Click **Deploy**. Vercel gives you a link such as `https://business-advisor-xxxx.vercel.app`.
+5. Click **Deploy**. Share the link and the access code with the trainee.
 
-### Step 3. Share with the trainee
+If a device also has a key saved with the key button, the app uses that device key first.
 
-- Send her the link and the access code.
-- On the first talk, the app asks for the access code once, then remembers it.
-- On her phone she can tap **Share → Add to Home Screen** to open it like an app.
+### How the voice works
+
+- The phone connects directly to the Gemini Live API for the voice talk.
+- Sources are saved on the user's own device (browser storage). They are sent to Gemini only during a talk.
+- A talk stops by itself after 3 minutes of silence, to save cost.
 
 ---
 

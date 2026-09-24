@@ -22,6 +22,7 @@ const TEXT = {
     rate_limited: 'ប្រើច្រើនពេក។ សូមរង់ចាំប៉ុន្មាននាទី រួចព្យាយាមម្ដងទៀត។',
     access_code_required: 'លេខកូដមិនត្រឹមត្រូវ។',
     connection_lost: 'ការភ្ជាប់បានដាច់។ សូមចុច ចាប់ផ្ដើមនិយាយ ម្ដងទៀត។',
+    bad_key: 'API Key មិនត្រឹមត្រូវ ឬមិនអាចប្រើបាន។ សូមពិនិត្យ Key ម្ដងទៀត។',
     default: 'មិនអាចភ្ជាប់ទៅ Advisor បានទេ។ សូមព្យាយាមម្ដងទៀត។',
   },
   idleStop: 'បានបញ្ចប់ដោយស្វ័យប្រវត្តិ ព្រោះគ្មានសំឡេង ៣ នាទី។',
@@ -36,6 +37,16 @@ const TEXT = {
     added: 'បានបន្ថែមប្រភព',
     nextTalk: 'ប្រភពថ្មីនឹងប្រើ នៅពេលបងចាប់ផ្ដើមនិយាយលើកក្រោយ។',
     needText: 'សូមបិទភ្ជាប់អត្ថបទជាមុនសិន។',
+  },
+  key: {
+    need: 'សូមដាក់ Gemini API Key ជាមុនសិន ទើបអាចនិយាយបាន។',
+    intro: 'ដាក់ Gemini API Key ម្ដងគត់ ដើម្បីឲ្យ Advisor អាចនិយាយបាន។',
+    saved: (last4) => `បានរក្សាទុក API Key (…${last4})`,
+    savedToast: 'បានរក្សាទុក API Key។ ឥឡូវចុច ចាប់ផ្ដើមនិយាយ បាន។',
+    removed: 'បានលុប API Key ចេញពីឧបករណ៍នេះ។',
+    checking: 'កំពុងពិនិត្យ Key...',
+    invalid: 'Key នេះមិនត្រឹមត្រូវទេ។ សូម Copy ម្ដងទៀតពី AI Studio។',
+    empty: 'សូមបិទភ្ជាប់ API Key ជាមុនសិន។',
   },
   remove: 'លុប',
   used: (pct) => `បានប្រើ ${toKhmerDigits(pct)}% នៃទំហំប្រភព`,
@@ -65,7 +76,15 @@ function storageSet(key, value) {
 const advisor = new LiveAdvisor({
   getSystemInstruction: () => buildSystemInstruction(sources),
   getAccessCode: () => storageGet('ba.code'),
+  getApiKey: () => storageGet('ba.apiKey'),
 });
+
+// Does this site have a token server (Vercel / npm start)? GitHub Pages does not.
+let hasServer = false;
+fetch('api/token', { method: 'GET' })
+  .then((r) => (hasServer = (r.headers.get('content-type') || '').includes('application/json')))
+  .catch(() => {})
+  .finally(updateKeyDot);
 
 // ---------- toast ----------
 let toastTimer;
@@ -99,6 +118,10 @@ advisor.addEventListener('state', (e) => {
 });
 
 advisor.addEventListener('failure', (e) => {
+  if (e.detail === 'need_key' || e.detail === 'bad_key') {
+    openKeySheet(e.detail === 'bad_key' ? TEXT.errors.bad_key : TEXT.key.need);
+    return;
+  }
   if (e.detail === 'access_code_required') {
     const hadCode = !!storageGet('ba.code');
     storageSet('ba.code', '');
@@ -111,8 +134,9 @@ advisor.addEventListener('failure', (e) => {
 advisor.addEventListener('idle-stop', () => toast(TEXT.idleStop, 6000));
 
 talkBtn.addEventListener('click', () => {
-  if (advisor.state === 'idle') advisor.start();
-  else advisor.stop();
+  if (advisor.state !== 'idle') return advisor.stop();
+  if (!storageGet('ba.apiKey') && !hasServer) return openKeySheet(TEXT.key.need);
+  advisor.start();
 });
 
 // Orb reacts to the voice level.
@@ -150,6 +174,72 @@ $('codeForm').addEventListener('submit', (e) => {
 });
 $('codeCancel').addEventListener('click', () => ($('codeDialog').hidden = true));
 
+// ---------- API key ----------
+const keySheet = $('keySheet');
+
+function updateKeyDot() {
+  $('keyDot').hidden = !!storageGet('ba.apiKey') || hasServer;
+}
+
+function showKeyStatus(text, isError) {
+  const el = $('keyStatus');
+  el.textContent = text;
+  el.classList.toggle('error', !!isError);
+  el.hidden = !text;
+}
+
+function openKeySheet(message) {
+  const key = storageGet('ba.apiKey');
+  $('keyNote').textContent = message || TEXT.key.intro;
+  $('keyInput').value = '';
+  showKeyStatus(key ? TEXT.key.saved(key.slice(-4)) : '');
+  $('keyRemove').hidden = !key;
+  keySheet.hidden = false;
+  requestAnimationFrame(() => keySheet.classList.add('open'));
+}
+function closeKeySheet() {
+  keySheet.classList.remove('open');
+  setTimeout(() => (keySheet.hidden = true), 250);
+}
+
+// Returns false only when Google clearly rejects the key.
+async function checkKey(key) {
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?pageSize=1&key=${encodeURIComponent(key)}`,
+    );
+    return !(res.status === 400 || res.status === 401 || res.status === 403);
+  } catch {
+    return true; // offline or blocked: save it and let the talk show any problem
+  }
+}
+
+$('keyBtn').addEventListener('click', () => openKeySheet());
+$('keyClose').addEventListener('click', closeKeySheet);
+keySheet.addEventListener('click', (e) => {
+  if (e.target === keySheet) closeKeySheet();
+});
+$('keyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const key = $('keyInput').value.trim().replace(/\s+/g, '');
+  if (!key) return showKeyStatus(TEXT.key.empty, true);
+  $('keySave').disabled = true;
+  showKeyStatus(TEXT.key.checking);
+  const ok = await checkKey(key);
+  $('keySave').disabled = false;
+  if (!ok) return showKeyStatus(TEXT.key.invalid, true);
+  storageSet('ba.apiKey', key);
+  updateKeyDot();
+  closeKeySheet();
+  toast(TEXT.key.savedToast);
+});
+$('keyRemove').addEventListener('click', () => {
+  storageSet('ba.apiKey', '');
+  updateKeyDot();
+  closeKeySheet();
+  toast(TEXT.key.removed);
+});
+
 // ---------- sources ----------
 const sheet = $('sheet');
 let changedDuringTalk = false;
@@ -175,6 +265,7 @@ sheet.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   if (!$('codeDialog').hidden) $('codeDialog').hidden = true;
+  else if (!keySheet.hidden) closeKeySheet();
   else if (!sheet.hidden) closeSheet();
 });
 
