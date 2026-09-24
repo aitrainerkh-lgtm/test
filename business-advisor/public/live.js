@@ -56,8 +56,7 @@ export class LiveAdvisor extends EventTarget {
 
     try {
       await resumed;
-      await this.ctx.audioWorklet.addModule(new URL('./mic-worklet.js', import.meta.url));
-      this.buildAudioGraph();
+      await this.buildAudioGraph();
     } catch (err) {
       return this.fail('audio_failed', err);
     }
@@ -80,18 +79,28 @@ export class LiveAdvisor extends EventTarget {
     }, 5000);
   }
 
-  buildAudioGraph() {
+  async buildAudioGraph() {
     const ctx = this.ctx;
     this.micSource = ctx.createMediaStreamSource(this.stream);
     this.micAnalyser = ctx.createAnalyser();
     this.micAnalyser.fftSize = 512;
     this.micSource.connect(this.micAnalyser);
 
-    this.worklet = new AudioWorkletNode(ctx, 'mic-processor');
     const mute = ctx.createGain();
     mute.gain.value = 0;
-    this.micSource.connect(this.worklet).connect(mute).connect(ctx.destination);
-    this.worklet.port.onmessage = (e) => this.sendMic(e.data);
+    mute.connect(ctx.destination);
+    try {
+      await ctx.audioWorklet.addModule(new URL('./mic-worklet.js', import.meta.url));
+      this.worklet = new AudioWorkletNode(ctx, 'mic-processor');
+      this.worklet.port.onmessage = (e) => this.sendMic(e.data);
+      this.micSource.connect(this.worklet).connect(mute);
+    } catch {
+      // Older browsers, or the app opened as a file: process the microphone on the main thread.
+      const toPcm = pcmChunker(ctx.sampleRate, (chunk) => this.sendMic(chunk));
+      this.processor = ctx.createScriptProcessor(4096, 1, 1);
+      this.processor.onaudioprocess = (e) => toPcm(e.inputBuffer.getChannelData(0));
+      this.micSource.connect(this.processor).connect(mute);
+    }
 
     this.outGain = ctx.createGain();
     this.outAnalyser = ctx.createAnalyser();
@@ -306,12 +315,43 @@ export class LiveAdvisor extends EventTarget {
     this.stream?.getTracks().forEach((t) => t.stop());
     this.stream = null;
     if (this.worklet) this.worklet.port.onmessage = null;
+    if (this.processor) this.processor.onaudioprocess = null;
+    this.worklet = this.processor = null;
     this.ctx?.close().catch(() => {});
     this.ctx = null;
     this.micAnalyser = this.outAnalyser = null;
     this.reconnecting = false;
     this.setState('idle');
   }
+}
+
+// Same conversion as mic-worklet.js: 16 kHz, 16-bit PCM chunks of 100 ms.
+function pcmChunker(inputRate, onChunk) {
+  const ratio = inputRate / 16000;
+  let chunk = new Int16Array(1600);
+  let length = 0;
+  let sum = 0;
+  let count = 0;
+  let step = 0;
+  return (samples) => {
+    for (let i = 0; i < samples.length; i++) {
+      sum += samples[i];
+      count++;
+      step++;
+      if (step >= ratio) {
+        step -= ratio;
+        const v = Math.max(-1, Math.min(1, sum / count));
+        chunk[length++] = v < 0 ? v * 0x8000 : v * 0x7fff;
+        sum = 0;
+        count = 0;
+        if (length === chunk.length) {
+          onChunk(chunk);
+          chunk = new Int16Array(1600);
+          length = 0;
+        }
+      }
+    }
+  };
 }
 
 function toBase64(bytes) {
