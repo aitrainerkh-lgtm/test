@@ -1,0 +1,16 @@
+{
+  "name": "Business Advisor",
+  "short_name": "Advisor",
+  "description": "ទីប្រឹក្សាអាជីវកម្ម - និយាយផ្ទាល់ជាភាសាខ្មែរ",
+  "lang": "km",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F7F9F4",
+  "theme_color": "#1B7A3D",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
