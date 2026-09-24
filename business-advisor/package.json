@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "vendor": "node scripts/build-vendor.mjs"
+    "vendor": "node scripts/build-vendor.mjs",
+    "standalone": "node scripts/build-standalone.mjs"
   },
   "engines": {
     "node": ">=20.12"

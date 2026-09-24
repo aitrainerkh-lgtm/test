@@ -13,6 +13,14 @@ Powered by the Gemini Live API (model `gemini-3.8-live`). Branding: AI For Busin
 
 ## Put the app online: choose one way
 
+### Quick test on a computer: one single file
+
+1. Build the file with `npm run standalone` (or use the file you were sent): `dist/Business-Advisor.html`.
+2. Double-click it to open it in **Google Chrome**.
+3. Tap the key button, paste your Gemini API key, tap **រក្សាទុក**, then tap **ចាប់ផ្ដើមនិយាយ**.
+
+The file works without any website. It is best for testing on your own computer. For phones, use Way 1 or Way 2.
+
 ### Way 1 (easiest): GitHub Pages + key button in the app
 
 No server and no settings files. The API key is typed into the app.

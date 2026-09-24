@@ -81,10 +81,14 @@ const advisor = new LiveAdvisor({
 
 // Does this site have a token server (Vercel / npm start)? GitHub Pages does not.
 let hasServer = false;
-fetch('api/token', { method: 'GET' })
-  .then((r) => (hasServer = (r.headers.get('content-type') || '').includes('application/json')))
-  .catch(() => {})
-  .finally(updateKeyDot);
+if (location.protocol.startsWith('http')) {
+  fetch('api/token', { method: 'GET' })
+    .then((r) => (hasServer = (r.headers.get('content-type') || '').includes('application/json')))
+    .catch(() => {})
+    .finally(updateKeyDot);
+} else {
+  queueMicrotask(updateKeyDot);
+}
 
 // ---------- toast ----------
 let toastTimer;
