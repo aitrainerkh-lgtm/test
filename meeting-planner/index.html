@@ -1,0 +1,1470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Team Meeting Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1b7a3d;
+  --green-ink: #13592c;
+  --green-soft: #e3f1e6;
+  --orange: #e8731a;
+  --orange-ink: #9c4509;
+  --orange-soft: #fdebdc;
+  --slate: #3d6b8c;
+  --slate-ink: #274a63;
+  --slate-soft: #e2edf4;
+  --red: #b3261e;
+  --red-soft: #fbe4e2;
+  --amber: #8a5a00;
+  --amber-soft: #fbf0d6;
+  --bg: #f4f7f2;
+  --surface: #ffffff;
+  --surface-2: #edf2ea;
+  --line: #d6e0d3;
+  --line-soft: #e6ece3;
+  --text: #17251b;
+  --muted: #5a6b5f;
+  --on-accent: #ffffff;
+  --shadow: 0 1px 2px rgba(23, 50, 30, .06), 0 6px 20px rgba(23, 50, 30, .07);
+  --font: 'Inter', 'Battambang', 'Khmer OS Battambang', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --green: #4cbf6a;
+    --green-ink: #9fe0b0;
+    --green-soft: #1c3a26;
+    --orange: #f08a3c;
+    --orange-ink: #ffc497;
+    --orange-soft: #3d2715;
+    --slate: #6fa3c7;
+    --slate-ink: #b9d7ec;
+    --slate-soft: #1d3140;
+    --red: #f07167;
+    --red-soft: #3f1d1a;
+    --amber: #f2c265;
+    --amber-soft: #3a2e12;
+    --bg: #0f1712;
+    --surface: #18231c;
+    --surface-2: #1f2d24;
+    --line: #2d3f33;
+    --line-soft: #233229;
+    --text: #e4eee6;
+    --muted: #9db0a2;
+    --on-accent: #0f1712;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 20px rgba(0, 0, 0, .25);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --green: #4cbf6a;
+  --green-ink: #9fe0b0;
+  --green-soft: #1c3a26;
+  --orange: #f08a3c;
+  --orange-ink: #ffc497;
+  --orange-soft: #3d2715;
+  --slate: #6fa3c7;
+  --slate-ink: #b9d7ec;
+  --slate-soft: #1d3140;
+  --red: #f07167;
+  --red-soft: #3f1d1a;
+  --amber: #f2c265;
+  --amber-soft: #3a2e12;
+  --bg: #0f1712;
+  --surface: #18231c;
+  --surface-2: #1f2d24;
+  --line: #2d3f33;
+  --line-soft: #233229;
+  --text: #e4eee6;
+  --muted: #9db0a2;
+  --on-accent: #0f1712;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 20px rgba(0, 0, 0, .25);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--green); }
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+.app {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  padding-block: 16px 32px;
+  display: grid;
+  gap: 16px;
+}
+
+/* Top bar */
+.topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.mark {
+  width: 40px; height: 40px; border-radius: 10px; flex: none;
+  background: var(--green);
+  display: grid; place-items: center;
+}
+.mark svg { width: 24px; height: 24px; }
+.brand-text { display: grid; line-height: 1.15; }
+.brand-text small { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--green); }
+.brand-text h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+.top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 999px;
+  background: var(--surface-2); color: var(--muted); border: 1px solid var(--line);
+}
+.badge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.badge.shared { color: var(--green-ink); background: var(--green-soft); border-color: transparent; }
+.badge.local { color: var(--amber); background: var(--amber-soft); border-color: transparent; }
+.badge.memory, .badge.readonly { color: var(--red); background: var(--red-soft); border-color: transparent; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 38px; padding: 0 14px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; white-space: nowrap;
+}
+.btn:hover { background: var(--surface-2); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn.primary { background: var(--orange); border-color: var(--orange); color: #fff; }
+.btn.primary:hover { filter: brightness(.95); }
+.btn.green { background: var(--green); border-color: var(--green); color: var(--on-accent); }
+.btn.danger { color: var(--red); }
+.btn.danger.solid { background: var(--red); border-color: var(--red); color: #fff; }
+.btn.small { min-height: 32px; padding: 0 10px; font-size: 13px; }
+.btn.icon { width: 38px; padding: 0; }
+.btn svg { width: 16px; height: 16px; flex: none; }
+
+/* Summary */
+.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tile {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px 14px; display: grid; gap: 2px; min-width: 0;
+}
+.tile .label { font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.tile .value { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.tile .sub { font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tile.next .value { font-size: 15px; line-height: 1.35; padding-top: 6px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow-wrap: anywhere; }
+.tile.next .sub { white-space: normal; }
+.tile.alert { border-color: var(--red); background: var(--red-soft); }
+.tile.alert .value, .tile.alert .label { color: var(--red); }
+
+/* Toolbar */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.nav-group { display: flex; align-items: center; gap: 6px; }
+.range-label { font-weight: 700; font-size: 16px; margin-inline: 6px; font-variant-numeric: tabular-nums; }
+.spacer { flex: 1; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: none; padding: 0 14px; min-height: 36px; cursor: pointer; font-weight: 600; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--green); color: var(--on-accent); }
+.search {
+  min-height: 38px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+  padding: 0 12px; width: 220px; max-width: 100%;
+}
+.check-inline { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; color: var(--muted); cursor: pointer; }
+
+.banner {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  padding: 10px 14px; border-radius: var(--radius);
+  background: var(--orange-soft); color: var(--orange-ink); font-weight: 500;
+}
+
+/* Week grid */
+.week-scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.week {
+  display: grid;
+  grid-template-columns: 56px repeat(var(--cols), minmax(118px, 1fr));
+  min-width: calc(56px + var(--cols) * 118px);
+}
+.wk-head {
+  position: sticky; top: 0; z-index: 3;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+  padding: 8px 6px; text-align: center; font-size: 12px; color: var(--muted); font-weight: 600;
+  display: grid; gap: 0; line-height: 1.2;
+}
+.wk-head b { display: block; font-size: 20px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.wk-head.today b { color: var(--on-accent); background: var(--green); border-radius: 999px; width: 34px; height: 34px; line-height: 34px; margin: 2px auto 0; font-size: 17px; }
+.wk-head.off { color: var(--muted); opacity: .75; }
+.wk-times { position: relative; border-right: 1px solid var(--line); }
+.wk-times span {
+  position: absolute; right: 8px; transform: translateY(-50%);
+  font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; background: var(--surface); padding: 0 2px;
+}
+.wk-col {
+  position: relative; border-left: 1px solid var(--line-soft); cursor: copy;
+  background-image: repeating-linear-gradient(to bottom, var(--line-soft) 0, var(--line-soft) 1px, transparent 1px, transparent 56px);
+}
+.wk-col.off { background-color: var(--surface-2); }
+.wk-col.readonly { cursor: default; }
+.ev {
+  position: absolute; z-index: 1; margin: 0; padding: 4px 6px; overflow: hidden;
+  border-radius: 6px; text-align: left; cursor: pointer; display: grid; align-content: start; gap: 0;
+  font-size: 12px; line-height: 1.3; border: 1px solid transparent;
+  background: var(--green-soft); color: var(--green-ink); border-color: color-mix(in srgb, var(--green) 45%, transparent);
+}
+.ev:hover { z-index: 2; box-shadow: var(--shadow); }
+.ev .t { font-weight: 600; font-variant-numeric: tabular-nums; opacity: .85; }
+.ev .n { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev .p { opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev.mode-online { background: var(--orange-soft); color: var(--orange-ink); border-color: color-mix(in srgb, var(--orange) 45%, transparent); }
+.ev.mode-phone { background: var(--slate-soft); color: var(--slate-ink); border-color: color-mix(in srgb, var(--slate) 45%, transparent); }
+.ev.st-done { opacity: .6; }
+.ev.st-cancelled { opacity: .5; }
+.ev.st-cancelled .n { text-decoration: line-through; }
+.ev.clash { border: 2px solid var(--red); }
+.ev.clash .n::before { content: '! '; color: var(--red); }
+.ev.example { border-style: dashed; opacity: .7; }
+.now-line { position: absolute; left: 0; right: 0; height: 2px; background: var(--red); z-index: 2; pointer-events: none; }
+.now-line::before { content: ''; position: absolute; left: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+
+/* List */
+.list { display: grid; gap: 18px; }
+.day-group h3 { margin: 0 0 8px; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.day-group h3 .today-tag { color: var(--green); }
+.cards { display: grid; gap: 8px; }
+.card {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  width: 100%; text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px;
+}
+.card:hover { border-color: var(--green); }
+.card.example { border-style: dashed; opacity: .75; }
+.card-time { display: grid; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.card-time strong { font-size: 16px; }
+.card-time span { color: var(--muted); font-size: 12px; }
+.card-title { font-weight: 700; font-size: 15px; overflow-wrap: anywhere; }
+.card.st-cancelled .card-title { text-decoration: line-through; color: var(--muted); }
+.card-meta { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; margin-top: 2px; }
+.card-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.chip.in_person { background: var(--green-soft); color: var(--green-ink); }
+.chip.online { background: var(--orange-soft); color: var(--orange-ink); }
+.chip.phone { background: var(--slate-soft); color: var(--slate-ink); }
+.pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.pill.scheduled { border-color: color-mix(in srgb, var(--green) 50%, transparent); color: var(--green-ink); }
+.pill.done { background: var(--surface-2); }
+.pill.cancelled { color: var(--muted); text-decoration: line-through; }
+.pill.clash { background: var(--red-soft); color: var(--red); border-color: transparent; }
+.pill.example { border-style: dashed; }
+
+.empty {
+  background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius);
+  padding: 28px 18px; text-align: center; color: var(--muted); display: grid; gap: 10px; justify-items: center;
+}
+.empty strong { color: var(--text); font-size: 16px; }
+.loading { padding: 40px; text-align: center; color: var(--muted); }
+
+.foot { color: var(--muted); font-size: 12px; display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; }
+
+/* Dialogs */
+dialog {
+  border: 0; padding: 0; border-radius: 14px; background: var(--surface); color: var(--text);
+  width: min(620px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+}
+dialog::backdrop { background: rgba(10, 20, 14, .45); }
+.dlg { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; max-height: calc(100dvh - 24px); }
+.dlg-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 20px 10px; }
+.dlg-head h2 { margin: 0; font-size: 19px; line-height: 1.3; overflow-wrap: anywhere; text-wrap: balance; }
+.dlg-body { padding: 6px 20px 16px; overflow-y: auto; display: grid; gap: 14px; }
+.dlg-foot { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; padding: 12px 20px 18px; border-top: 1px solid var(--line-soft); }
+.dlg-foot .left { margin-right: auto; }
+.close-x { border: 0; background: none; cursor: pointer; color: var(--muted); padding: 4px; border-radius: 6px; flex: none; }
+.close-x svg { width: 20px; height: 20px; display: block; }
+
+.field { display: grid; gap: 5px; min-width: 0; }
+.field > label, .field > .lbl { font-size: 13px; font-weight: 600; }
+.field .hint { font-size: 12px; color: var(--muted); }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+  padding: 8px 10px;
+}
+.field textarea { min-height: 76px; resize: vertical; }
+.field input[aria-invalid="true"] { border-color: var(--red); }
+.err { color: var(--red); font-size: 12px; font-weight: 500; }
+.row { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.modes { display: flex; flex-wrap: wrap; gap: 8px; }
+.modes label {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; font-weight: 600;
+}
+.modes input { accent-color: var(--green); margin: 0; }
+.modes label:has(input:checked) { border-color: var(--green); background: var(--green-soft); color: var(--green-ink); }
+.warn { background: var(--red-soft); color: var(--red); border-radius: 8px; padding: 10px 12px; font-size: 13px; display: grid; gap: 4px; }
+.warn b { font-weight: 700; }
+.slots { display: grid; gap: 8px; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
+.slots .hint { font-size: 12px; color: var(--muted); }
+.slot-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.slot-list button {
+  border: 1px solid var(--green); color: var(--green-ink); background: var(--surface); border-radius: 999px;
+  padding: 4px 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-variant-numeric: tabular-nums;
+}
+.slot-list button:hover { background: var(--green-soft); }
+
+.detail-grid { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 12px; }
+.detail-grid dt { color: var(--muted); font-weight: 600; font-size: 13px; }
+.detail-grid dd { margin: 0; overflow-wrap: anywhere; }
+.people { display: flex; flex-wrap: wrap; gap: 6px; }
+.people span { background: var(--surface-2); border-radius: 999px; padding: 2px 10px; font-size: 13px; }
+.agenda { white-space: pre-wrap; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; margin: 0; font-family: inherit; overflow-wrap: anywhere; }
+.action-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--red-soft); color: var(--red); padding: 10px 12px; border-radius: 8px; font-weight: 600; }
+.copy-box textarea { width: 100%; min-height: 150px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--surface); }
+.days-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+.days-pick label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-weight: 600; }
+.days-pick label:has(input:checked) { border-color: var(--green); background: var(--green-soft); color: var(--green-ink); }
+.days-pick input { accent-color: var(--green); margin: 0; }
+
+/* Toasts */
+#toasts { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; z-index: 50; width: min(420px, calc(100vw - 32px)); }
+.toast { background: var(--text); color: var(--bg); padding: 10px 14px; border-radius: 10px; box-shadow: var(--shadow); font-weight: 500; }
+.toast.error { background: var(--red); color: #fff; }
+
+@media (max-width: 860px) {
+  .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .brand-text h1 { font-size: 19px; }
+  .row, .row.two { grid-template-columns: minmax(0, 1fr); }
+  .search { width: 100%; order: 10; }
+  .card { grid-template-columns: 52px minmax(0, 1fr); }
+  .card-side { grid-column: 2; flex-direction: row; align-items: center; justify-content: flex-start; flex-wrap: wrap; }
+  .detail-grid { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .detail-grid dd { margin-bottom: 8px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .toast { animation: rise .2s ease-out; }
+  @keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="3" stroke="#fff" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="15.5" cy="15.5" r="2.5" fill="#e8731a"/></svg>
+      </div>
+      <div class="brand-text">
+        <small>AI For Business</small>
+        <h1>Team Meeting Planner</h1>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="badge" id="storage-badge">Loading…</span>
+      <button class="btn icon" id="btn-settings" type="button" aria-label="Working hours settings" title="Working hours settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+      <button class="btn primary" id="btn-new" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="btn-label">New meeting</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="summary" id="summary" aria-label="Summary"></section>
+
+  <div class="toolbar">
+    <div class="nav-group" id="week-nav">
+      <button class="btn small" id="btn-today" type="button">Today</button>
+      <button class="btn small icon" id="btn-prev" type="button" aria-label="Previous week">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="btn small icon" id="btn-next" type="button" aria-label="Next week">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <span class="range-label" id="range-label"></span>
+    </div>
+    <label class="check-inline" id="past-toggle" hidden><input type="checkbox" id="show-past"> Show past meetings</label>
+    <span class="spacer"></span>
+    <input class="search" id="search" type="search" placeholder="Search title, person, place" aria-label="Search meetings">
+    <div class="seg" role="group" aria-label="View">
+      <button type="button" data-view="week" aria-pressed="true">Week</button>
+      <button type="button" data-view="list" aria-pressed="false">List</button>
+    </div>
+    <button class="btn small" id="btn-export" type="button" hidden>Export CSV</button>
+  </div>
+
+  <div id="banner" hidden></div>
+  <main id="main"><div class="loading">Loading meetings…</div></main>
+
+  <footer class="foot">
+    <span>All times are Cambodia time (ICT, UTC+7).</span>
+    <span>AI For Business</span>
+  </footer>
+</div>
+
+<dialog id="dlg-form" aria-labelledby="form-title">
+  <form class="dlg" id="meeting-form" novalidate>
+    <div class="dlg-head">
+      <h2 id="form-title">New meeting</h2>
+      <button class="close-x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="dlg-body">
+      <div class="field">
+        <label for="f-title">Meeting title</label>
+        <input id="f-title" maxlength="200" autocomplete="off" placeholder="e.g. Weekly management meeting">
+        <span class="err" id="e-title" hidden></span>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="f-date">Date</label>
+          <input id="f-date" type="date">
+          <span class="err" id="e-date" hidden></span>
+        </div>
+        <div class="field">
+          <label for="f-start">Start time</label>
+          <input id="f-start" type="time" step="300">
+          <span class="err" id="e-start" hidden></span>
+        </div>
+        <div class="field">
+          <label for="f-duration">Length</label>
+          <select id="f-duration">
+            <option value="15">15 min</option>
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">1 hour</option>
+            <option value="90">1 hour 30 min</option>
+            <option value="120">2 hours</option>
+            <option value="180">3 hours</option>
+            <option value="240">4 hours</option>
+            <option value="480">Full day (8 hours)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl" id="mode-lbl">Meeting type</span>
+        <div class="modes" role="radiogroup" aria-labelledby="mode-lbl">
+          <label><input type="radio" name="f-mode" id="f-mode-in_person" value="in_person" checked> In person</label>
+          <label><input type="radio" name="f-mode" id="f-mode-online" value="online"> Online</label>
+          <label><input type="radio" name="f-mode" id="f-mode-phone" value="phone"> Phone call</label>
+        </div>
+      </div>
+      <div class="row two">
+        <div class="field">
+          <label for="f-place" id="place-lbl">Place or room</label>
+          <input id="f-place" maxlength="200" autocomplete="off" placeholder="e.g. Meeting room 1">
+        </div>
+        <div class="field" id="link-field" hidden>
+          <label for="f-link">Online meeting link</label>
+          <input id="f-link" type="url" maxlength="500" autocomplete="off" placeholder="https://meet.google.com/…">
+          <span class="err" id="e-link" hidden></span>
+        </div>
+      </div>
+      <div class="row two">
+        <div class="field">
+          <label for="f-organizer">Organizer</label>
+          <input id="f-organizer" maxlength="100" autocomplete="off" placeholder="Name or role">
+        </div>
+        <div class="field" id="status-field" hidden>
+          <label for="f-status">Status</label>
+          <select id="f-status">
+            <option value="scheduled">Scheduled</option>
+            <option value="done">Done</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-attendees">Attendees</label>
+        <textarea id="f-attendees" rows="2" placeholder="One per line, or separate with commas"></textarea>
+        <span class="hint">Used to check clashes and find a free time.</span>
+      </div>
+      <div class="field">
+        <label for="f-agenda">Agenda</label>
+        <textarea id="f-agenda" rows="4" maxlength="5000" placeholder="1. Review last week&#10;2. Sales update&#10;3. Next actions"></textarea>
+      </div>
+      <div class="warn" id="form-clash" hidden></div>
+      <div class="slots">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:space-between">
+          <span class="hint">Find the next free times for everyone listed, inside working hours.</span>
+          <button class="btn small green" type="button" id="btn-find">Find a free time</button>
+        </div>
+        <div class="slot-list" id="slot-list"></div>
+      </div>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit" id="btn-save">Save meeting</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-detail" aria-labelledby="detail-title">
+  <div class="dlg" id="detail"></div>
+</dialog>
+
+<dialog id="dlg-settings" aria-labelledby="settings-title">
+  <form class="dlg" id="settings-form" novalidate>
+    <div class="dlg-head">
+      <h2 id="settings-title">Working hours</h2>
+      <button class="close-x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="dlg-body">
+      <p style="margin:0;color:var(--muted)">These hours shape the week view and the free-time finder.</p>
+      <div class="row">
+        <div class="field">
+          <label for="s-start">Day starts</label>
+          <input id="s-start" type="time" step="900">
+        </div>
+        <div class="field">
+          <label for="s-end">Day ends</label>
+          <input id="s-end" type="time" step="900">
+        </div>
+        <div class="field">
+          <label for="s-duration">Default length</label>
+          <select id="s-duration">
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">1 hour</option>
+            <option value="90">1 hour 30 min</option>
+            <option value="120">2 hours</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl" id="days-lbl">Working days</span>
+        <div class="days-pick" role="group" aria-labelledby="days-lbl" id="s-days"></div>
+      </div>
+      <span class="err" id="e-settings" hidden></span>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit" id="btn-save-settings">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- Constants ---------- */
+const TZ_MIN = 420; // Cambodia (ICT) is UTC+7 all year
+const HOUR_PX = 56;
+const LS_KEY = 'afb-meeting-planner-v1';
+const DEFAULT_SETTINGS = { workStart: '08:00', workEnd: '17:00', days: [1, 2, 3, 4, 5], defaultDuration: 60 };
+const MODES = { in_person: 'In person', online: 'Online', phone: 'Phone call' };
+const STATUS = { scheduled: 'Scheduled', done: 'Done', cancelled: 'Cancelled' };
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const has = (o, k) => typeof k === 'string' && Object.prototype.hasOwnProperty.call(o, k);
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ---------- Dates (all in Cambodia time, handled as YYYY-MM-DD strings) ---------- */
+const pad = n => String(n).padStart(2, '0');
+function nowICT() {
+  const d = new Date(Date.now() + TZ_MIN * 60000);
+  return { date: `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`, minutes: d.getUTCHours() * 60 + d.getUTCMinutes() };
+}
+function parseDate(s) { const [y, m, d] = s.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)); }
+function fmtDate(dt) { return `${dt.getUTCFullYear()}-${pad(dt.getUTCMonth() + 1)}-${pad(dt.getUTCDate())}`; }
+function addDays(s, n) { const d = parseDate(s); d.setUTCDate(d.getUTCDate() + n); return fmtDate(d); }
+function dow(s) { return parseDate(s).getUTCDay(); }
+function weekStart(s) { return addDays(s, -((dow(s) + 6) % 7)); }
+function toMin(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
+function toTime(min) { return `${pad(Math.floor(min / 60))}:${pad(min % 60)}`; }
+function endMin(m) { return toMin(m.start) + m.duration; }
+function longDate(s) { const d = parseDate(s); return `${DAYS[d.getUTCDay()]}, ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; }
+function shortDate(s) { const d = parseDate(s); return `${DAYS[d.getUTCDay()].slice(0, 3)} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()].slice(0, 3)}`; }
+function rangeText(ws, we) {
+  const a = parseDate(ws), b = parseDate(we);
+  return a.getUTCMonth() === b.getUTCMonth()
+    ? `${a.getUTCDate()} – ${b.getUTCDate()} ${MONTHS[b.getUTCMonth()].slice(0, 3)} ${b.getUTCFullYear()}`
+    : `${a.getUTCDate()} ${MONTHS[a.getUTCMonth()].slice(0, 3)} – ${b.getUTCDate()} ${MONTHS[b.getUTCMonth()].slice(0, 3)} ${b.getUTCFullYear()}`;
+}
+function durLabel(min) { const h = Math.floor(min / 60), m = min % 60; return [h ? `${h} hour${h > 1 ? 's' : ''}` : '', m ? `${m} min` : ''].filter(Boolean).join(' '); }
+function utcStamp(date, min) {
+  const [y, mo, d] = date.split('-').map(Number);
+  return new Date(Date.UTC(y, mo - 1, d, 0, min - TZ_MIN)).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+}
+
+/* ---------- State ---------- */
+const state = {
+  meetings: [],
+  settings: { ...DEFAULT_SETTINGS },
+  loaded: false,
+  storage: 'loading', // shared | local | memory
+  readOnly: false,
+  view: window.innerWidth < 720 ? 'list' : 'week',
+  anchor: nowICT().date,
+  query: '',
+  showPast: false,
+};
+const hasClaude = !!(window.claude && typeof window.claude.use === 'function');
+let db = null;
+let downloads = null;
+
+/* ---------- Data cleaning (stored data is untrusted input) ---------- */
+function str(v, max) { return typeof v === 'string' ? v.slice(0, max) : ''; }
+function splitPeople(text) { return text.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean).slice(0, 100); }
+function normalizeMeeting(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(raw.date) ? raw.date : null;
+  const start = /^([01]\d|2[0-3]):[0-5]\d$/.test(raw.start) ? raw.start : null;
+  if (!date || !start) return null;
+  let duration = Math.round(Number(raw.duration));
+  if (!Number.isFinite(duration) || duration < 5) duration = 60;
+  duration = Math.max(5, Math.min(duration, 1440 - toMin(start)));
+  return {
+    id: str(raw.id, 100),
+    title: str(raw.title, 200).trim() || 'Untitled meeting',
+    date, start, duration,
+    mode: has(MODES, raw.mode) ? raw.mode : 'in_person',
+    place: str(raw.place, 200),
+    link: str(raw.link, 500),
+    organizer: str(raw.organizer, 100),
+    attendees: Array.isArray(raw.attendees) ? raw.attendees.filter(a => typeof a === 'string').map(a => a.trim().slice(0, 100)).filter(Boolean).slice(0, 100) : [],
+    agenda: str(raw.agenda, 5000),
+    status: has(STATUS, raw.status) ? raw.status : 'scheduled',
+    createdAt: str(raw.createdAt, 40),
+    updatedAt: str(raw.updatedAt, 40),
+  };
+}
+function normalizeSettings(raw) {
+  const s = { ...DEFAULT_SETTINGS };
+  if (!raw || typeof raw !== 'object') return s;
+  const t = /^([01]\d|2[0-3]):[0-5]\d$/;
+  if (t.test(raw.workStart)) s.workStart = raw.workStart;
+  if (t.test(raw.workEnd)) s.workEnd = raw.workEnd;
+  if (toMin(s.workEnd) <= toMin(s.workStart)) { s.workStart = DEFAULT_SETTINGS.workStart; s.workEnd = DEFAULT_SETTINGS.workEnd; }
+  if (Array.isArray(raw.days)) { const d = [...new Set(raw.days.filter(x => Number.isInteger(x) && x >= 0 && x <= 6))]; if (d.length) s.days = d; }
+  const dd = Number(raw.defaultDuration);
+  if ([30, 45, 60, 90, 120].includes(dd)) s.defaultDuration = dd;
+  return s;
+}
+function newId() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+/* ---------- Storage ---------- */
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    const data = raw ? JSON.parse(raw) : {};
+    state.meetings = (Array.isArray(data.meetings) ? data.meetings : []).map(normalizeMeeting).filter(Boolean);
+    state.settings = normalizeSettings(data.settings);
+    state.storage = 'local';
+  } catch (e) {
+    state.storage = 'memory';
+  }
+  state.loaded = true;
+}
+function saveLocal() {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({ meetings: state.meetings, settings: state.settings }));
+    return true;
+  } catch (e) {
+    state.storage = 'memory';
+    return false;
+  }
+}
+async function withRetry(fn) {
+  try { return await fn(); }
+  catch (e) {
+    if (e && (e.code === 'unavailable')) {
+      await new Promise(r => setTimeout(r, 400 + Math.random() * 600));
+      return fn();
+    }
+    throw e;
+  }
+}
+function saveError(e) {
+  const code = e && e.code;
+  if (code === 'invalid_argument' || code === 'not_granted' || code === 'revoked') {
+    state.readOnly = true;
+    render();
+    return 'You can view this planner but not change it. Ask the owner for edit access.';
+  }
+  if (code === 'quota_exceeded') return 'The planner is full. Delete old meetings, then try again.';
+  if (code === 'resource_exhausted') return 'Too many changes at once. Wait a moment, then try again.';
+  return 'Could not save. Check your connection, then try again.';
+}
+async function putMeeting(m) {
+  if (state.storage === 'shared') {
+    await withRetry(() => db.collection('meetings').doc(m.id).set({ ...m }));
+    // the live subscription updates the screen
+    const i = state.meetings.findIndex(x => x.id === m.id);
+    if (i >= 0) state.meetings[i] = m; else state.meetings.push(m);
+  } else {
+    const i = state.meetings.findIndex(x => x.id === m.id);
+    if (i >= 0) state.meetings[i] = m; else state.meetings.push(m);
+    if (state.storage === 'local' && !saveLocal()) throw { code: 'local_blocked' };
+  }
+  render();
+}
+async function removeMeeting(id) {
+  if (state.storage === 'shared') await withRetry(() => db.collection('meetings').doc(id).delete());
+  state.meetings = state.meetings.filter(m => m.id !== id);
+  if (state.storage === 'local' && !saveLocal()) throw { code: 'local_blocked' };
+  render();
+}
+async function putSettings(s) {
+  if (state.storage === 'shared') await withRetry(() => db.doc('settings/main').set({ ...s }));
+  state.settings = s;
+  if (state.storage === 'local' && !saveLocal()) throw { code: 'local_blocked' };
+  render();
+}
+async function initStorage() {
+  if (hasClaude) {
+    window.claude.use('downloads').then(d => { downloads = d; render(); }).catch(() => {});
+    try { db = await window.claude.use('db'); } catch (e) { db = null; }
+  }
+  if (!db) { loadLocal(); render(); return; }
+  state.storage = 'shared';
+  db.collection('meetings').onSnapshot(snap => {
+    state.meetings = snap.docs.map(d => normalizeMeeting({ ...d.data(), id: d.id })).filter(Boolean);
+    state.loaded = true;
+    render();
+    refreshOpenDetail();
+  }, () => {
+    toast('Live updates stopped. Reload the page to reconnect.', 'error');
+  });
+  db.doc('settings/main').onSnapshot(snap => {
+    state.settings = normalizeSettings(snap.exists ? snap.data() : null);
+    render();
+  }, () => {});
+}
+
+/* ---------- Clash detection ---------- */
+function peopleOf(m) { return [m.organizer, ...m.attendees].map(p => p.trim()).filter(Boolean); }
+function clashReasons(a, b) {
+  if (a.id === b.id || a.date !== b.date || a.status === 'cancelled' || b.status === 'cancelled') return null;
+  const as = toMin(a.start), ae = as + a.duration, bs = toMin(b.start), be = bs + b.duration;
+  if (!(as < be && bs < ae)) return null;
+  const reasons = [];
+  const pb = new Set(peopleOf(b).map(p => p.toLowerCase()));
+  const shared = [...new Map(peopleOf(a).map(p => [p.toLowerCase(), p])).entries()].filter(([k]) => pb.has(k)).map(([, v]) => v);
+  if (shared.length) reasons.push('same people: ' + shared.join(', '));
+  const pa = a.place.trim().toLowerCase();
+  if (a.mode === 'in_person' && b.mode === 'in_person' && pa && pa === b.place.trim().toLowerCase()) reasons.push('same place: ' + a.place.trim());
+  return reasons.length ? reasons : null;
+}
+function clashesFor(m) {
+  return state.meetings.map(o => ({ o, r: clashReasons(m, o) })).filter(x => x.r);
+}
+function clashSet() {
+  const set = new Set();
+  const byDate = new Map();
+  state.meetings.forEach(m => { if (!byDate.has(m.date)) byDate.set(m.date, []); byDate.get(m.date).push(m); });
+  byDate.forEach(list => {
+    for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+      if (clashReasons(list[i], list[j])) { set.add(list[i].id); set.add(list[j].id); }
+    }
+  });
+  return set;
+}
+
+/* ---------- Free time finder ---------- */
+function findSlots(fromDate, duration, people, excludeId) {
+  const s = state.settings, ws = toMin(s.workStart), we = toMin(s.workEnd);
+  const now = nowICT();
+  const who = new Set(people.map(p => p.toLowerCase()));
+  const out = [];
+  let start = fromDate && fromDate >= now.date ? fromDate : now.date;
+  for (let i = 0; i < 30 && out.length < 6; i++) {
+    const d = addDays(start, i);
+    if (!s.days.includes(dow(d))) continue;
+    const busy = state.meetings
+      .filter(m => m.date === d && m.status !== 'cancelled' && m.id !== excludeId && (who.size === 0 || peopleOf(m).some(p => who.has(p.toLowerCase()))))
+      .map(m => [toMin(m.start), endMin(m)]);
+    let t = ws;
+    if (d === now.date) t = Math.max(t, Math.ceil((now.minutes + 15) / 30) * 30);
+    let perDay = 0;
+    for (; t + duration <= we && perDay < 3 && out.length < 6; t += 30) {
+      if (busy.every(([bs, be]) => t + duration <= bs || t >= be)) { out.push({ date: d, start: toTime(t) }); perDay++; }
+    }
+  }
+  return out;
+}
+
+/* ---------- Examples shown only while the planner is empty ---------- */
+function exampleMeetings() {
+  const ws = weekStart(state.anchor);
+  const mk = (i, day, start, duration, title, mode, place, attendees, organizer) => ({
+    id: 'example-' + i, example: true, title, date: addDays(ws, day), start, duration, mode, place, link: '',
+    organizer, attendees, agenda: '', status: 'scheduled',
+  });
+  return [
+    mk(1, 0, '08:30', 60, 'Weekly management meeting', 'in_person', 'Meeting room 1', ['Sales Manager', 'Finance Manager', 'HR Manager'], 'CEO'),
+    mk(2, 1, '14:00', 45, 'Sales pipeline review', 'online', 'Google Meet', ['Sales team'], 'Sales Manager'),
+    mk(3, 2, '10:00', 90, 'Client project kickoff', 'in_person', 'Client office', ['CEO', 'Project Lead'], 'Project Lead'),
+    mk(4, 4, '15:00', 30, 'Weekly report check-in', 'phone', '', ['Finance Manager'], 'CEO'),
+  ].map(m => ({ ...normalizeMeeting(m), example: true }));
+}
+
+/* ---------- Rendering ---------- */
+function matches(m) {
+  const q = state.query.trim().toLowerCase();
+  if (!q) return true;
+  return [m.title, m.place, m.organizer, m.agenda, ...m.attendees].some(v => v.toLowerCase().includes(q));
+}
+function showingExamples() { return state.loaded && state.meetings.length === 0 && !state.query.trim(); }
+
+function render() {
+  renderBadge();
+  renderSummary();
+  renderToolbar();
+  renderBanner();
+  renderMain();
+}
+
+function renderBadge() {
+  const b = $('#storage-badge');
+  const map = {
+    loading: ['', 'Loading…', ''],
+    shared: ['shared', 'Shared with your team', 'Everyone with this link sees the same meetings, live.'],
+    local: ['local', 'Saved on this device', 'Meetings are saved in this browser only.'],
+    memory: ['memory', 'Not saved', 'This browser blocks storage. Changes are lost when you close the page.'],
+  };
+  let [cls, text, tip] = map[state.storage] || map.loading;
+  if (state.readOnly) { cls = 'readonly'; text = 'View only'; tip = 'You can view meetings but not change them.'; }
+  b.className = 'badge ' + cls;
+  b.textContent = text;
+  b.title = tip;
+  $('#btn-new').disabled = state.readOnly || !state.loaded;
+  $('#btn-settings').disabled = state.readOnly || !state.loaded;
+}
+
+function relTime(m, now) {
+  const start = toMin(m.start);
+  if (m.date === now.date) {
+    if (start <= now.minutes) return 'Now, until ' + toTime(endMin(m));
+    const diff = start - now.minutes;
+    const h = Math.floor(diff / 60), mm = diff % 60;
+    return 'Today ' + m.start + ' (in ' + (h ? h + 'h ' : '') + mm + 'm)';
+  }
+  if (m.date === addDays(now.date, 1)) return 'Tomorrow ' + m.start;
+  return shortDate(m.date) + ', ' + m.start;
+}
+
+function renderSummary() {
+  const el = $('#summary');
+  if (!state.loaded) { el.innerHTML = ''; return; }
+  const now = nowICT();
+  const live = state.meetings.filter(m => m.status !== 'cancelled');
+  const today = live.filter(m => m.date === now.date);
+  const todayLeft = today.filter(m => endMin(m) > now.minutes).length;
+  const ws = weekStart(now.date), we = addDays(ws, 6);
+  const week = live.filter(m => m.date >= ws && m.date <= we);
+  const upcoming = live
+    .filter(m => m.status === 'scheduled' && (m.date > now.date || (m.date === now.date && endMin(m) > now.minutes)))
+    .sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
+  const next = upcoming[0];
+  const clashes = clashSet();
+  const upcomingClashes = upcoming.filter(m => clashes.has(m.id)).length;
+  el.innerHTML = `
+    <div class="tile"><span class="label">Today</span><span class="value">${today.length}</span><span class="sub">${today.length ? todayLeft + ' still to come' : 'No meetings today'}</span></div>
+    <div class="tile"><span class="label">This week</span><span class="value">${week.length}</span><span class="sub">${esc(rangeText(ws, we))}</span></div>
+    <div class="tile next"><span class="label">Next meeting</span>${next
+      ? `<span class="value">${esc(next.title)}</span><span class="sub">${esc(relTime(next, now))}</span>`
+      : `<span class="value">Nothing scheduled</span><span class="sub">Add a meeting to get started</span>`}</div>
+    <div class="tile ${upcomingClashes ? 'alert' : ''}"><span class="label">Clashes</span><span class="value">${upcomingClashes}</span><span class="sub">${upcomingClashes ? upcomingClashes + ' meetings overlap. Open them to fix.' : 'No double bookings'}</span></div>`;
+}
+
+function renderToolbar() {
+  const ws = weekStart(state.anchor), we = addDays(ws, 6);
+  $('#range-label').textContent = rangeText(ws, we);
+  $('#week-nav').hidden = state.view !== 'week';
+  $('#past-toggle').hidden = state.view !== 'list';
+  document.querySelectorAll('.seg button').forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.view === state.view)));
+  $('#btn-export').hidden = !(state.loaded && state.meetings.length && (downloads || !hasClaude));
+}
+
+function renderBanner() {
+  const el = $('#banner');
+  if (showingExamples()) {
+    el.hidden = false;
+    el.className = 'banner';
+    el.innerHTML = `<span>These are examples only and are not saved. Add your first meeting to start your plan.</span>${state.readOnly ? '' : '<button class="btn small primary" type="button" data-act="new">Add first meeting</button>'}`;
+  } else if (state.storage === 'memory') {
+    el.hidden = false;
+    el.className = 'banner';
+    el.textContent = 'This browser blocks saving. Meetings you add will be lost when you close this page.';
+  } else {
+    el.hidden = true;
+    el.innerHTML = '';
+  }
+}
+
+function renderMain() {
+  const main = $('#main');
+  if (!state.loaded) { main.innerHTML = '<div class="loading">Loading meetings…</div>'; return; }
+  main.innerHTML = state.view === 'week' ? weekHTML() : listHTML();
+}
+
+function layoutDay(items) {
+  const out = [];
+  let cluster = [], clusterEnd = -1;
+  const flush = () => {
+    const lanes = [];
+    cluster.forEach(it => {
+      let l = lanes.findIndex(end => end <= it.s);
+      if (l < 0) { l = lanes.length; lanes.push(0); }
+      lanes[l] = it.e; it.lane = l;
+    });
+    cluster.forEach(it => { it.lanes = lanes.length; out.push(it); });
+    cluster = []; clusterEnd = -1;
+  };
+  items.forEach(it => {
+    if (cluster.length && it.s >= clusterEnd) flush();
+    cluster.push(it);
+    clusterEnd = Math.max(clusterEnd, it.e);
+  });
+  if (cluster.length) flush();
+  return out;
+}
+
+function weekHTML() {
+  const now = nowICT();
+  const ws = weekStart(state.anchor);
+  const all = Array.from({ length: 7 }, (_, i) => addDays(ws, i));
+  const examples = showingExamples();
+  const source = examples ? exampleMeetings() : state.meetings.filter(matches);
+  const inWeek = source.filter(m => m.date >= ws && m.date <= all[6]);
+  let days = all.filter(d => state.settings.days.includes(dow(d)) || inWeek.some(m => m.date === d));
+  if (!days.length) days = all.slice(0, 5);
+  let startMin = toMin(state.settings.workStart), stopMin = toMin(state.settings.workEnd);
+  inWeek.forEach(m => { startMin = Math.min(startMin, toMin(m.start)); stopMin = Math.max(stopMin, endMin(m)); });
+  startMin = Math.max(0, Math.floor(startMin / 60) * 60);
+  stopMin = Math.min(1440, Math.ceil(stopMin / 60) * 60);
+  const height = (stopMin - startMin) / 60 * HOUR_PX;
+  const clashes = clashSet();
+  const y = min => (min - startMin) / 60 * HOUR_PX;
+
+  let html = `<div class="week-scroll"><div class="week" style="--cols:${days.length}">`;
+  html += '<div class="wk-head" aria-hidden="true"></div>';
+  days.forEach(d => {
+    const dt = parseDate(d);
+    const off = !state.settings.days.includes(dow(d));
+    html += `<div class="wk-head${d === now.date ? ' today' : ''}${off ? ' off' : ''}">${DAYS[dt.getUTCDay()].slice(0, 3)}<b>${dt.getUTCDate()}</b></div>`;
+  });
+  html += `<div class="wk-times" style="height:${height}px">`;
+  for (let t = startMin + 60; t < stopMin; t += 60) html += `<span style="top:${y(t)}px">${toTime(t)}</span>`;
+  html += '</div>';
+  days.forEach(d => {
+    const off = !state.settings.days.includes(dow(d));
+    const items = layoutDay(inWeek.filter(m => m.date === d)
+      .map(m => ({ m, s: toMin(m.start), e: endMin(m) }))
+      .sort((a, b) => a.s - b.s || b.e - a.e));
+    html += `<div class="wk-col${off ? ' off' : ''}${state.readOnly ? ' readonly' : ''}" data-date="${d}" data-start="${startMin}" style="height:${height}px" title="${state.readOnly ? '' : 'Click an empty time to add a meeting'}">`;
+    items.forEach(({ m, s, e, lane, lanes }) => {
+      const top = y(s), h = Math.max(22, y(e) - top - 2);
+      const cls = ['ev', 'mode-' + m.mode, 'st-' + m.status, clashes.has(m.id) && !m.example ? 'clash' : '', m.example ? 'example' : ''].join(' ');
+      const where = m.mode === 'online' ? (m.place || 'Online') : m.place;
+      html += `<button type="button" class="${cls}" data-id="${esc(m.id)}" style="top:${top}px;height:${h}px;left:calc(${lane} * 100% / ${lanes} + 2px);width:calc(100% / ${lanes} - 4px)" aria-label="${esc(m.title)}, ${esc(shortDate(m.date))} ${m.start} to ${toTime(e)}${m.example ? ', example' : ''}">`
+        + (h < 40
+          ? `<span class="n"><span class="t">${m.start}</span> ${esc(m.title)}</span></button>`
+          : `<span class="t">${m.start}–${toTime(e)}</span><span class="n">${esc(m.title)}</span>${h > 50 && where ? `<span class="p">${esc(where)}</span>` : ''}</button>`);
+    });
+    if (d === now.date && now.minutes >= startMin && now.minutes <= stopMin) html += `<div class="now-line" style="top:${y(now.minutes)}px"></div>`;
+    html += '</div>';
+  });
+  html += '</div></div>';
+  if (!examples && state.query.trim() && !inWeek.length) html += `<div class="empty" style="margin-top:12px"><strong>No matches this week</strong><span>Try another week or switch to List view to search all dates.</span></div>`;
+  return html;
+}
+
+function cardHTML(m, clashes) {
+  const e = toTime(endMin(m));
+  const where = m.mode === 'online' ? (m.place || 'Online link') : m.place;
+  const count = peopleOf(m).length;
+  return `<button type="button" class="card st-${m.status}${m.example ? ' example' : ''}" data-id="${esc(m.id)}">
+    <div class="card-time"><strong>${m.start}</strong><span>${e}</span></div>
+    <div><div class="card-title">${esc(m.title)}</div>
+      <div class="card-meta"><span class="chip ${m.mode}">${MODES[m.mode]}</span>${where ? `<span>${esc(where)}</span>` : ''}${count ? `<span>${count} ${count === 1 ? 'person' : 'people'}</span>` : ''}</div></div>
+    <div class="card-side">${m.example ? '<span class="pill example">Example</span>' : `<span class="pill ${m.status}">${STATUS[m.status]}</span>`}${clashes.has(m.id) && !m.example ? '<span class="pill clash">Clash</span>' : ''}</div>
+  </button>`;
+}
+
+function listHTML() {
+  const now = nowICT();
+  const examples = showingExamples();
+  let items = examples ? exampleMeetings() : state.meetings.filter(matches);
+  items = items.filter(m => state.showPast ? m.date < now.date : m.date >= now.date);
+  items.sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
+  if (state.showPast) items.reverse();
+  if (!items.length) {
+    const msg = state.query.trim() ? ['No meetings match your search', 'Check the spelling or clear the search box.']
+      : state.showPast ? ['No past meetings', 'Meetings move here after their date has passed.']
+      : ['No upcoming meetings', 'Add a meeting to plan your week.'];
+    return `<div class="empty"><strong>${msg[0]}</strong><span>${msg[1]}</span>${!state.readOnly && !state.showPast && !state.query.trim() ? '<button class="btn primary" type="button" data-act="new">New meeting</button>' : ''}</div>`;
+  }
+  const clashes = clashSet();
+  const groups = new Map();
+  items.forEach(m => { if (!groups.has(m.date)) groups.set(m.date, []); groups.get(m.date).push(m); });
+  let html = '<div class="list">';
+  groups.forEach((list, d) => {
+    const tag = d === now.date ? '<span class="today-tag">Today · </span>' : d === addDays(now.date, 1) ? '<span class="today-tag">Tomorrow · </span>' : '';
+    html += `<section class="day-group"><h3>${tag}${esc(longDate(d))}</h3><div class="cards">${list.map(m => cardHTML(m, clashes)).join('')}</div></section>`;
+  });
+  return html + '</div>';
+}
+
+/* ---------- Toasts ---------- */
+function toast(msg, kind) {
+  const t = document.createElement('div');
+  t.className = 'toast' + (kind === 'error' ? ' error' : '');
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(() => t.remove(), kind === 'error' ? 6000 : 3200);
+}
+
+/* ---------- Meeting form ---------- */
+const form = $('#meeting-form');
+const dlgForm = $('#dlg-form');
+let editing = null; // existing meeting being edited, or null
+
+function openForm(existing, prefill) {
+  if (state.readOnly) return;
+  editing = existing || null;
+  const m = existing || prefill || {};
+  const now = nowICT();
+  $('#form-title').textContent = existing ? 'Edit meeting' : 'New meeting';
+  $('#f-title').value = m.title || '';
+  $('#f-date').value = m.date || (state.anchor >= now.date ? state.anchor : now.date);
+  $('#f-start').value = m.start || '09:00';
+  const dur = String(m.duration || state.settings.defaultDuration);
+  const sel = $('#f-duration');
+  if (![...sel.options].some(o => o.value === dur)) sel.add(new Option(durLabel(Number(dur)), dur));
+  sel.value = dur;
+  const mode = has(MODES, m.mode) ? m.mode : 'in_person';
+  $('#f-mode-' + mode).checked = true;
+  $('#f-place').value = m.place || '';
+  $('#f-link').value = m.link || '';
+  $('#f-organizer').value = m.organizer || '';
+  $('#f-attendees').value = (m.attendees || []).join('\n');
+  $('#f-agenda').value = m.agenda || '';
+  $('#f-status').value = m.status || 'scheduled';
+  $('#status-field').hidden = !existing;
+  $('#slot-list').innerHTML = '';
+  ['title', 'date', 'start', 'link'].forEach(k => { $('#e-' + k).hidden = true; const i = $('#f-' + k); i.removeAttribute('aria-invalid'); });
+  updateModeFields();
+  updateFormClash();
+  $('#btn-save').disabled = false;
+  $('#btn-save').textContent = 'Save meeting';
+  if (!dlgForm.open) dlgForm.showModal();
+  $('#f-title').focus();
+}
+
+function currentMode() { const r = form.querySelector('input[name="f-mode"]:checked'); return r ? r.value : 'in_person'; }
+function updateModeFields() {
+  const mode = currentMode();
+  $('#link-field').hidden = mode !== 'online';
+  $('#place-lbl').textContent = mode === 'online' ? 'Platform' : mode === 'phone' ? 'Phone number or dial-in (optional)' : 'Place or room';
+  $('#f-place').placeholder = mode === 'online' ? 'e.g. Google Meet, Zoom, Teams' : mode === 'phone' ? 'e.g. 012 345 678' : 'e.g. Meeting room 1';
+}
+
+function draftFromForm() {
+  return normalizeMeeting({
+    id: editing ? editing.id : '__draft__',
+    title: $('#f-title').value.trim(),
+    date: $('#f-date').value,
+    start: $('#f-start').value,
+    duration: Number($('#f-duration').value),
+    mode: currentMode(),
+    place: $('#f-place').value.trim(),
+    link: currentMode() === 'online' ? $('#f-link').value.trim() : '',
+    organizer: $('#f-organizer').value.trim(),
+    attendees: splitPeople($('#f-attendees').value),
+    agenda: $('#f-agenda').value.trim(),
+    status: editing ? $('#f-status').value : 'scheduled',
+    createdAt: editing ? editing.createdAt : '',
+  });
+}
+
+function updateFormClash() {
+  const box = $('#form-clash');
+  const d = draftFromForm();
+  const list = d ? clashesFor(d) : [];
+  if (!list.length) { box.hidden = true; box.innerHTML = ''; return; }
+  box.hidden = false;
+  box.innerHTML = `<b>Clash with ${list.length} other meeting${list.length > 1 ? 's' : ''}. You can still save.</b>` + list.map(({ o, r }) =>
+    `<span>${esc(o.title)}, ${o.start}–${toTime(endMin(o))}: ${esc(r.join('; '))}</span>`).join('');
+}
+
+function setErr(key, msg) {
+  const e = $('#e-' + key), i = $('#f-' + key);
+  e.textContent = msg || '';
+  e.hidden = !msg;
+  if (msg) i.setAttribute('aria-invalid', 'true'); else i.removeAttribute('aria-invalid');
+  return !msg;
+}
+
+function validate() {
+  const title = $('#f-title').value.trim();
+  const date = $('#f-date').value;
+  const start = $('#f-start').value;
+  const dur = Number($('#f-duration').value);
+  const link = $('#f-link').value.trim();
+  let ok = true;
+  ok = setErr('title', title ? '' : 'Enter a meeting title.') && ok;
+  ok = setErr('date', /^\d{4}-\d{2}-\d{2}$/.test(date) ? '' : 'Choose a date.') && ok;
+  let startMsg = '';
+  if (!/^\d{2}:\d{2}$/.test(start)) startMsg = 'Choose a start time.';
+  else if (toMin(start) + dur > 1440) startMsg = 'The meeting must end by midnight. Choose an earlier time or a shorter length.';
+  ok = setErr('start', startMsg) && ok;
+  let linkMsg = '';
+  if (currentMode() === 'online' && link && !/^https?:\/\/\S+$/i.test(link)) linkMsg = 'The link must start with https://';
+  ok = setErr('link', linkMsg) && ok;
+  return ok;
+}
+
+form.addEventListener('input', e => {
+  if (e.target.name === 'f-mode') updateModeFields();
+  updateFormClash();
+});
+form.addEventListener('change', () => updateFormClash());
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!validate()) { const bad = form.querySelector('[aria-invalid="true"]'); if (bad) bad.focus(); return; }
+  const d = draftFromForm();
+  const stamp = new Date().toISOString();
+  const m = { ...d, id: editing ? editing.id : newId(), createdAt: editing ? (editing.createdAt || stamp) : stamp, updatedAt: stamp };
+  const btn = $('#btn-save');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await putMeeting(m);
+    dlgForm.close();
+    state.anchor = m.date;
+    render();
+    toast(editing ? 'Meeting updated' : 'Meeting saved');
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Save meeting';
+    toast(err && err.code === 'local_blocked' ? 'This browser blocked saving. The meeting is kept only until you close this page.' : saveError(err), 'error');
+    if (err && err.code === 'local_blocked') { dlgForm.close(); render(); }
+  }
+});
+
+$('#btn-find').addEventListener('click', () => {
+  const dur = Number($('#f-duration').value);
+  const people = [$('#f-organizer').value.trim(), ...splitPeople($('#f-attendees').value)].filter(Boolean);
+  const slots = findSlots($('#f-date').value, dur, people, editing ? editing.id : null);
+  const list = $('#slot-list');
+  if (!slots.length) {
+    list.innerHTML = '<span class="hint">No free time found in the next 30 days inside working hours. Try a shorter meeting or change working hours.</span>';
+    return;
+  }
+  list.innerHTML = (people.length ? '' : '<span class="hint" style="flex-basis:100%">No attendees listed, so these times avoid every meeting in the planner.</span>')
+    + slots.map(s => `<button type="button" data-date="${s.date}" data-start="${s.start}">${esc(shortDate(s.date))} · ${s.start}–${toTime(toMin(s.start) + dur)}</button>`).join('');
+});
+$('#slot-list').addEventListener('click', e => {
+  const b = e.target.closest('button[data-date]');
+  if (!b) return;
+  $('#f-date').value = b.dataset.date;
+  $('#f-start').value = b.dataset.start;
+  setErr('date', ''); setErr('start', '');
+  updateFormClash();
+  toast('Time set to ' + shortDate(b.dataset.date) + ' at ' + b.dataset.start);
+});
+
+/* ---------- Meeting details ---------- */
+const dlgDetail = $('#dlg-detail');
+let detailId = null;
+let detailExample = null;
+
+function invitationText(m) {
+  const lines = [
+    'Meeting: ' + m.title,
+    'Date: ' + longDate(m.date),
+    'Time: ' + m.start + ' – ' + toTime(endMin(m)) + ' (Cambodia time)',
+    'Type: ' + MODES[m.mode],
+  ];
+  if (m.place) lines.push((m.mode === 'online' ? 'Platform: ' : m.mode === 'phone' ? 'Phone: ' : 'Place: ') + m.place);
+  if (m.link) lines.push('Join link: ' + m.link);
+  if (m.organizer) lines.push('Organizer: ' + m.organizer);
+  if (m.attendees.length) lines.push('Attendees: ' + m.attendees.join(', '));
+  if (m.agenda) lines.push('', 'Agenda:', m.agenda);
+  lines.push('', 'Please confirm your attendance.');
+  return lines.join('\n');
+}
+function calendarDetails(m) {
+  const parts = [];
+  if (m.link) parts.push('Join link: ' + m.link);
+  if (m.organizer) parts.push('Organizer: ' + m.organizer);
+  if (m.attendees.length) parts.push('Attendees: ' + m.attendees.join(', '));
+  if (m.agenda) parts.push('', 'Agenda:', m.agenda);
+  return parts.join('\n');
+}
+function googleUrl(m) {
+  const p = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: m.title,
+    dates: utcStamp(m.date, toMin(m.start)) + '/' + utcStamp(m.date, endMin(m)),
+    details: calendarDetails(m),
+    location: m.mode === 'online' && m.link ? m.link : m.place,
+    ctz: 'Asia/Phnom_Penh',
+  });
+  return 'https://calendar.google.com/calendar/render?' + p.toString();
+}
+function icsEsc(s) { return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); }
+function icsFold(line) {
+  const enc = new TextEncoder();
+  if (enc.encode(line).length <= 75) return line;
+  let out = '', cur = '', bytes = 0, limit = 75;
+  for (const ch of line) {
+    const b = enc.encode(ch).length;
+    if (bytes + b > limit) { out += cur + '\r\n '; cur = ''; bytes = 0; limit = 74; }
+    cur += ch; bytes += b;
+  }
+  return out + cur;
+}
+function icsFile(m) {
+  const lines = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//AI For Business//Team Meeting Planner//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    'UID:' + m.id + '@team-meeting-planner',
+    'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''),
+    'DTSTART:' + utcStamp(m.date, toMin(m.start)),
+    'DTEND:' + utcStamp(m.date, endMin(m)),
+    'SUMMARY:' + icsEsc(m.title),
+  ];
+  const loc = m.mode === 'online' && m.link ? m.link : m.place;
+  if (loc) lines.push('LOCATION:' + icsEsc(loc));
+  const det = calendarDetails(m);
+  if (det) lines.push('DESCRIPTION:' + icsEsc(det));
+  if (m.link) lines.push('URL:' + m.link);
+  if (m.status === 'cancelled') lines.push('STATUS:CANCELLED');
+  lines.push('END:VEVENT', 'END:VCALENDAR');
+  return lines.map(icsFold).join('\r\n') + '\r\n';
+}
+function fileSafe(s) { return (s.replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'meeting'); }
+function blobDownload(name, data, type) {
+  const url = URL.createObjectURL(new Blob([data], { type }));
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function findMeeting(id) {
+  if (detailExample && detailExample.id === id) return detailExample;
+  return state.meetings.find(m => m.id === id) || null;
+}
+
+function openDetail(id) {
+  detailExample = showingExamples() ? exampleMeetings().find(m => m.id === id) || null : null;
+  detailId = id;
+  const m = findMeeting(id);
+  if (!m) return;
+  renderDetail(m);
+  if (!dlgDetail.open) dlgDetail.showModal();
+}
+function refreshOpenDetail() {
+  if (!dlgDetail.open || !detailId || detailExample) return;
+  const m = findMeeting(detailId);
+  if (!m) { dlgDetail.close(); toast('This meeting was deleted.'); return; }
+  if (!$('#detail').querySelector('.confirm, .copy-box')) renderDetail(m);
+}
+
+function renderDetail(m, extra) {
+  const example = !!m.example;
+  const clashes = example ? [] : clashesFor(m);
+  const where = m.place ? `<dt>${m.mode === 'online' ? 'Platform' : m.mode === 'phone' ? 'Phone' : 'Place'}</dt><dd>${esc(m.place)}</dd>` : '';
+  const link = m.link && /^https?:\/\//i.test(m.link) ? `<dt>Join link</dt><dd><a href="${esc(m.link)}" target="_blank" rel="noopener noreferrer">${esc(m.link)}</a></dd>` : '';
+  const people = m.attendees.length ? `<dt>Attendees</dt><dd><div class="people">${m.attendees.map(p => `<span>${esc(p)}</span>`).join('')}</div></dd>` : '';
+  const ro = state.readOnly;
+  let actions;
+  if (example) {
+    actions = `<p style="margin:0;color:var(--muted)">This is an example. Use it as a starting point for a real meeting.</p>
+      <div class="action-row">${ro ? '' : '<button class="btn primary" type="button" data-act="use-example">Use this example</button>'}</div>`;
+  } else {
+    actions = `<div class="action-row">
+        <button class="btn" type="button" data-act="copy">Copy invitation</button>
+        <a class="btn" href="${esc(googleUrl(m))}" target="_blank" rel="noopener noreferrer">Add to Google Calendar</a>
+        ${hasClaude ? '' : '<button class="btn" type="button" data-act="ics">Download calendar file (.ics)</button>'}
+      </div>`;
+  }
+  $('#detail').innerHTML = `
+    <div class="dlg-head">
+      <div style="display:grid;gap:6px;min-width:0">
+        <h2 id="detail-title">${esc(m.title)}</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="chip ${m.mode}">${MODES[m.mode]}</span>${example ? '<span class="pill example">Example</span>' : `<span class="pill ${m.status}">${STATUS[m.status]}</span>`}${clashes.length ? '<span class="pill clash">Clash</span>' : ''}</div>
+      </div>
+      <button class="close-x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="dlg-body">
+      <dl class="detail-grid" style="margin:0">
+        <dt>Date</dt><dd>${esc(longDate(m.date))}</dd>
+        <dt>Time</dt><dd>${m.start} – ${toTime(endMin(m))} (${esc(durLabel(m.duration))})</dd>
+        ${where}${link}
+        ${m.organizer ? `<dt>Organizer</dt><dd>${esc(m.organizer)}</dd>` : ''}
+        ${people}
+      </dl>
+      ${m.agenda ? `<div class="field"><span class="lbl">Agenda</span><pre class="agenda">${esc(m.agenda)}</pre></div>` : ''}
+      ${clashes.length ? `<div class="warn"><b>Clashes with:</b>${clashes.map(({ o, r }) => `<span>${esc(o.title)}, ${o.start}–${toTime(endMin(o))}: ${esc(r.join('; '))}</span>`).join('')}</div>` : ''}
+      ${actions}
+      ${extra || ''}
+    </div>
+    ${example || ro ? '' : `<div class="dlg-foot">
+      <button class="btn danger left" type="button" data-act="delete">Delete</button>
+      ${m.status === 'scheduled' ? '<button class="btn" type="button" data-act="cancel">Cancel meeting</button><button class="btn" type="button" data-act="done">Mark as done</button>' : '<button class="btn" type="button" data-act="reopen">Set back to scheduled</button>'}
+      <button class="btn primary" type="button" data-act="edit">Edit</button>
+    </div>`}`;
+}
+
+async function setStatus(m, status) {
+  try {
+    await putMeeting({ ...m, status, updatedAt: new Date().toISOString() });
+    renderDetail(findMeeting(m.id) || m);
+    toast(status === 'done' ? 'Marked as done' : status === 'cancelled' ? 'Meeting cancelled' : 'Meeting set back to scheduled');
+  } catch (err) {
+    toast(err && err.code === 'local_blocked' ? 'This browser blocked saving.' : saveError(err), 'error');
+  }
+}
+
+$('#detail').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn) return;
+  const m = findMeeting(detailId);
+  if (!m) return;
+  const act = btn.dataset.act;
+  if (act === 'edit') { dlgDetail.close(); openForm(m); }
+  else if (act === 'use-example') { dlgDetail.close(); const { id, example, ...rest } = m; openForm(null, rest); }
+  else if (act === 'done' || act === 'cancel' || act === 'reopen') setStatus(m, act === 'done' ? 'done' : act === 'cancel' ? 'cancelled' : 'scheduled');
+  else if (act === 'delete') {
+    renderDetail(m, `<div class="confirm"><span style="flex:1">Delete this meeting? This cannot be undone.</span><button class="btn small" type="button" data-act="keep">Keep it</button><button class="btn small danger solid" type="button" data-act="confirm-delete">Delete</button></div>`);
+    $('#detail').querySelector('[data-act="keep"]').focus();
+  }
+  else if (act === 'keep') renderDetail(m);
+  else if (act === 'confirm-delete') {
+    btn.disabled = true;
+    try { await removeMeeting(m.id); dlgDetail.close(); toast('Meeting deleted'); }
+    catch (err) { btn.disabled = false; toast(err && err.code === 'local_blocked' ? 'This browser blocked saving.' : saveError(err), 'error'); }
+  }
+  else if (act === 'copy') {
+    const text = invitationText(m);
+    let copied = false;
+    try { if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(text); copied = true; } } catch (err) { copied = false; }
+    if (copied) toast('Invitation copied. Paste it in Telegram or email.');
+    else {
+      renderDetail(m, `<div class="field copy-box"><label for="copy-text">Copy this text</label><textarea id="copy-text" readonly>${esc(text)}</textarea></div>`);
+      const ta = $('#copy-text'); ta.focus(); ta.select();
+    }
+  }
+  else if (act === 'ics') {
+    blobDownload(fileSafe(m.title) + '-' + m.date + '.ics', icsFile(m), 'text/calendar;charset=utf-8');
+    toast('Calendar file downloaded. Open it to add the meeting to Outlook or your phone calendar.');
+  }
+});
+
+/* ---------- Settings ---------- */
+const dlgSettings = $('#dlg-settings');
+function openSettings() {
+  if (state.readOnly) return;
+  const s = state.settings;
+  $('#s-start').value = s.workStart;
+  $('#s-end').value = s.workEnd;
+  $('#s-duration').value = String(s.defaultDuration);
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  $('#s-days').innerHTML = order.map(d => `<label><input type="checkbox" id="s-day-${d}" value="${d}" ${s.days.includes(d) ? 'checked' : ''}> ${DAYS[d].slice(0, 3)}</label>`).join('');
+  $('#e-settings').hidden = true;
+  $('#btn-save-settings').disabled = false;
+  dlgSettings.showModal();
+}
+$('#settings-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const start = $('#s-start').value, end = $('#s-end').value;
+  const days = [...document.querySelectorAll('#s-days input:checked')].map(i => Number(i.value));
+  const err = $('#e-settings');
+  let msg = '';
+  if (!/^\d{2}:\d{2}$/.test(start) || !/^\d{2}:\d{2}$/.test(end)) msg = 'Enter a start and end time.';
+  else if (toMin(end) - toMin(start) < 60) msg = 'The working day must be at least 1 hour long.';
+  else if (!days.length) msg = 'Choose at least one working day.';
+  if (msg) { err.textContent = msg; err.hidden = false; return; }
+  const btn = $('#btn-save-settings');
+  btn.disabled = true;
+  try {
+    await putSettings(normalizeSettings({ workStart: start, workEnd: end, days, defaultDuration: Number($('#s-duration').value) }));
+    dlgSettings.close();
+    toast('Working hours saved');
+  } catch (er) {
+    btn.disabled = false;
+    toast(er && er.code === 'local_blocked' ? 'This browser blocked saving.' : saveError(er), 'error');
+  }
+});
+
+/* ---------- CSV export ---------- */
+function csvCell(v) {
+  let s = String(v ?? '');
+  if (/^[=+\-@]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+async function exportCsv() {
+  const rows = [['Date', 'Start', 'End', 'Title', 'Type', 'Place', 'Online link', 'Organizer', 'Attendees', 'Status', 'Agenda']];
+  [...state.meetings].sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start)).forEach(m => {
+    rows.push([m.date, m.start, toTime(endMin(m)), m.title, MODES[m.mode], m.place, m.link, m.organizer, m.attendees.join(', '), STATUS[m.status], m.agenda]);
+  });
+  const csv = '\ufeff' + rows.map(r => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
+  const name = 'meetings-' + nowICT().date + '.csv';
+  if (downloads) {
+    try { await downloads.save({ filename: name, data: csv }); toast('Meeting list saved'); }
+    catch (e) { if (e && e.code !== 'declined') toast('Could not save the file here.', 'error'); }
+  } else if (!hasClaude) {
+    blobDownload(name, csv, 'text/csv;charset=utf-8');
+    toast('Meeting list downloaded');
+  }
+}
+
+/* ---------- Global events ---------- */
+document.addEventListener('click', e => {
+  const close = e.target.closest('[data-close]');
+  if (close) { const d = close.closest('dialog'); if (d) d.close(); return; }
+  const act = e.target.closest('[data-act="new"]');
+  if (act && !act.closest('#detail')) { openForm(null, null); return; }
+});
+[dlgForm, dlgDetail, dlgSettings].forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+
+$('#btn-new').addEventListener('click', () => openForm(null, null));
+$('#btn-settings').addEventListener('click', openSettings);
+$('#btn-export').addEventListener('click', exportCsv);
+$('#btn-today').addEventListener('click', () => { state.anchor = nowICT().date; render(); });
+$('#btn-prev').addEventListener('click', () => { state.anchor = addDays(state.anchor, -7); render(); });
+$('#btn-next').addEventListener('click', () => { state.anchor = addDays(state.anchor, 7); render(); });
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => { state.view = b.dataset.view; render(); }));
+$('#show-past').addEventListener('change', e => { state.showPast = e.target.checked; render(); });
+let searchTimer;
+$('#search').addEventListener('input', e => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { state.query = e.target.value; render(); }, 150); });
+
+$('#main').addEventListener('click', e => {
+  const item = e.target.closest('[data-id]');
+  if (item) { openDetail(item.dataset.id); return; }
+  const col = e.target.closest('.wk-col');
+  if (col && e.target === col && !state.readOnly) {
+    const startMin = Number(col.dataset.start);
+    const y = e.clientY - col.getBoundingClientRect().top;
+    let min = startMin + Math.floor(y / HOUR_PX * 2) * 30;
+    min = Math.max(0, Math.min(min, 1440 - 30));
+    openForm(null, { date: col.dataset.date, start: toTime(min) });
+  }
+});
+
+setInterval(() => { if (state.loaded) { renderSummary(); if (state.view === 'week') renderMain(); } }, 60000);
+
+render();
+initStorage();
+})();
+</script>
+</body>
+</html>
