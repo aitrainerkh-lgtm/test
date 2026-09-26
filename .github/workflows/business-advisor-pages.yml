@@ -1,4 +1,5 @@
-# Publishes the Business Advisor app (business-advisor/public) to GitHub Pages.
+# Publishes the Business Advisor app (business-advisor/public) to GitHub Pages,
+# with the Phnom Penh 3D map at /phnom-penh-3d/.
 # One-time setup: repository Settings -> Pages -> Source: "GitHub Actions".
 # The app will be at https://<owner>.github.io/<repo>/
 name: Publish Business Advisor
@@ -6,7 +7,7 @@ name: Publish Business Advisor
 on:
   push:
     branches: [claude/build-consulting-website-jrobo] # the repository's default branch
-    paths: ['business-advisor/public/**', '.github/workflows/business-advisor-pages.yml']
+    paths: ['business-advisor/public/**', 'phnom-penh-3d/**', '.github/workflows/business-advisor-pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -29,8 +30,13 @@ jobs:
       - uses: actions/configure-pages@v5
         with:
           enablement: true # turns on GitHub Pages the first time
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r business-advisor/public/. _site/
+          cp -r phnom-penh-3d _site/phnom-penh-3d
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: business-advisor/public
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
