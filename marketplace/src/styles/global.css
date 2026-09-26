@@ -111,7 +111,7 @@ a.chip:hover { text-decoration: none; border-color: var(--primary); }
 .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
 
 /* Header -------------------------------------------------------------- */
-.site-header { background: var(--primary); color: #fff; position: sticky; top: 0; z-index: 50; }
+.site-header { background: var(--primary); color: #fff; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; }
 .header-main { display: flex; align-items: center; gap: 8px; height: var(--header-h); }
 .logo { display: inline-flex; align-items: center; gap: 8px; color: #fff; font-weight: 800; font-size: 1.2rem; letter-spacing: -.01em; }
 .logo:hover { text-decoration: none; }
