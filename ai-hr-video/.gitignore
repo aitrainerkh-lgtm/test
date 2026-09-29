@@ -1,0 +1,6 @@
+clips/
+build/
+.venv/
+*.mp4
+*.srt
+*.zip
