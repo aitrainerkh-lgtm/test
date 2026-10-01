@@ -1,0 +1,1886 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>CamStore 365 — FY2025 Financial Report</title>
+    <script src="assets/js/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Fraunces";
+        src: url("assets/fonts/fraunces-latin-full-normal.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Fraunces";
+        src: url("assets/fonts/fraunces-latin-full-italic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2");
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+        font-weight: 600;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2");
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+      }
+
+      :root {
+        --ink: #0d0b09;
+        --ink-2: #1b1612;
+        --paper: #f3ece0;
+        --paper-dim: rgba(243, 236, 224, 0.64);
+        --paper-faint: rgba(243, 236, 224, 0.38);
+        --hair: rgba(243, 236, 224, 0.12);
+        --terra: #d9734f;
+        --terra-deep: #a8502f;
+        --olive: #a3b062;
+        --gold: #e4b24c;
+        --serif: "Fraunces", Georgia, serif;
+        --sans: "Inter", system-ui, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ink);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--ink);
+        font-family: var(--sans);
+        color: var(--paper);
+        -webkit-font-smoothing: antialiased;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+      .layer {
+        position: absolute;
+        inset: 0;
+      }
+      .serif {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0;
+      }
+      .num {
+        font-feature-settings: "lnum" 1, "tnum" 1;
+      }
+      .odo-ch,
+      .odo {
+        display: inline-block;
+        vertical-align: top;
+        height: 1.1em;
+        line-height: 1.1em;
+      }
+      .odo {
+        position: relative;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+      }
+      .odo .ph {
+        visibility: hidden;
+      }
+      .odo .strip {
+        position: absolute;
+        left: -0.3em;
+        right: -0.3em;
+        top: 0;
+        text-align: center;
+      }
+      .odo .strip span {
+        display: block;
+        height: 1.1em;
+        line-height: 1.1em;
+      }
+
+      /* ---------- Background ---------- */
+      #bg-base {
+        background:
+          radial-gradient(120% 90% at 50% 40%, #1d1813 0%, #120f0c 55%, #080706 100%);
+      }
+      #bg-grid {
+        inset: -80px;
+        background-image:
+          linear-gradient(rgba(243, 236, 224, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(243, 236, 224, 0.035) 1px, transparent 1px);
+        background-size: 80px 80px;
+        -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 30%, transparent 100%);
+        mask-image: radial-gradient(70% 70% at 50% 50%, #000 30%, transparent 100%);
+      }
+      .glow {
+        position: absolute;
+        width: 1400px;
+        height: 1400px;
+        border-radius: 50%;
+      }
+      #glow-a {
+        left: -300px;
+        top: -500px;
+        background: radial-gradient(circle, rgba(217, 115, 79, 0.2) 0%, rgba(217, 115, 79, 0) 62%);
+      }
+      #glow-b {
+        left: 900px;
+        top: 200px;
+        background: radial-gradient(circle, rgba(228, 178, 76, 0.13) 0%, rgba(228, 178, 76, 0) 62%);
+      }
+      #glow-c {
+        left: 200px;
+        top: 300px;
+        background: radial-gradient(circle, rgba(163, 176, 98, 0.12) 0%, rgba(163, 176, 98, 0) 62%);
+      }
+      #grain {
+        inset: -256px;
+        background-image: url("assets/grain.png");
+        background-size: 512px 512px;
+        opacity: 0.075;
+        mix-blend-mode: overlay;
+      }
+      #vignette {
+        background: radial-gradient(110% 85% at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.55) 100%);
+      }
+      #sweep {
+        width: 520px;
+        left: -700px;
+        right: auto;
+        background: linear-gradient(
+          90deg,
+          rgba(228, 178, 76, 0) 0%,
+          rgba(228, 178, 76, 0.1) 40%,
+          rgba(255, 236, 200, 0.22) 50%,
+          rgba(228, 178, 76, 0.1) 60%,
+          rgba(228, 178, 76, 0) 100%
+        );
+        mix-blend-mode: screen;
+        opacity: 0;
+      }
+
+      /* ---------- HUD ---------- */
+      .hud-tl,
+      .hud-tr {
+        position: absolute;
+        top: 56px;
+        font-family: var(--mono);
+        font-size: 17px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: rgba(243, 236, 224, 0.62);
+      }
+      .hud-tl {
+        left: 160px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .hud-tl b {
+        color: var(--paper);
+        font-weight: 500;
+      }
+      .hud-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--gold);
+      }
+      .hud-tr {
+        right: 160px;
+      }
+      #progress {
+        position: absolute;
+        left: 160px;
+        right: 160px;
+        bottom: 64px;
+        height: 2px;
+        background: var(--hair);
+      }
+      #progress-fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--gold);
+        transform-origin: left center;
+      }
+      .tick {
+        position: absolute;
+        top: -5px;
+        width: 2px;
+        height: 12px;
+        background: var(--paper-faint);
+      }
+
+      /* ---------- Shared scene parts ---------- */
+      .inner {
+        position: absolute;
+        inset: 0;
+      }
+      .kicker {
+        position: absolute;
+        left: 160px;
+        top: 132px;
+        font-family: var(--mono);
+        font-size: 22px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--paper-dim);
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        white-space: nowrap;
+      }
+      .kicker .k-num {
+        color: var(--gold);
+        font-weight: 500;
+      }
+      .kicker .k-rule {
+        display: block;
+        width: 56px;
+        height: 2px;
+        background: var(--gold);
+        transform-origin: left center;
+      }
+      .headline {
+        position: absolute;
+        left: 160px;
+        top: 176px;
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0;
+        font-weight: 500;
+        font-size: 64px;
+        line-height: 1.08;
+        letter-spacing: -0.015em;
+        color: var(--paper);
+        white-space: nowrap;
+      }
+      .headline em {
+        font-style: italic;
+        color: var(--gold);
+        font-weight: 400;
+      }
+      .mask {
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+        padding-bottom: 0.08em;
+        margin-bottom: -0.08em;
+      }
+      .mask > .w {
+        display: inline-block;
+      }
+      .baseline {
+        position: absolute;
+        height: 2px;
+        background: rgba(228, 178, 76, 0.7);
+        transform-origin: left center;
+      }
+
+      /* ---------- S1 Title ---------- */
+      #s1-stack {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #s1-kicker {
+        font-family: var(--mono);
+        font-size: 22px;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 26px;
+        padding-left: 0.42em;
+      }
+      #s1-word {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 196px;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        color: var(--paper);
+        white-space: nowrap;
+      }
+      #s1-word .yr {
+        font-style: italic;
+        font-weight: 400;
+        color: var(--gold);
+        letter-spacing: -0.02em;
+      }
+      #s1-word .ch {
+        display: inline-block;
+      }
+      #s1-line {
+        position: relative;
+        width: 980px;
+        height: 30px;
+        margin-top: 34px;
+      }
+      #s1-sub {
+        margin-top: 26px;
+        font-size: 36px;
+        font-weight: 500;
+        color: var(--paper-dim);
+        letter-spacing: 0.01em;
+      }
+      #s1-sub span {
+        color: var(--paper);
+      }
+      #s1-outline {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 170px;
+        text-align: center;
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 0;
+        font-weight: 700;
+        font-size: 640px;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        color: rgba(228, 178, 76, 0.07);
+        -webkit-text-stroke: 1.5px rgba(228, 178, 76, 0.22);
+        opacity: 0;
+      }
+      #s1-ticker {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 900px;
+        height: 40px;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+        mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+        opacity: 0;
+      }
+      #s1-ticker-track {
+        position: absolute;
+        left: 0;
+        top: 0;
+        white-space: nowrap;
+        font-family: var(--mono);
+        font-size: 21px;
+        letter-spacing: 0.12em;
+        color: rgba(243, 236, 224, 0.62);
+      }
+      #s1-ticker-track b {
+        color: var(--paper);
+        font-weight: 500;
+      }
+      #s1-ticker-track i {
+        font-style: normal;
+        color: var(--olive);
+      }
+      #s1-ticker-track .sep {
+        color: var(--gold);
+        margin: 0 28px;
+      }
+
+      /* ---------- S2 Revenue ---------- */
+      #s2-hero {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 318px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform-origin: 50% 50%;
+      }
+      #s2-label {
+        font-family: var(--mono);
+        font-size: 24px;
+        letter-spacing: 0.24em;
+        color: var(--gold);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        padding-left: 0.24em;
+      }
+      #s2-num {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 260px;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+        color: var(--paper);
+        width: 1300px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      #s2-hline {
+        width: 900px;
+        height: 2px;
+        margin-top: 18px;
+        background: linear-gradient(90deg, rgba(228, 178, 76, 0), rgba(228, 178, 76, 0.85), rgba(228, 178, 76, 0));
+      }
+      #s2-label2 {
+        position: absolute;
+        left: 162px;
+        top: 300px;
+        font-family: var(--mono);
+        font-size: 22px;
+        letter-spacing: 0.22em;
+        color: var(--gold);
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      #s2-growth {
+        position: absolute;
+        left: 160px;
+        top: 540px;
+        width: 760px;
+      }
+      #s2-growth-row {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+      }
+      #s2-tri {
+        width: 64px;
+        height: 56px;
+        display: block;
+      }
+      #s2-pct {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 170px;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        color: var(--olive);
+        white-space: nowrap;
+      }
+      #s2-growth-cap {
+        margin-top: 18px;
+        font-size: 32px;
+        color: var(--paper-dim);
+        font-weight: 400;
+      }
+      #s2-growth-cap b {
+        color: var(--paper);
+        font-weight: 600;
+      }
+      #s2-chart {
+        position: absolute;
+        left: 1000px;
+        top: 250px;
+        width: 760px;
+        height: 700px;
+      }
+      .s2-bar {
+        position: absolute;
+        bottom: 90px;
+        width: 168px;
+        border-radius: 6px 6px 0 0;
+        transform-origin: 50% 100%;
+      }
+      .s2-val {
+        position: absolute;
+        width: 240px;
+        text-align: center;
+        font-size: 34px;
+        font-weight: 600;
+        color: var(--paper);
+        white-space: nowrap;
+      }
+      .s2-yr {
+        position: absolute;
+        bottom: 36px;
+        width: 240px;
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 22px;
+        letter-spacing: 0.14em;
+        color: var(--paper-dim);
+      }
+      #s2-arc {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 760px;
+        height: 700px;
+        overflow: visible;
+      }
+
+      /* ---------- S3 Waterfall ---------- */
+      #s3-chart {
+        position: absolute;
+        inset: 0;
+      }
+      .wf-bar {
+        position: absolute;
+        width: 132px;
+        border-radius: 4px;
+      }
+      .wf-total {
+        transform-origin: 50% 100%;
+      }
+      .wf-ded {
+        background: repeating-linear-gradient(
+          -45deg,
+          rgba(217, 115, 79, 0.28) 0px,
+          rgba(217, 115, 79, 0.28) 6px,
+          rgba(217, 115, 79, 0.1) 6px,
+          rgba(217, 115, 79, 0.1) 12px
+        );
+        box-shadow: inset 0 0 0 1.5px rgba(217, 115, 79, 0.55);
+      }
+      .wf-val {
+        position: absolute;
+        width: 220px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .wf-name {
+        position: absolute;
+        top: 922px;
+        width: 220px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: 500;
+        line-height: 1.25;
+        color: var(--paper-dim);
+      }
+      .wf-conn {
+        position: absolute;
+        height: 0;
+        border-top: 2px dashed rgba(243, 236, 224, 0.28);
+        transform-origin: left center;
+      }
+      .pill {
+        position: absolute;
+        padding: 10px 20px 11px;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 21px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+      }
+      #s3-callout {
+        position: absolute;
+        left: 1130px;
+        top: 300px;
+        width: 640px;
+      }
+      #s3-cents {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 230px;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        color: var(--gold);
+      }
+      #s3-cents-cap {
+        margin-top: 14px;
+        font-size: 36px;
+        line-height: 1.3;
+        color: var(--paper);
+        font-weight: 500;
+      }
+      #s3-cents-sub {
+        margin-top: 14px;
+        font-family: var(--mono);
+        font-size: 22px;
+        letter-spacing: 0.2em;
+        color: var(--gold);
+      }
+
+      /* ---------- S4 Months ---------- */
+      .mo-bar {
+        position: absolute;
+        width: 78px;
+        border-radius: 5px 5px 0 0;
+        transform-origin: 50% 100%;
+        background: linear-gradient(180deg, #df7c58 0%, #b9583a 100%);
+      }
+      .mo-lbl {
+        position: absolute;
+        top: 918px;
+        width: 120px;
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 20px;
+        letter-spacing: 0.1em;
+        color: var(--paper-dim);
+      }
+      #s4-avg {
+        position: absolute;
+        left: 170px;
+        width: 1580px;
+        height: 0;
+        border-top: 2px dashed rgba(243, 236, 224, 0.35);
+        transform-origin: left center;
+      }
+      #s4-avg-lbl {
+        position: absolute;
+        left: 170px;
+        font-family: var(--mono);
+        font-size: 18px;
+        letter-spacing: 0.14em;
+        color: var(--paper-dim);
+        white-space: nowrap;
+      }
+      .callout {
+        position: absolute;
+        white-space: nowrap;
+      }
+      .callout .c-val {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 58px;
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
+      .callout .c-cap {
+        margin-top: 8px;
+        font-size: 24px;
+        font-weight: 500;
+        color: var(--paper-dim);
+      }
+      .c-lead {
+        position: absolute;
+        width: 2px;
+        background: rgba(243, 236, 224, 0.5);
+        transform-origin: 50% 0%;
+      }
+      .c-dot {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      /* ---------- S5 Donut ---------- */
+      #s5-donut {
+        position: absolute;
+        left: 300px;
+        top: 300px;
+        width: 600px;
+        height: 600px;
+        overflow: visible;
+      }
+      #s5-center {
+        position: absolute;
+        left: 300px;
+        top: 300px;
+        width: 600px;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #s5-total {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 86px;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      #s5-total-cap {
+        margin-top: 14px;
+        font-family: var(--mono);
+        font-size: 19px;
+        letter-spacing: 0.24em;
+        color: var(--paper-dim);
+      }
+      .lg-row {
+        position: absolute;
+        left: 1060px;
+        width: 700px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--hair);
+      }
+      .lg-pct {
+        width: 300px;
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 112px;
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
+      .lg-name {
+        font-size: 38px;
+        font-weight: 600;
+        color: var(--paper);
+      }
+      .lg-amt {
+        margin-top: 6px;
+        font-size: 28px;
+        color: var(--paper-dim);
+      }
+
+      /* ---------- S6 Costs ---------- */
+      #s6-kinetic {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 380px;
+        text-align: center;
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0;
+        font-weight: 500;
+        font-size: 128px;
+        line-height: 1.1;
+        letter-spacing: -0.025em;
+      }
+      #s6-kinetic em {
+        font-style: italic;
+        color: var(--terra);
+        font-weight: 400;
+      }
+      .line-block {
+        display: block;
+      }
+      .cb-row {
+        position: absolute;
+        left: 160px;
+        height: 76px;
+        display: flex;
+        align-items: center;
+      }
+      .cb-name {
+        width: 360px;
+        font-size: 34px;
+        font-weight: 500;
+        color: var(--paper);
+      }
+      .cb-bar {
+        height: 76px;
+        border-radius: 4px;
+        transform-origin: left center;
+      }
+      .cb-val {
+        margin-left: 22px;
+        font-size: 34px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      #s6-bracket {
+        position: absolute;
+        left: 1462px;
+        top: 324px;
+        width: 40px;
+        height: 328px;
+        overflow: visible;
+      }
+      #s6-share {
+        position: absolute;
+        left: 1530px;
+        top: 360px;
+        width: 300px;
+      }
+      #s6-share-num {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 150px;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        color: var(--gold);
+      }
+      #s6-share-cap {
+        margin-top: 30px;
+        font-size: 27px;
+        line-height: 1.3;
+        color: var(--paper-dim);
+      }
+      #s6-share-sub {
+        margin-top: 8px;
+        font-family: var(--mono);
+        font-size: 20px;
+        letter-spacing: 0.06em;
+        color: var(--paper-faint);
+        white-space: nowrap;
+      }
+      #s6-margin {
+        position: absolute;
+        inset: 0;
+      }
+      .mg-col {
+        position: absolute;
+        top: 380px;
+        width: 560px;
+        text-align: center;
+      }
+      .mg-num {
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 230px;
+        line-height: 1.12;
+        letter-spacing: -0.04em;
+      }
+      .mg-yr {
+        margin-top: 40px;
+        font-family: var(--mono);
+        font-size: 24px;
+        letter-spacing: 0.2em;
+        color: var(--paper-dim);
+      }
+      #s6-mg-title {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 290px;
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 26px;
+        letter-spacing: 0.3em;
+        color: var(--gold);
+      }
+      #s6-mg-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: visible;
+      }
+      #s6-mg-delta {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 760px;
+        text-align: center;
+      }
+      #s6-mg-delta span {
+        display: inline-block;
+        padding: 14px 30px 15px;
+        border-radius: 999px;
+        border: 1.5px solid rgba(217, 115, 79, 0.7);
+        background: rgba(217, 115, 79, 0.12);
+        font-family: var(--mono);
+        font-size: 24px;
+        letter-spacing: 0.08em;
+        color: var(--terra);
+      }
+
+      /* ---------- S7 Cards ---------- */
+      .card {
+        position: absolute;
+        top: 330px;
+        width: 500px;
+        height: 540px;
+        padding: 46px 44px 40px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(243, 236, 224, 0.075) 0%, rgba(243, 236, 224, 0.03) 100%);
+        box-shadow:
+          inset 0 0 0 1.5px rgba(243, 236, 224, 0.1),
+          0 30px 60px rgba(0, 0, 0, 0.35);
+        overflow: hidden;
+      }
+      .card-accent {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 6px;
+        transform-origin: left center;
+      }
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .card-no {
+        font-family: var(--mono);
+        font-size: 26px;
+        letter-spacing: 0.1em;
+        font-weight: 500;
+      }
+      .card-icon {
+        width: 76px;
+        height: 76px;
+      }
+      .card-title {
+        margin-top: 64px;
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0;
+        font-weight: 500;
+        font-size: 52px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        color: var(--paper);
+      }
+      .card-body {
+        margin-top: 24px;
+        font-size: 27px;
+        line-height: 1.42;
+        color: var(--paper-dim);
+      }
+      .card-body b {
+        color: var(--paper);
+        font-weight: 600;
+      }
+      .card-tag {
+        position: absolute;
+        left: 44px;
+        bottom: 40px;
+        font-family: var(--mono);
+        font-size: 19px;
+        letter-spacing: 0.2em;
+      }
+
+      /* ---------- S8 Close ---------- */
+      #s8-lines {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 330px;
+        text-align: center;
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0;
+        font-weight: 500;
+        font-size: 150px;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+      }
+      #s8-lines em {
+        font-style: italic;
+        font-weight: 400;
+        color: var(--gold);
+      }
+      #s8-brand {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 770px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #s8-brand-line {
+        width: 640px;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(228, 178, 76, 0), rgba(228, 178, 76, 0.9), rgba(228, 178, 76, 0));
+        transform-origin: 50% 50%;
+      }
+      #s8-brand-word {
+        margin-top: 30px;
+        font-family: var(--serif);
+        font-variation-settings: "opsz" 144, "SOFT" 20, "WONK" 0;
+        font-weight: 600;
+        font-size: 58px;
+        letter-spacing: -0.02em;
+      }
+      #s8-brand-word i {
+        font-weight: 400;
+        color: var(--gold);
+      }
+      #s8-brand-sub {
+        margin-top: 10px;
+        font-family: var(--mono);
+        font-size: 19px;
+        letter-spacing: 0.3em;
+        color: var(--paper-dim);
+        padding-left: 0.3em;
+      }
+      #fade-black {
+        background: #000;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="60"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- ================= BACKGROUND (whole film) ================= -->
+      <div id="bg" class="clip" data-start="0" data-duration="60" data-track-index="0">
+        <div id="bg-base" class="layer"></div>
+        <div id="bg-grid" class="layer"></div>
+        <div id="glow-a" class="glow"></div>
+        <div id="glow-b" class="glow"></div>
+        <div id="glow-c" class="glow"></div>
+      </div>
+
+      <!-- ================= S1 TITLE 0 – 5.4 ================= -->
+      <section id="s1" class="clip" data-start="0" data-duration="5.4" data-track-index="1">
+        <div class="inner" id="s1-in">
+          <div id="s1-outline" class="num" data-layout-ignore>2025</div>
+          <div id="s1-stack">
+            <div id="s1-kicker">Management Briefing</div>
+            <div id="s1-word"><span class="mask"><span class="w" id="s1-word-a">CamStore</span></span>&nbsp;<span class="mask"><span class="w yr" id="s1-word-b">365</span></span></div>
+            <svg id="s1-line" viewBox="0 0 980 30">
+              <line id="s1-line-main" x1="0" y1="15" x2="980" y2="15" stroke="#e4b24c" stroke-width="2" />
+              <g id="s1-ticks" stroke="rgba(228,178,76,0.75)" stroke-width="2"></g>
+            </svg>
+            <div id="s1-sub">Financial Report&nbsp;&nbsp;·&nbsp;&nbsp;<span>FY2025</span></div>
+          </div>
+          <div id="s1-ticker">
+            <div id="s1-ticker-track"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= S2 REVENUE 4.8 – 11.7 ================= -->
+      <section id="s2" class="clip" data-start="4.8" data-duration="6.9" data-track-index="2">
+        <div class="inner" id="s2-in">
+          <div class="kicker" id="s2-kick"><span class="k-num">01</span><span class="k-rule"></span><span>Revenue</span></div>
+          <div id="s2-hero">
+            <div id="s2-label">Total revenue · FY2025</div>
+            <div id="s2-num" class="num">$0</div>
+            <div id="s2-hline"></div>
+          </div>
+          <div id="s2-label2">Total revenue · FY2025</div>
+          <div id="s2-growth">
+            <div id="s2-growth-row">
+              <svg id="s2-tri" viewBox="0 0 64 56"><path d="M32 2 L62 54 L2 54 Z" fill="#a3b062" /></svg>
+              <div id="s2-pct" class="num">0.0%</div>
+            </div>
+            <div id="s2-growth-cap">growth on <b>$312,000</b> in FY2024</div>
+          </div>
+          <div id="s2-chart">
+            <div class="baseline" id="s2-base" style="left: 0; width: 760px; bottom: 89px"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= S3 WATERFALL 11.0 – 24.15 ================= -->
+      <section id="s3" class="clip" data-start="11.0" data-duration="13.15" data-track-index="1">
+        <div class="inner" id="s3-in">
+          <div class="kicker" id="s3-kick"><span class="k-num">02</span><span class="k-rule"></span><span>Profit &amp; loss</span></div>
+          <div class="headline" id="s3-head">From revenue to <em>profit</em></div>
+          <div id="s3-chart"></div>
+          <div id="s3-callout">
+            <div id="s3-cents" class="num">8¢</div>
+            <div id="s3-cents-cap">net profit from every $1 of sales</div><div id="s3-cents-sub">8.0% NET MARGIN</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= S4 MONTHS 23.5 – 31.0 ================= -->
+      <section id="s4" class="clip" data-start="23.5" data-duration="7.5" data-track-index="2">
+        <div class="inner" id="s4-in">
+          <div class="kicker" id="s4-kick"><span class="k-num">03</span><span class="k-rule"></span><span>Monthly revenue</span></div>
+          <div class="headline" id="s4-head">Sales follow the <em>seasons</em></div>
+          <div id="s4-chart" class="layer"></div>
+        </div>
+      </section>
+
+      <!-- ================= S5 CHANNELS 30.4 – 36.65 ================= -->
+      <section id="s5" class="clip" data-start="30.4" data-duration="6.25" data-track-index="1">
+        <div class="inner" id="s5-in">
+          <div class="kicker" id="s5-kick"><span class="k-num">04</span><span class="k-rule"></span><span>Revenue by channel</span></div>
+          <div id="s5-viz" class="layer">
+          <svg id="s5-donut" viewBox="0 0 600 600">
+            <circle cx="300" cy="300" r="250" fill="none" stroke="rgba(243,236,224,0.07)" stroke-width="74" />
+            <circle id="s5-seg-0" cx="300" cy="300" r="250" fill="none" stroke="#d9734f" stroke-width="74" />
+            <circle id="s5-seg-1" cx="300" cy="300" r="250" fill="none" stroke="#a3b062" stroke-width="74" />
+            <circle id="s5-seg-2" cx="300" cy="300" r="250" fill="none" stroke="#e4b24c" stroke-width="74" />
+          </svg>
+          <div id="s5-center">
+            <div id="s5-total" class="num">$420,000</div>
+            <div id="s5-total-cap">TOTAL REVENUE</div>
+          </div>
+          </div>
+          <div class="lg-row" id="s5-row-0" style="top: 300px">
+            <div class="lg-pct num" id="s5-pct-0" style="color: #d9734f">50%</div>
+            <div><div class="lg-name">Retail stores</div><div class="lg-amt">$210,000</div></div>
+          </div>
+          <div class="lg-row" id="s5-row-1" style="top: 480px">
+            <div class="lg-pct num" id="s5-pct-1" style="color: #a3b062">40%</div>
+            <div><div class="lg-name">Wholesale</div><div class="lg-amt">$168,000</div></div>
+          </div>
+          <div class="lg-row" id="s5-row-2" style="top: 660px">
+            <div class="lg-pct num" id="s5-pct-2" style="color: #e4b24c">10%</div>
+            <div><div class="lg-name">Online</div><div class="lg-amt">$42,000</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= S6 COSTS + MARGIN 36.0 – 47.25 ================= -->
+      <section id="s6" class="clip" data-start="36.0" data-duration="11.25" data-track-index="2">
+        <div class="inner" id="s6-in">
+          <div class="kicker" id="s6-kick"><span class="k-num">05</span><span class="k-rule"></span><span>Costs &amp; margin</span></div>
+          <div id="s6-kinetic">
+            <span class="line-block"><span class="mask"><span class="w">Costs</span></span> <span class="mask"><span class="w">are</span></span> <span class="mask"><span class="w">climbing</span></span></span>
+            <span class="line-block"><span class="mask"><span class="w"><em>faster</em></span></span> <span class="mask"><span class="w">than</span></span> <span class="mask"><span class="w">sales.</span></span></span>
+          </div>
+          <div id="s6-bars" class="layer">
+            <div class="headline" id="s6-head">Where operating costs <em>go</em></div>
+          </div>
+          <div id="s6-margin">
+            <div id="s6-mg-title">NET PROFIT MARGIN</div>
+            <div class="mg-col" style="left: 260px">
+              <div class="mg-num num" style="color: var(--paper)">8.7%</div>
+              <div class="mg-yr">FY2024</div>
+            </div>
+            <div class="mg-col" style="left: 1100px">
+              <div class="mg-num num" id="s6-mg-new" style="color: var(--terra)">8.7%</div>
+              <div class="mg-yr">FY2025</div>
+            </div>
+            <svg id="s6-mg-svg" viewBox="0 0 1920 1080">
+              <path id="s6-mg-path" d="M 850 470 C 940 470, 1000 560, 1080 590" fill="none" stroke="#d9734f" stroke-width="4" stroke-linecap="round" />
+              <path id="s6-mg-head" d="M 1058 566 L 1086 592 L 1048 600" fill="none" stroke="#d9734f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <div id="s6-mg-delta"><span>▼ 0.7 PERCENTAGE POINTS</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= S7 PRIORITIES 46.6 – 55.4 ================= -->
+      <section id="s7" class="clip" data-start="46.6" data-duration="8.8" data-track-index="1">
+        <div class="inner" id="s7-in">
+          <div class="kicker" id="s7-kick"><span class="k-num">06</span><span class="k-rule"></span><span>Next steps</span></div>
+          <div class="headline" id="s7-head">Three priorities for the <em>year ahead</em></div>
+
+          <div class="card" id="s7-card-0" style="left: 160px">
+            <div class="card-accent" style="background: #d9734f"></div>
+            <div class="card-top">
+              <div class="card-no" style="color: #d9734f">01</div>
+              <svg class="card-icon" viewBox="0 0 76 76" fill="none" stroke="#d9734f" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M38 8 L66 22 L66 54 L38 68 L10 54 L10 22 Z" />
+                <path d="M10 22 L38 36 L66 22" />
+                <path d="M38 36 L38 68" />
+                <path d="M24 15 L52 29" />
+              </svg>
+            </div>
+            <div class="card-title">Tighten stock control</div>
+            <div class="card-body">Inventory grew <b>45%</b>, faster than sales, and product losses reached <b>$8,000</b>.</div>
+            <div class="card-tag" style="color: #d9734f">ACT NOW</div>
+          </div>
+
+          <div class="card" id="s7-card-1" style="left: 710px">
+            <div class="card-accent" style="background: #a3b062"></div>
+            <div class="card-top">
+              <div class="card-no" style="color: #a3b062">02</div>
+              <svg class="card-icon" viewBox="0 0 76 76" fill="none" stroke="#a3b062" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M38 6 L64 16 L64 36 C64 52 52 64 38 70 C24 64 12 52 12 36 L12 16 Z" />
+                <path d="M26 38 L35 47 L52 29" />
+              </svg>
+            </div>
+            <div class="card-title">Protect our margin</div>
+            <div class="card-body">Operating costs are rising <b>faster than revenue</b>. Find savings to hold the margin.</div>
+            <div class="card-tag" style="color: #a3b062">COST DISCIPLINE</div>
+          </div>
+
+          <div class="card" id="s7-card-2" style="left: 1260px">
+            <div class="card-accent" style="background: #e4b24c"></div>
+            <div class="card-top">
+              <div class="card-no" style="color: #e4b24c">03</div>
+              <svg class="card-icon" viewBox="0 0 76 76" fill="none" stroke="#e4b24c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M18 6 L48 6 L60 18 L60 70 L18 70 Z" />
+                <path d="M48 6 L48 18 L60 18" />
+                <path d="M27 32 L51 32" />
+                <path d="M27 42 L45 42" />
+                <path d="M28 56 L34 62 L46 50" />
+              </svg>
+            </div>
+            <div class="card-title">Confirm tax status</div>
+            <div class="card-body">The <b>20%</b> rate is an estimate. Confirm our taxpayer type with the <b>GDT</b> before paying tax.</div>
+            <div class="card-tag" style="color: #e4b24c">COMPLIANCE</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= S8 CLOSE 54.75 – 60 ================= -->
+      <section id="s8" class="clip" data-start="54.75" data-duration="5.25" data-track-index="2">
+        <div class="inner" id="s8-in">
+          <div id="s8-lines">
+            <span class="line-block"><span class="mask"><span class="w">Strong</span></span> <span class="mask"><span class="w">growth.</span></span></span>
+            <span class="line-block"><span class="mask"><span class="w">Now,</span></span> <span class="mask"><span class="w"><em>smarter</em></span></span> <span class="mask"><span class="w">growth.</span></span></span>
+          </div>
+          <div id="s8-brand">
+            <div id="s8-brand-line"></div>
+            <div id="s8-brand-word">CamStore <i>365</i></div>
+            <div id="s8-brand-sub">FY2025 FINANCIAL REPORT</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= OVERLAYS (whole film) ================= -->
+      <div id="hud" class="clip" data-start="0" data-duration="60" data-track-index="5">
+        <div id="hud-in" class="layer">
+          <div class="hud-tl"><span class="hud-dot"></span><b>CamStore 365</b></div>
+          <div class="hud-tr">FY2025 · Management briefing</div>
+          <div id="progress"><div id="progress-fill"></div></div>
+        </div>
+      </div>
+      <div id="fx" class="clip" data-start="0" data-duration="60" data-track-index="6">
+        <div id="sweep" class="layer"></div>
+        <div id="grain" class="layer"></div>
+        <div id="vignette" class="layer"></div>
+        <div id="fade-black" class="layer"></div>
+      </div>
+
+      <!-- ================= AUDIO ================= -->
+      <audio id="aud-mix" src="assets/audio/soundtrack.wav" data-start="0" data-duration="60" data-track-index="10" data-volume="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const tl = gsap.timeline({ paused: true });
+        const $ = (s) => document.querySelector(s);
+        const fmt = (v) => "$" + Math.round(v).toLocaleString("en-US");
+        const C = {
+          terra: "#d9734f",
+          olive: "#a3b062",
+          gold: "#e4b24c",
+          paper: "#f3ece0",
+        };
+
+        // Scene cut points (seconds) — all on the 96 BPM beat grid.
+        const CUT = { s2: 5.0, s3: 11.25, s4: 23.75, s5: 30.625, s6: 36.25, s7: 46.875, s8: 55.0 };
+
+        // ---------- helpers ----------
+        function counter(el, from, to, t, dur, ease, f) {
+          const st = { v: from };
+          const render = f || fmt;
+          const paint = () => (el.textContent = render(st.v));
+          paint();
+          tl.to(st, { v: to, duration: dur, ease: ease || "power3.out", onUpdate: paint }, t);
+        }
+        // Odometer: each digit column is sized by its final glyph; digits roll vertically inside it.
+        // seqFor(i, target) returns the digit sequence a column scrolls through (last item = target).
+        function odometer(el, finalStr, t, dur, seqFor, stagger) {
+          el.innerHTML = "";
+          let col = 0;
+          [...finalStr].forEach((ch) => {
+            if (!/[0-9]/.test(ch)) {
+              const sp = document.createElement("span");
+              sp.className = "odo-ch";
+              sp.textContent = ch;
+              el.appendChild(sp);
+              return;
+            }
+            const seq = seqFor(col, +ch);
+            const wrap = document.createElement("span");
+            wrap.className = "odo";
+            wrap.setAttribute("data-layout-allow-overlap", "");
+            wrap.innerHTML = `<span class="ph">${ch}</span><span class="strip" data-layout-allow-overlap>${seq.map((d) => `<span data-layout-allow-overlap>${d}</span>`).join("")}</span>`;
+            el.appendChild(wrap);
+            const strip = wrap.querySelector(".strip");
+            const k = seq.length - 1;
+            if (k > 0) tl.fromTo(strip, { yPercent: 0 }, { yPercent: (-100 * k) / seq.length, duration: dur, ease: "expo.out" }, t + col * (stagger || 0));
+            col++;
+          });
+        }
+        const pathLen = (el) => Math.ceil(el.getTotalLength()) + 2;
+        function maskRise(sel, t, opts) {
+          const o = Object.assign({ dur: 1.0, stagger: 0.07, ease: "expo.out" }, opts || {});
+          tl.fromTo(sel, { yPercent: 110 }, { yPercent: 0, duration: o.dur, ease: o.ease, stagger: o.stagger }, t);
+        }
+        function kicker(id, t) {
+          tl.fromTo(`#${id} .k-num`, { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, t);
+          tl.fromTo(`#${id} .k-rule`, { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "expo.out" }, t + 0.08);
+          tl.fromTo(`#${id} span:last-child`, { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, t + 0.16);
+        }
+        function headline(id, t) {
+          const el = document.getElementById(id);
+          // wrap each word in a mask for a clean rise
+          const html = el.innerHTML
+            .split(/(<em>.*?<\/em>|\s+)/)
+            .filter((p) => p && p.trim().length)
+            .map((p) => `<span class="mask"><span class="w">${p}</span></span>`)
+            .join(" ");
+          el.innerHTML = html;
+          maskRise(`#${id} .w`, t, { dur: 0.9, stagger: 0.06 });
+        }
+        // Scene transition: outgoing drifts up + blurs, incoming settles from below.
+        function sceneIn(sel, t) {
+          tl.fromTo(sel, { opacity: 0, y: 46, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.75, ease: "power3.out" }, t);
+        }
+        function sceneOut(sel, t) {
+          tl.to(sel, { opacity: 0, y: -40, filter: "blur(10px)", duration: 0.45, ease: "power2.in" }, t);
+        }
+        function sweep(t) {
+          tl.fromTo("#sweep", { x: 0, opacity: 0 }, { x: 3000, duration: 0.85, ease: "power2.inOut" }, t - 0.42);
+          tl.fromTo("#sweep", { opacity: 0 }, { opacity: 1, duration: 0.2, yoyo: true, repeat: 1, repeatDelay: 0.45, ease: "sine.inOut", immediateRender: false }, t - 0.42);
+        }
+        // slow camera drift on each scene
+        function drift(sel, t0, t1) {
+          tl.fromTo(sel, { scale: 1 }, { scale: 1.03, duration: t1 - t0, ease: "none" }, t0);
+        }
+
+        // ================= BACKGROUND =================
+        tl.fromTo("#bg", { opacity: 0 }, { opacity: 1, duration: 1.4, ease: "power2.out" }, 0);
+        tl.fromTo("#bg-grid", { x: 0, y: 0 }, { x: -40, y: -24, duration: 60, ease: "none" }, 0);
+        tl.fromTo("#glow-a", { x: 0, y: 0 }, { x: 520, y: 260, duration: 60, ease: "sine.inOut" }, 0);
+        tl.fromTo("#glow-b", { x: 0, y: 0 }, { x: -700, y: -260, duration: 60, ease: "sine.inOut" }, 0);
+        tl.fromTo("#glow-c", { x: 0, y: 0, opacity: 0.4 }, { x: 700, y: -200, opacity: 1, duration: 60, ease: "sine.inOut" }, 0);
+
+        // Film grain: jump to a seeded position 12 times per second.
+        (function () {
+          const grain = $("#grain");
+          const st = { f: 0 };
+          const hash = (n) => {
+            let x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+            return x - Math.floor(x);
+          };
+          tl.to(
+            st,
+            {
+              f: 720,
+              duration: 60,
+              ease: "none",
+              onUpdate: () => {
+                const i = Math.floor(st.f);
+                grain.style.transform = `translate(${Math.round(hash(i) * 256 - 128)}px, ${Math.round(hash(i + 999) * 256 - 128)}px)`;
+              },
+            },
+            0,
+          );
+        })();
+
+        // HUD
+        tl.fromTo("#hud-in", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, 4.9);
+        tl.fromTo("#progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 60, ease: "none" }, 0);
+        (function () {
+          const bar = $("#progress");
+          Object.values(CUT).forEach((c) => {
+            const d = document.createElement("div");
+            d.className = "tick";
+            d.style.left = (c / 60) * 100 + "%";
+            bar.appendChild(d);
+          });
+        })();
+        tl.to("#hud-in", { opacity: 0, duration: 0.6, ease: "power2.in" }, 54.6);
+
+        // ================= S1 TITLE =================
+        (function () {
+          // ruler ticks along the gold line
+          const g = $("#s1-ticks");
+          for (let i = 0; i <= 28; i++) {
+            const x = 10 + i * 34.6;
+            const big = i % 7 === 0;
+            const ln = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            ln.setAttribute("x1", x);
+            ln.setAttribute("x2", x);
+            ln.setAttribute("y1", big ? 2 : 9);
+            ln.setAttribute("y2", 15);
+            ln.setAttribute("class", "s1-tick");
+            g.appendChild(ln);
+          }
+          // split wordmark into characters
+          ["#s1-word-a", "#s1-word-b"].forEach((s) => {
+            const el = $(s);
+            el.innerHTML = el.textContent
+              .split("")
+              .map((c) => `<span class="ch">${c}</span>`)
+              .join("");
+          });
+          // ticker content
+          const item = (k, v, extra) => `<b>${k}</b>&nbsp;&nbsp;${v}${extra ? "&nbsp;&nbsp;<i>" + extra + "</i>" : ""}`;
+          const items = [
+            item("REVENUE", "$420,000", "▲ 34.6%"),
+            item("GROSS PROFIT", "$168,000", "40%"),
+            item("OPERATING COSTS", "$126,000"),
+            item("PROFIT BEFORE TAX", "$42,000"),
+            item("NET PROFIT", "$33,600", "8.0%"),
+          ];
+          const once = items.join('<span class="sep">◆</span>') + '<span class="sep">◆</span>';
+          $("#s1-ticker-track").innerHTML = once + once + once;
+        })();
+
+        tl.fromTo("#s1-line-main", { attr: { x1: 490, x2: 490 } }, { attr: { x1: 0, x2: 980 }, duration: 1.3, ease: "expo.inOut" }, 0.2);
+        tl.fromTo(".s1-tick", { opacity: 0, scaleY: 0, transformOrigin: "50% 100%" }, { opacity: 1, scaleY: 1, duration: 0.4, ease: "power2.out", stagger: { each: 0.025, from: "center" } }, 0.75);
+        tl.fromTo("#s1-word .ch", { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: 0.045 }, 0.62);
+        tl.fromTo("#s1-word .yr .ch", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out", stagger: 0.06 }, 1.05);
+        tl.fromTo("#s1-kicker", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }, 1.25);
+        tl.fromTo("#s1-sub", { opacity: 0, y: 18, clipPath: "inset(0 100% 0 0)" }, { opacity: 1, y: 0, clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "expo.out" }, 2.75);
+        tl.fromTo("#s1-outline", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1.0, duration: 2.6, ease: "expo.out" }, 2.75);
+        tl.fromTo("#s1-ticker", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, 3.0);
+        tl.fromTo("#s1-ticker-track", { x: 0 }, { x: -900, duration: 3.0, ease: "none" }, 2.6);
+        drift("#s1-stack", 0, 5.4);
+        sceneOut("#s1-in", CUT.s2 - 0.3);
+
+        // ================= S2 REVENUE =================
+        sweep(CUT.s2);
+        sceneIn("#s2-in", CUT.s2 - 0.05);
+        kicker("s2-kick", CUT.s2 + 0.1);
+        tl.fromTo("#s2-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 5.15);
+        tl.fromTo("#s2-hline", { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: "expo.out" }, 5.25);
+        odometer(
+          $("#s2-num"),
+          "$420,000",
+          5.3,
+          2.6,
+          (i, target) => {
+            const loops = 1 + i; // right-hand columns spin further
+            const seq = [];
+            for (let l = 0; l < loops; l++) for (let d = 0; d < 10; d++) seq.push(d);
+            for (let d = 0; d <= target; d++) seq.push(d);
+            return seq;
+          },
+          0.04,
+        );
+        tl.fromTo("#s2-num", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 2.7, ease: "expo.out" }, 5.3);
+        // Phase B — hero moves to the left column, chart builds on the right
+        tl.to("#s2-hero", { x: -566, y: -84, scale: 0.5, duration: 1.0, ease: "expo.inOut" }, 8.05);
+        tl.to(["#s2-hline", "#s2-label"], { opacity: 0, duration: 0.35 }, 8.05);
+        tl.fromTo("#s2-label2", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 8.75);
+        (function () {
+          const chart = $("#s2-chart");
+          const data = [
+            { yr: "FY2023", v: 228000, x: 30 },
+            { yr: "FY2024", v: 312000, x: 296 },
+            { yr: "FY2025", v: 420000, x: 562 },
+          ];
+          const px = 520 / 420000;
+          data.forEach((d, i) => {
+            const h = Math.round(d.v * px);
+            const bar = document.createElement("div");
+            bar.className = "s2-bar";
+            bar.id = `s2-bar-${i}`;
+            bar.style.left = d.x + "px";
+            bar.style.height = h + "px";
+            bar.style.background =
+              i === 2 ? "linear-gradient(180deg, #e8835e 0%, #b9583a 100%)" : "linear-gradient(180deg, rgba(217,115,79,0.55) 0%, rgba(169,80,47,0.45) 100%)";
+            if (i === 2) bar.style.boxShadow = "0 0 60px rgba(217,115,79,0.35)";
+            chart.appendChild(bar);
+            const val = document.createElement("div");
+            val.className = "s2-val num";
+            val.id = `s2-val-${i}`;
+            val.style.left = d.x + 84 - 120 + "px";
+            val.style.bottom = 90 + h + 18 + "px";
+            val.textContent = fmt(d.v);
+            if (i < 2) val.style.color = "rgba(243,236,224,0.7)";
+            chart.appendChild(val);
+            const yr = document.createElement("div");
+            yr.className = "s2-yr";
+            yr.style.left = d.x + 84 - 120 + "px";
+            yr.textContent = d.yr;
+            yr.id = `s2-yr-${i}`;
+            chart.appendChild(yr);
+          });
+          // growth arc from FY2024 label to FY2025 label
+          const svgNS = "http://www.w3.org/2000/svg";
+          const svg = document.createElementNS(svgNS, "svg");
+          svg.setAttribute("id", "s2-arc");
+          svg.setAttribute("viewBox", "0 0 760 700");
+          svg.innerHTML =
+            '<path id="s2-arc-path" d="M 380 146 C 384 80, 440 52, 538 50" fill="none" stroke="#a3b062" stroke-width="3.5" stroke-linecap="round"/>' +
+            '<path id="s2-arc-head" d="M 524 38 L 540 50 L 524 62" fill="none" stroke="#a3b062" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+          chart.appendChild(svg);
+        })();
+        tl.fromTo("#s2-base", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "expo.inOut" }, 8.15);
+        tl.fromTo(".s2-yr", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: "power2.out" }, 8.35);
+        tl.fromTo(".s2-bar", { scaleY: 0 }, { scaleY: 1, duration: 1.0, ease: "expo.out", stagger: 0.16 }, 8.35);
+        tl.fromTo(".s2-val", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.16 }, 8.75);
+        tl.fromTo("#s2-growth", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, 8.45);
+        counter($("#s2-pct"), 0, 34.6, 8.5, 1.6, "power3.out", (v) => "+" + v.toFixed(1) + "%");
+        (function () {
+          const p = $("#s2-arc-path");
+          const L = pathLen(p);
+          p.style.strokeDasharray = L;
+          tl.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 9.3);
+          tl.fromTo("#s2-arc-head", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 10.0);
+        })();
+        drift("#s2-chart", 8.2, 11.7);
+        sceneOut("#s2-in", CUT.s3 - 0.3);
+
+        // ================= S3 WATERFALL =================
+        sweep(CUT.s3);
+        sceneIn("#s3-in", CUT.s3 - 0.05);
+        kicker("s3-kick", CUT.s3 + 0.05);
+        headline("s3-head", CUT.s3 + 0.15);
+        const WF = [
+          { name: "Revenue", lo: 0, hi: 420, kind: "total", color: "linear-gradient(180deg,#e8835e,#b9583a)", label: "$420,000", t: 11.6 },
+          { name: "Cost of sales", lo: 168, hi: 420, kind: "ded", label: "−$252,000", t: 12.35 },
+          { name: "Gross profit", lo: 0, hi: 168, kind: "total", color: "linear-gradient(180deg,#b3c06d,#7f8b45)", label: "$168,000", t: 12.85, count: 168000 },
+          { name: "Operating costs", lo: 42, hi: 168, kind: "ded", label: "−$126,000", t: 16.7 },
+          { name: "Profit before tax", lo: 0, hi: 42, kind: "total", color: "linear-gradient(180deg,#b3c06d,#7f8b45)", label: "$42,000", t: 17.35 },
+          { name: "Tax (20%)", lo: 33.6, hi: 42, kind: "ded", label: "−$8,400", t: 17.95 },
+          { name: "Net profit", lo: 0, hi: 33.6, kind: "total", color: "linear-gradient(180deg,#f0c463,#c48f2c)", label: "$33,600", t: 18.7, count: 33600 },
+        ];
+        (function () {
+          const chart = $("#s3-chart");
+          const BASE = 900,
+            PX = 520 / 420,
+            X0 = 250,
+            STEP = 235,
+            W = 132;
+          const base = document.createElement("div");
+          base.className = "baseline";
+          base.id = "s3-base";
+          Object.assign(base.style, { left: "160px", width: "1600px", top: BASE + "px" });
+          chart.appendChild(base);
+          WF.forEach((d, i) => {
+            const cx = X0 + i * STEP;
+            const top = BASE - d.hi * PX;
+            const h = (d.hi - d.lo) * PX;
+            const bar = document.createElement("div");
+            bar.className = "wf-bar " + (d.kind === "total" ? "wf-total" : "wf-ded");
+            bar.id = `wf-bar-${i}`;
+            Object.assign(bar.style, { left: cx - W / 2 + "px", top: top + "px", height: Math.max(h, 3) + "px" });
+            if (d.kind === "total") bar.style.background = d.color;
+            if (i === 6) bar.style.boxShadow = "0 0 50px rgba(228,178,76,0.45)";
+            chart.appendChild(bar);
+            const val = document.createElement("div");
+            val.className = "wf-val num";
+            val.id = `wf-val-${i}`;
+            Object.assign(val.style, { left: cx - 110 + "px", top: top - 50 + "px" });
+            val.textContent = d.label;
+            val.style.color = d.kind === "ded" ? "rgba(233,150,118,0.95)" : i === 6 ? C.gold : C.paper;
+            chart.appendChild(val);
+            const nm = document.createElement("div");
+            nm.className = "wf-name";
+            nm.id = `wf-name-${i}`;
+            nm.style.left = cx - 110 + "px";
+            nm.textContent = d.name;
+            if (i === 6) nm.style.color = C.gold;
+            chart.appendChild(nm);
+            if (i < WF.length - 1) {
+              const n = WF[i + 1];
+              // running level carried to the next column
+              const lvl = d.kind === "total" ? d.hi : d.lo;
+              const conn = document.createElement("div");
+              conn.className = "wf-conn";
+              conn.id = `wf-conn-${i}`;
+              Object.assign(conn.style, { left: cx + W / 2 + 4 + "px", width: STEP - W - 8 + "px", top: BASE - lvl * PX - 1 + "px" });
+              chart.appendChild(conn);
+            }
+          });
+          // margin pills
+          const p1 = document.createElement("div");
+          p1.className = "pill";
+          p1.id = "s3-pill-gp";
+          p1.textContent = "40% MARGIN";
+          Object.assign(p1.style, {
+            left: X0 + 2 * STEP - 92 + "px",
+            top: BASE - 168 * PX - 118 + "px",
+            color: C.olive,
+            border: "1.5px solid rgba(163,176,98,0.7)",
+            background: "rgba(163,176,98,0.12)",
+          });
+          chart.appendChild(p1);
+        })();
+        tl.fromTo("#s3-base", { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: "expo.inOut" }, 11.45);
+        tl.fromTo(".wf-name", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: "power2.out" }, 11.65);
+        WF.forEach((d, i) => {
+          if (d.kind === "total") {
+            tl.fromTo(`#wf-bar-${i}`, { scaleY: 0 }, { scaleY: 1, duration: 0.9, ease: "expo.out" }, d.t);
+          } else {
+            tl.fromTo(`#wf-bar-${i}`, { opacity: 0, y: -60 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, d.t);
+          }
+          tl.fromTo(`#wf-val-${i}`, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, d.t + 0.2);
+          if (d.count) counter($(`#wf-val-${i}`), 0, d.count, d.t + 0.2, i === 6 ? 2.2 : 1.3, "power3.out");
+          if (i > 0) {
+            tl.fromTo(`#wf-conn-${i - 1}`, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out" }, d.t - 0.15);
+          }
+        });
+        tl.fromTo("#s3-pill-gp", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, 14.75);
+        // "Eight cents on every dollar" — focus revenue vs net
+        [1, 2, 3, 4, 5].forEach((i) => {
+          tl.to([`#wf-bar-${i}`, `#wf-val-${i}`, `#wf-name-${i}`], { opacity: 0.22, duration: 0.6, ease: "power2.out" }, 21.55);
+        });
+        tl.to(["#wf-conn-0", "#wf-conn-1", "#wf-conn-2", "#wf-conn-3", "#wf-conn-4", "#wf-conn-5", "#s3-pill-gp"], { opacity: 0.2, duration: 0.6 }, 21.55);
+        tl.fromTo("#s3-callout", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, 21.65);
+        tl.fromTo("#s3-cents", { scale: 0.85, transformOrigin: "0% 100%" }, { scale: 1, duration: 1.0, ease: "expo.out" }, 21.65);
+        drift("#s3-chart", 11.25, 24.15);
+        sceneOut("#s3-in", CUT.s4 - 0.3);
+
+        // ================= S4 MONTHS =================
+        sweep(CUT.s4);
+        sceneIn("#s4-in", CUT.s4 - 0.05);
+        kicker("s4-kick", CUT.s4 + 0.05);
+        headline("s4-head", CUT.s4 + 0.15);
+        const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        // Bar heights: Feb, Apr and Dec are the reported values; the rest share the remaining revenue.
+        const MV = [33780, 29400, 33437, 40320, 32979, 34582, 32292, 31720, 35155, 33780, 36300, 46200];
+        (function () {
+          const chart = $("#s4-chart");
+          const BASE = 900,
+            PX = 400 / 46200,
+            X0 = 236,
+            STEP = 132;
+          const base = document.createElement("div");
+          base.className = "baseline";
+          base.id = "s4-base";
+          Object.assign(base.style, { left: "170px", width: "1580px", top: BASE + "px" });
+          chart.appendChild(base);
+          MV.forEach((v, i) => {
+            const cx = X0 + i * STEP;
+            const h = v * PX;
+            const b = document.createElement("div");
+            b.className = "mo-bar";
+            b.id = `mo-bar-${i}`;
+            Object.assign(b.style, { left: cx - 39 + "px", top: BASE - h + "px", height: h + "px" });
+            if (i === 11) b.innerHTML = '<div id="mo-gold" style="position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,#f0c463,#c48f2c);box-shadow:0 0 50px rgba(228,178,76,0.45);opacity:0"></div>';
+            chart.appendChild(b);
+            const l = document.createElement("div");
+            l.className = "mo-lbl";
+            l.id = `mo-lbl-${i}`;
+            l.style.left = cx - 60 + "px";
+            l.textContent = MONTHS[i];
+            chart.appendChild(l);
+          });
+          const avgY = BASE - 35000 * PX;
+          const avg = document.createElement("div");
+          avg.id = "s4-avg";
+          avg.style.top = avgY + "px";
+          chart.appendChild(avg);
+          const al = document.createElement("div");
+          al.id = "s4-avg-lbl";
+          al.style.top = avgY - 34 + "px";
+          al.textContent = "MONTHLY AVERAGE  $35,000";
+          chart.appendChild(al);
+          // callouts
+          const CO = [
+            { i: 1, val: "$29,400", cap: "Quiet month", color: C.paper, dy: 140, align: "center" },
+            { i: 3, val: "$40,320", cap: "Khmer New Year", color: C.terra, dy: 130, align: "center" },
+            { i: 11, val: "$46,200", cap: "Year-end peak", color: C.gold, dy: 130, align: "right" },
+          ];
+          CO.forEach((c, k) => {
+            const cx = X0 + c.i * STEP;
+            const top = BASE - MV[c.i] * PX;
+            const box = document.createElement("div");
+            box.className = "callout";
+            box.id = `s4-co-${k}`;
+            const textTop = top - c.dy - 92;
+            box.innerHTML = `<div class="c-val num" style="color:${c.color}">${c.val}</div><div class="c-cap">${c.cap}</div>`;
+            box.style.top = textTop + "px";
+            if (c.align === "center") {
+              box.style.left = cx - 150 + "px";
+              box.style.width = "300px";
+              box.style.textAlign = "center";
+            } else {
+              box.style.right = 1920 - (cx + 39) + "px";
+              box.style.textAlign = "right";
+            }
+            chart.appendChild(box);
+            const lead = document.createElement("div");
+            lead.className = "c-lead";
+            lead.id = `s4-lead-${k}`;
+            Object.assign(lead.style, { position: "absolute", left: cx - 1 + "px", top: textTop + 104 + "px", height: c.dy - 26 + "px" });
+            chart.appendChild(lead);
+            const dot = document.createElement("div");
+            dot.className = "c-dot";
+            dot.id = `s4-dot-${k}`;
+            Object.assign(dot.style, { position: "absolute", left: cx - 6 + "px", top: top - 22 + "px", background: c.color });
+            chart.appendChild(dot);
+          });
+        })();
+        tl.fromTo("#s4-base", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "expo.inOut" }, 23.9);
+        tl.fromTo(".mo-bar", { scaleY: 0 }, { scaleY: 1, duration: 1.0, ease: "expo.out", stagger: 0.075 }, 24.05);
+        tl.fromTo(".mo-lbl", { opacity: 0 }, { opacity: 1, duration: 0.4, stagger: 0.075 }, 24.1);
+        tl.fromTo("#s4-avg", { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: "power2.inOut" }, 25.0);
+        tl.fromTo("#s4-avg-lbl", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 25.4);
+        // dim everything, then light up each mentioned month in turn
+        tl.to(".mo-bar", { opacity: 0.35, duration: 0.5, ease: "power2.out" }, 25.62);
+        const HL = [
+          { k: 0, i: 1, t: 25.7 },
+          { k: 1, i: 3, t: 27.1 },
+          { k: 2, i: 11, t: 29.0 },
+        ];
+        HL.forEach((h) => {
+          tl.to(`#mo-bar-${h.i}`, { opacity: 1, duration: 0.4, ease: "power2.out" }, h.t);
+          tl.fromTo(`#mo-bar-${h.i}`, { scaleX: 1 }, { scaleX: 1.14, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, h.t);
+          tl.fromTo(`#s4-dot-${h.k}`, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(3)" }, h.t);
+          tl.fromTo(`#s4-lead-${h.k}`, { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.45, ease: "power3.out" }, h.t + 0.08);
+          tl.fromTo(`#s4-co-${h.k}`, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, h.t + 0.2);
+          tl.to(`#mo-lbl-${h.i}`, { color: "#f3ece0", duration: 0.3 }, h.t);
+        });
+        tl.to("#mo-gold", { opacity: 1, duration: 0.4 }, 29.0);
+        drift("#s4-chart", 23.75, 31.0);
+        sceneOut("#s4-in", CUT.s5 - 0.3);
+
+        // ================= S5 CHANNELS =================
+        sweep(CUT.s5);
+        sceneIn("#s5-in", CUT.s5 - 0.05);
+        kicker("s5-kick", CUT.s5 + 0.05);
+        (function () {
+          const R = 250,
+            CIRC = 2 * Math.PI * R,
+            GAP = 6;
+          const segs = [
+            { from: 0, frac: 0.5, t: 30.85, dur: 1.2 },
+            { from: 0.5, frac: 0.4, t: 33.15, dur: 1.0 },
+            { from: 0.9, frac: 0.1, t: 34.85, dur: 0.6 },
+          ];
+          segs.forEach((s, i) => {
+            const el = $(`#s5-seg-${i}`);
+            const len = s.frac * CIRC - GAP;
+            el.setAttribute("transform", `rotate(${-90 + s.from * 360 + (GAP / CIRC) * 180} 300 300)`);
+            el.style.strokeDasharray = `0 ${CIRC}`;
+            const st = { l: 0 };
+            tl.to(
+              st,
+              {
+                l: len,
+                duration: s.dur,
+                ease: "power3.inOut",
+                onUpdate: () => (el.style.strokeDasharray = `${st.l} ${CIRC}`),
+              },
+              s.t,
+            );
+            tl.fromTo(`#s5-row-${i}`, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.8, ease: "expo.out" }, s.t + 0.1);
+            const target = Math.round(s.frac * 100);
+            counter($(`#s5-pct-${i}`), 0, target, s.t + 0.1, s.dur, "power3.out", (v) => Math.round(v) + "%");
+          });
+        })();
+        tl.fromTo("#s5-donut", { rotation: -25, scale: 0.92, opacity: 0, transformOrigin: "50% 50%" }, { rotation: 0, scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" }, 30.7);
+        tl.fromTo("#s5-center", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.9, ease: "expo.out" }, 30.95);
+        tl.set("#s5-viz", { transformOrigin: "600px 600px" }, 0);
+        drift("#s5-viz", 30.625, 36.65);
+        sceneOut("#s5-in", CUT.s6 - 0.3);
+
+        // ================= S6 COSTS & MARGIN =================
+        sweep(CUT.s6);
+        tl.fromTo("#s6-in", { opacity: 0 }, { opacity: 1, duration: 0.4 }, CUT.s6 - 0.05);
+        kicker("s6-kick", CUT.s6 + 0.05);
+        // Phase A — kinetic statement, word by word with the voice
+        (function () {
+          const ws = document.querySelectorAll("#s6-kinetic .w");
+          const times = [36.55, 36.82, 37.0, 37.62, 37.98, 38.18];
+          ws.forEach((w, i) => tl.fromTo(w, { yPercent: 110 }, { yPercent: 0, duration: 0.8, ease: "expo.out" }, times[i]));
+        })();
+        tl.fromTo("#s6-kinetic em", { color: "#f3ece0" }, { color: "#d9734f", duration: 0.5, ease: "power2.out" }, 38.0);
+        tl.to("#s6-kinetic", { opacity: 0, y: -60, filter: "blur(10px)", duration: 0.5, ease: "power2.in" }, 38.65);
+        // Phase B — cost bars
+        const CB = [
+          { name: "Staff salaries", v: 52000, t: 38.95, col: "linear-gradient(90deg,#b9583a,#e8835e)" },
+          { name: "Store rent", v: 24000, t: 39.45, col: "linear-gradient(90deg,#b9583a,#e8835e)" },
+          { name: "Marketing", v: 11000, t: 39.95, col: "linear-gradient(90deg,#b9583a,#e8835e)" },
+          { name: "All other costs", v: 39000, t: 40.45, col: "rgba(243,236,224,0.16)" },
+        ];
+        (function () {
+          const box = $("#s6-bars");
+          CB.forEach((d, i) => {
+            const row = document.createElement("div");
+            row.className = "cb-row";
+            row.id = `cb-row-${i}`;
+            row.style.top = 330 + i * 110 + "px";
+            row.innerHTML =
+              `<div class="cb-name" ${i === 3 ? 'style="color:rgba(243,236,224,0.6)"' : ""}>${d.name}</div>` +
+              `<div class="cb-bar" id="cb-bar-${i}" style="width:${Math.round(d.v * 0.0148)}px;background:${d.col}"></div>` +
+              `<div class="cb-val num" id="cb-val-${i}" style="color:${i === 3 ? "rgba(243,236,224,0.6)" : "#f3ece0"}">${fmt(d.v)}</div>`;
+            box.appendChild(row);
+          });
+          const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("id", "s6-bracket");
+          svg.setAttribute("viewBox", "0 0 40 328");
+          svg.innerHTML = '<path id="s6-br-path" d="M 4 4 C 20 4, 18 10, 18 30 L 18 140 C 18 156, 24 164, 36 164 C 24 164, 18 172, 18 188 L 18 298 C 18 318, 20 324, 4 324" fill="none" stroke="#e4b24c" stroke-width="3" stroke-linecap="round"/>';
+          box.appendChild(svg);
+          const share = document.createElement("div");
+          share.id = "s6-share";
+          share.innerHTML = '<div id="s6-share-num" class="num">0%</div><div id="s6-share-cap">of operating costs</div><div id="s6-share-sub">$87,000 of $126,000</div>';
+          box.appendChild(share);
+        })();
+        tl.fromTo("#s6-head", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out" }, 38.85);
+        CB.forEach((d, i) => {
+          tl.fromTo(`#cb-row-${i} .cb-name`, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, d.t);
+          tl.fromTo(`#cb-bar-${i}`, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "expo.out" }, d.t + 0.05);
+          tl.fromTo(`#cb-val-${i}`, { opacity: 0 }, { opacity: 1, duration: 0.4 }, d.t + 0.4);
+        });
+        (function () {
+          const p = $("#s6-br-path");
+          const L = pathLen(p);
+          p.style.strokeDasharray = L;
+          tl.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.inOut" }, 41.0);
+        })();
+        tl.fromTo("#s6-share", { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" }, 41.2);
+        counter($("#s6-share-num"), 0, 69, 41.2, 1.1, "power3.out", (v) => Math.round(v) + "%");
+        tl.to("#cb-row-3", { opacity: 0.35, duration: 0.5 }, 41.1);
+        // Phase C — margin squeeze
+        tl.to("#s6-bars", { opacity: 0, y: -50, filter: "blur(10px)", duration: 0.5, ease: "power2.in" }, 42.55);
+        tl.fromTo("#s6-mg-title", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 42.9);
+        tl.fromTo("#s6-margin .mg-col", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out", stagger: 0.9 }, 43.0);
+        (function () {
+          const p = $("#s6-mg-path");
+          const L = pathLen(p);
+          p.style.strokeDasharray = L;
+          tl.fromTo(p, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, 44.15);
+          tl.fromTo("#s6-mg-head", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 45.0);
+        })();
+        odometer($("#s6-mg-new"), "8.0%", 44.55, 1.4, (i, target) => (i === 1 ? [7, 6, 5, 4, 3, 2, 1, 0] : [target]));
+        tl.fromTo("#s6-mg-delta", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, 45.6);
+        drift("#s6-margin", 42.6, 47.25);
+        sceneOut("#s6-in", CUT.s7 - 0.3);
+
+        // ================= S7 PRIORITIES =================
+        sweep(CUT.s7);
+        sceneIn("#s7-in", CUT.s7 - 0.05);
+        kicker("s7-kick", CUT.s7 + 0.05);
+        headline("s7-head", CUT.s7 + 0.2);
+        const CT = [48.75, 50.35, 51.8];
+        CT.forEach((t, i) => {
+          tl.fromTo(`#s7-card-${i}`, { opacity: 0, y: 70, rotationX: -12, transformPerspective: 1200, transformOrigin: "50% 100%" }, { opacity: 1, y: 0, rotationX: 0, duration: 1.0, ease: "expo.out" }, t);
+          tl.fromTo(`#s7-card-${i} .card-accent`, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "expo.inOut" }, t + 0.15);
+          tl.fromTo(`#s7-card-${i} .card-icon`, { opacity: 0, scale: 0.6, rotation: -12 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.8, ease: "back.out(2)" }, t + 0.3);
+          tl.fromTo(`#s7-card-${i} .card-body`, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, t + 0.45);
+          tl.fromTo(`#s7-card-${i} .card-tag`, { opacity: 0 }, { opacity: 1, duration: 0.5 }, t + 0.7);
+        });
+        drift(".card", 46.875, 55.4);
+        sceneOut("#s7-in", CUT.s8 - 0.3);
+
+        // ================= S8 CLOSE =================
+        sweep(CUT.s8);
+        tl.fromTo("#s8-in", { opacity: 0 }, { opacity: 1, duration: 0.3 }, CUT.s8 - 0.1);
+        (function () {
+          const ws = document.querySelectorAll("#s8-lines .w");
+          const times = [55.3, 55.62, 56.5, 56.85, 57.25];
+          ws.forEach((w, i) => tl.fromTo(w, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.out" }, times[i]));
+        })();
+        tl.fromTo("#s8-lines", { y: 40 }, { y: -30, duration: 5, ease: "power1.out" }, 55.0);
+        tl.fromTo("#s8-brand-line", { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: "expo.inOut" }, 57.75);
+        tl.fromTo("#s8-brand-word", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, 58.0);
+        tl.fromTo("#s8-brand-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1.0, ease: "expo.out" }, 58.2);
+        tl.fromTo("#fade-black", { opacity: 0 }, { opacity: 1, duration: 0.75, ease: "power2.in" }, 59.25);
+
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>
