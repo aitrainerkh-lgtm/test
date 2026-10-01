@@ -1,0 +1,23 @@
+{
+ "ready": "រួចរាល់",
+ "screening": "កំពុង Screen CV...",
+ "shortlist": "Shortlist បេក្ខជន",
+ "candidate": "បេក្ខជន",
+ "schedule": "កាលវិភាគសម្ភាសន៍",
+ "emails_sent": "បានផ្ញើ Email អញ្ជើញ",
+ "payroll_report": "Report Payroll ប្រចាំខែ",
+ "attendance": "វត្តមាន",
+ "needs_review": "រង់ចាំការពិនិត្យ",
+ "approved": "Approve រួចរាល់",
+ "ai_prepares": "AI រៀបចំ",
+ "human_decides": "មនុស្សសម្រេច",
+ "welcome": "សូមស្វាគមន៍!",
+ "docs": "ឯកសារចាំបាច់",
+ "first_week": "ផែនការសប្ដាហ៍ដំបូង",
+ "team_intro": "ណែនាំក្រុមការងារ",
+ "question": "តើខ្ញុំអាចសុំច្បាប់ប្រចាំឆ្នាំដោយរបៀបណា?",
+ "answer": "ពិនិត្យគោលការណ៍ក្នុងប្រព័ន្ធ ហើយដាក់ស្នើតាម Workflow",
+ "complex_case": "ករណីស្មុគស្មាញ → HR",
+ "repetitive": "ការងារដដែលៗ",
+ "people_focus": "ផ្ដោតលើមនុស្ស"
+}

@@ -1,0 +1,154 @@
+{
+ "title": "ក្រុមការងារ HR និង AI Agents ធ្វើការជាមួយគ្នា",
+ "closing": "AI ជួយការងារដដែលៗ មនុស្សផ្ដោតលើមនុស្ស និងការសម្រេចចិត្ត",
+ "scenes": [
+  {
+   "caption": "ពេលព្រឹកដ៏ស្រស់បំព្រងនៅការិយាល័យ",
+   "image_prompt": "A modern bright office in Phnom Penh with large glass windows showing city greenery. Studio Ghibli anime style interior. Sophea, a friendly 35-year-old Cambodian female HR manager, and Dara, an energetic 27-year-old Cambodian male HR officer, walk into the office holding iced coffees. Waiting on desks are three glossy Pixar-style friendly small robots: one round blue, one green, and one cheerful orange, waving their small mechanical hands in warm morning greeting.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "រាល់ព្រឹកនៅភ្នំពេញ ក្រុមការងារ HR ចាប់ផ្ដើមថ្ងៃថ្មីជាមួយ AI Agents ដ៏រួសរាយ។"
+    },
+    {
+     "speaker": "SOPHEA",
+     "khmer": "អរុណសួស្ដីដារ៉ា និង Agents ទាំងអស់គ្នា! តើយប់មិញការងាររលូនល្អទេ?"
+    },
+    {
+     "speaker": "DARA",
+     "khmer": "អរុណសួស្ដីបងសុភា! មើលទៅពួកវាបានរៀបចំការងារច្រើនរួចរាល់ហើយបង។"
+    }
+   ]
+  },
+  {
+   "caption": "ការជ្រើសរើស CV ស្វ័យប្រវត្តិកាន់តែលឿន",
+   "image_prompt": "Medium close-up inside the bright office. Sophea sits at a wooden desk smiling softly while looking at a floating holographic display. Beside her floats Recruit Agent, a cute glossy round blue 3D robot, happily pointing its glowing hand to a organized shortlist of job applications. Hand-painted anime style background with warm sunlight filtering through plants.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "យប់មិញ Recruit Agent បានពិនិត្យ CV រាប់រយសន្លឹកតាមលក្ខខណ្ឌដែលកំណត់។"
+    },
+    {
+     "speaker": "RECRUIT",
+     "khmer": "ខ្ញុំបាន Screen CV រួចហើយ និងរៀបចំ Shortlist បេក្ខជនល្អៗជូនបងសុភាពិនិត្យ។"
+    },
+    {
+     "speaker": "SOPHEA",
+     "khmer": "ល្អខ្លាំងណាស់ Recruit Agent! ឥឡូវបងអាចចំណាយពេលសម្ភាសន៍តែអ្នកត្រូវជំនាញ។"
+    }
+   ]
+  },
+  {
+   "caption": "រៀបចំកាលវិភាគសម្ភាសន៍ដោយស្វ័យប្រវត្តិ",
+   "image_prompt": "Dara, an energetic young Cambodian man drawn in soft anime style, sits with his laptop smiling warmly. Next to his laptop stands the small glossy blue Recruit Agent, displaying an interactive holographic calendar filled with scheduled appointment slots. Soft modern office environment with warm natural lighting.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "Recruit Agent ជួយរៀបចំកាលវិភាគ និងផ្ញើលិខិតអញ្ជើញសម្ភាសន៍ភ្លាមៗ។"
+    },
+    {
+     "speaker": "RECRUIT",
+     "khmer": "ខ្ញុំបានផ្ញើ Email អញ្ជើញបេក្ខជនតាមពេលវេលាទំនេររបស់ក្រុមការងាររួចរាល់ហើយ។"
+    },
+    {
+     "speaker": "DARA",
+     "khmer": "អរគុណច្រើន! ខ្ញុំបានពិនិត្យបញ្ជាក់រួចហើយ មិនបាច់ចំណាយពេលផ្ញើសំបុត្រមួយៗទៀតទេ។"
+    }
+   ]
+  },
+  {
+   "caption": "ការគណនា Payroll ត្រឹមត្រូវនិងរហ័ស",
+   "image_prompt": "Interior office shot. Payroll Agent, a cute shiny green 3D robot with a friendly expression, points to an organized glowing data sheet showing attendance and overtime records. Dara watches intently with an impressed look. Studio Ghibli style room detailing with soft shadows and colorful desk accessories.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "Payroll Agent គណនាទិន្នន័យវត្តមាន និងប្រាក់បៀវត្សរ៍ប្រចាំខែយ៉ាងរហ័ស។"
+    },
+    {
+     "speaker": "PAYROLL",
+     "khmer": "របាយការណ៍ Payroll ប្រចាំខែរួចរាល់ហើយ! ខ្ញុំបាន Flag ករណីច្បាប់ឈប់សម្រាកខ្លះសម្រាប់ពិនិត្យ។"
+    },
+    {
+     "speaker": "DARA",
+     "khmer": "ឆ្លាតណាស់! ជួយកាត់បន្ថយកំហុសលេខ និងចំណេញពេលវេលាគណនាបានច្រើន។"
+    }
+   ]
+  },
+  {
+   "caption": "មនុស្សជាអ្នកសម្រេចចិត្តចុងក្រោយ",
+   "image_prompt": "Close-up on Sophea seated gracefully in an anime painted office setting, reviewing a digital tablet with a calm and confident expression. Beside the tablet, the friendly green Payroll Agent patiently waits with glowing expressive digital eyes. Warm and professional atmosphere.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "ទោះបីជា AI ជួយរៀបចំទិន្នន័យយ៉ាងណា ក៏ការសម្រេចចិត្តចុងក្រោយគឺនៅលើមនុស្ស។"
+    },
+    {
+     "speaker": "SOPHEA",
+     "khmer": "បងបានពិនិត្យករណីពិសេសដែលឯង Flag រួចហើយ ត្រឹមត្រូវល្អណាស់។"
+    },
+    {
+     "speaker": "PAYROLL",
+     "khmer": "ខ្ញុំរង់ចាំការ Approval ពីបងសុភា ដើម្បីបញ្ចប់ Workflow នេះបាទ។"
+    },
+    {
+     "speaker": "SOPHEA",
+     "khmer": "បង Approve រួចរាល់ហើយ! បញ្ជូនទៅជំហានបន្ទាប់បាន។"
+    }
+   ]
+  },
+  {
+   "caption": "ការស្វាគមន៍បុគ្គលិកថ្មីយ៉ាងកក់ក្ដៅ",
+   "image_prompt": "Office entrance and reception area painted in lush Ghibli style with indoor plants. Dara and a cheerful glossy orange 3D robot named Onboard Agent are warmly greeting a new young Cambodian employee who holds a welcome folder. The orange robot holds up a digital orientation guide with a cute welcoming expression.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "សម្រាប់បុគ្គលិកថ្មី Onboard Agent បានរៀបចំឯកសារចាំបាច់រួចជាស្រេច។"
+    },
+    {
+     "speaker": "ONBOARD",
+     "khmer": "ខ្ញុំបានរៀបចំកញ្ចប់ Onboarding និងកាលវិភាគសប្ដាហ៍ដំបូងជូនបុគ្គលិកថ្មីរួចហើយ! "
+    },
+    {
+     "speaker": "DARA",
+     "khmer": "សូមស្វាគមន៍មកកាន់ក្រុមហ៊ុនយើង! ពួកយើងរីករាយណាស់ដែលបានអ្នកមកចូលរួម។"
+    }
+   ]
+  },
+  {
+   "caption": "ឆ្លើយសំណួរគោលការណ៍ HR ភ្លាមៗ",
+   "image_prompt": "Open plan office corner. The friendly orange 3D Onboard Agent hovers near an office desk, projecting a neat holographic infographic about company leave policy to an employee. Nearby, Sophea sits smiling, ready to support more complex human situations. Peaceful anime aesthetic with soft lighting.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "បុគ្គលិកអាចសួរសំណួរទូទៅអំពីគោលការណ៍ HR បានគ្រប់ពេល។"
+    },
+    {
+     "speaker": "ONBOARD",
+     "khmer": "ច្បាប់ឈប់សម្រាកប្រចាំឆ្នាំ និងនីតិវិធីស្នើសុំ ខ្ញុំបានពន្យល់ជូនបុគ្គលិករួចហើយ។"
+    },
+    {
+     "speaker": "SOPHEA",
+     "khmer": "ល្អណាស់ ចំពោះករណីផ្ទាល់ខ្លួនស្មុគស្មាញ បងនឹងជួបពិភាក្សាផ្ទាល់ជាមួយគាត់។"
+    }
+   ]
+  },
+  {
+   "caption": "កិច្ចសហការដ៏ល្អរវាងមនុស្ស និង AI",
+   "image_prompt": "Wide angle group shot inside the vibrant Phnom Penh office overlooking the city skyline under a clear sky. Sophea and Dara stand together smiling warmly alongside the three glossy Pixar-style robots: round blue Recruit Agent, green Payroll Agent, and cheerful orange Onboard Agent. Rich hand-painted anime background blended smoothly with 3D cute characters.",
+   "lines": [
+    {
+     "speaker": "NARRATOR",
+     "khmer": "នៅពេល AI Agents ទទួលបន្ទុកការងារដដែលៗ ក្រុមការងារ HR មានពេលផ្ដោតលើបុគ្គលិកកាន់តែប្រសើរ។"
+    },
+    {
+     "speaker": "DARA",
+     "khmer": "ការងារដំណើរការលឿនជាងមុន ហើយពួកយើងមានពេលស្ដាប់បុគ្គលិកកាន់តែច្រើន។"
+    },
+    {
+     "speaker": "SOPHEA",
+     "khmer": "នេះហើយជាអនាគតនៃការងារ៖ AI ជួយសម្រួល មនុស្សផ្ដល់តម្លៃ និងក្ដីមេត្តា។"
+    }
+   ]
+  }
+ ]
+}
