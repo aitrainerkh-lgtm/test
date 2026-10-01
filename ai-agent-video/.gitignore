@@ -5,3 +5,5 @@ vo/takes/
 audio/music_only.wav
 .hyperframes/
 audio/mix.wav
+renders/work-*/
+renders/.*
