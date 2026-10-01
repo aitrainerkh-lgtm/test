@@ -1,0 +1,129 @@
+{
+  "title": "What is an AI Agent and How Does It Work?",
+  "target_duration": 60,
+  "vo_lead_in": 0.7,
+  "end_card": 3.6,
+  "voice": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Charon",
+    "style": "Read this like a premium technology documentary narrator: warm, confident and clear, with a calm, modern energy. Medium pace. Crisp consonants. Smile slightly on positive lines. Do not rush."
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "name": "Hook",
+      "lines": [
+        "l1",
+        "l2",
+        "l3"
+      ]
+    },
+    {
+      "id": "s2",
+      "name": "Definition",
+      "lines": [
+        "l4"
+      ]
+    },
+    {
+      "id": "s3",
+      "name": "Goal",
+      "lines": [
+        "l5",
+        "l6"
+      ]
+    },
+    {
+      "id": "s4",
+      "name": "Loop",
+      "lines": [
+        "l7",
+        "l8",
+        "l9",
+        "l10"
+      ]
+    },
+    {
+      "id": "s5",
+      "name": "Anatomy",
+      "lines": [
+        "l11"
+      ]
+    },
+    {
+      "id": "s6",
+      "name": "Close",
+      "lines": [
+        "l12"
+      ]
+    }
+  ],
+  "lines": [
+    {
+      "id": "l1",
+      "gap": 0.3,
+      "text": "Ask a chatbot a question, [ans]and you get an answer.",
+      "direction": "Conversational and matter-of-fact."
+    },
+    {
+      "id": "l2",
+      "gap": 0.3,
+      "text": "But what if AI could [do]actually do the work for you?",
+      "direction": "Curious, building intrigue; lift slightly on \"actually do the work\"."
+    },
+    {
+      "id": "l3",
+      "gap": 0.9,
+      "text": "[agent]That's an AI agent.",
+      "direction": "A confident, satisfying reveal."
+    },
+    {
+      "id": "l4",
+      "gap": 0.75,
+      "text": "An AI agent uses a [llm]large language model as its brain, to [plan]plan, [decide]decide, and [act]take action toward a [goal]goal, [own]on its own."
+    },
+    {
+      "id": "l5",
+      "gap": 0.25,
+      "text": "It starts with a [goal]goal."
+    },
+    {
+      "id": "l6",
+      "gap": 1.3,
+      "text": "Say: [task]find three suppliers, [compare]compare prices, and [email]email me a summary."
+    },
+    {
+      "id": "l7",
+      "gap": 0.35,
+      "text": "First, the agent [think]thinks, [steps]breaking the goal into steps."
+    },
+    {
+      "id": "l8",
+      "gap": 0.35,
+      "text": "Then it [act]acts, using tools: [web]web search, [files]files, [email]email."
+    },
+    {
+      "id": "l9",
+      "gap": 0.4,
+      "text": "It [observe]observes the result, and [next]decides what to do next."
+    },
+    {
+      "id": "l10",
+      "gap": 0.8,
+      "text": "[t]Think. [a]Act. [o]Observe. [r]Repeat, [done]until the job is done.",
+      "direction": "Rhythmic and punchy, a short beat after each of: Think. Act. Observe. Repeat."
+    },
+    {
+      "id": "l11",
+      "gap": 0.7,
+      "text": "Every agent combines four parts: [model]a model to reason, [memory]memory for context, [tools]tools to act, and [instr]instructions to stay on track."
+    },
+    {
+      "id": "l12",
+      "gap": 0.0,
+      "text": "[chat]Chatbots answer. [agents]Agents get work done, [control]with you in control.",
+      "direction": "Warm, conclusive and inspiring."
+    }
+  ]
+}

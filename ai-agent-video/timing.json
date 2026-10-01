@@ -1,0 +1,367 @@
+{
+  "lines": {
+    "l1": {
+      "start": 0.7,
+      "end": 4.153333333333333,
+      "duration": 3.453333333333333,
+      "text": "Ask a chatbot a question, and you get an answer."
+    },
+    "l2": {
+      "start": 4.3933333333333335,
+      "end": 7.846666666666668,
+      "duration": 3.4533333333333336,
+      "text": "But what if AI could actually do the work for you?"
+    },
+    "l3": {
+      "start": 8.086666666666668,
+      "end": 9.473333333333334,
+      "duration": 1.3866666666666667,
+      "text": "That's an AI agent."
+    },
+    "l4": {
+      "start": 10.193333333333335,
+      "end": 18.380000000000003,
+      "duration": 8.186666666666666,
+      "text": "An AI agent uses a large language model as its brain, to plan, decide, and take action toward a goal, on its own."
+    },
+    "l5": {
+      "start": 18.980000000000004,
+      "end": 20.56666666666667,
+      "duration": 1.5866666666666664,
+      "text": "It starts with a goal."
+    },
+    "l6": {
+      "start": 20.76666666666667,
+      "end": 25.74666666666667,
+      "duration": 4.9799999999999995,
+      "text": "Say: find three suppliers, compare prices, and email me a summary."
+    },
+    "l7": {
+      "start": 26.78666666666667,
+      "end": 30.773333333333337,
+      "duration": 3.986666666666667,
+      "text": "First, the agent thinks, breaking the goal into steps."
+    },
+    "l8": {
+      "start": 31.053333333333338,
+      "end": 35.23333333333334,
+      "duration": 4.180000000000001,
+      "text": "Then it acts, using tools: web search, files, email."
+    },
+    "l9": {
+      "start": 35.51333333333334,
+      "end": 39.23333333333334,
+      "duration": 3.72,
+      "text": "It observes the result, and decides what to do next."
+    },
+    "l10": {
+      "start": 39.55333333333334,
+      "end": 44.02666666666668,
+      "duration": 4.473333333333334,
+      "text": "Think. Act. Observe. Repeat, until the job is done."
+    },
+    "l11": {
+      "start": 44.66666666666668,
+      "end": 53.38000000000001,
+      "duration": 8.713333333333333,
+      "text": "Every agent combines four parts: a model to reason, memory for context, tools to act, and instructions to stay on track."
+    },
+    "l12": {
+      "start": 53.94000000000001,
+      "end": 58.40000000000001,
+      "duration": 4.46,
+      "text": "Chatbots answer. Agents get work done, with you in control."
+    }
+  },
+  "cues": {
+    "l1.ans": 2.567,
+    "l1.start": 0.7,
+    "l1.end": 4.033,
+    "l2.do": 5.793,
+    "l2.start": 4.393,
+    "l2.end": 7.727,
+    "l3.agent": 8.087,
+    "l3.start": 8.087,
+    "l3.end": 9.353,
+    "l4.llm": 11.46,
+    "l4.plan": 14.127,
+    "l4.decide": 14.66,
+    "l4.act": 15.593,
+    "l4.goal": 16.993,
+    "l4.own": 17.527,
+    "l4.start": 10.193,
+    "l4.end": 18.26,
+    "l5.goal": 20.113,
+    "l5.start": 18.98,
+    "l5.end": 20.447,
+    "l6.task": 21.293,
+    "l6.compare": 22.893,
+    "l6.email": 24.36,
+    "l6.start": 20.767,
+    "l6.end": 25.627,
+    "l7.think": 28.053,
+    "l7.steps": 28.72,
+    "l7.start": 26.787,
+    "l7.end": 30.653,
+    "l8.act": 31.587,
+    "l8.web": 33.18,
+    "l8.files": 34.113,
+    "l8.email": 34.713,
+    "l8.start": 31.053,
+    "l8.end": 35.113,
+    "l9.observe": 35.713,
+    "l9.next": 37.513,
+    "l9.start": 35.513,
+    "l9.end": 39.113,
+    "l10.t": 39.553,
+    "l10.a": 40.293,
+    "l10.o": 40.9,
+    "l10.r": 41.773,
+    "l10.done": 42.44,
+    "l10.start": 39.553,
+    "l10.end": 43.907,
+    "l11.model": 47.06,
+    "l11.memory": 48.46,
+    "l11.tools": 49.927,
+    "l11.instr": 51.26,
+    "l11.start": 44.667,
+    "l11.end": 53.26,
+    "l12.chat": 53.94,
+    "l12.agents": 55.347,
+    "l12.control": 56.947,
+    "l12.start": 53.94,
+    "l12.end": 58.28,
+    "end.card": 58.55
+  },
+  "captions": [
+    {
+      "text": "Ask a chatbot a question,",
+      "start": 0.7,
+      "end": 2.367
+    },
+    {
+      "text": "and you get an answer.",
+      "start": 2.567,
+      "end": 4.033
+    },
+    {
+      "text": "But what if AI could actually",
+      "start": 4.393,
+      "end": 6.327
+    },
+    {
+      "text": "do the work for you?",
+      "start": 6.393,
+      "end": 7.727
+    },
+    {
+      "text": "That's an AI agent.",
+      "start": 8.087,
+      "end": 9.353
+    },
+    {
+      "text": "An AI agent uses a large",
+      "start": 10.193,
+      "end": 11.793
+    },
+    {
+      "text": "language model as its brain,",
+      "start": 11.86,
+      "end": 13.727
+    },
+    {
+      "text": "to plan,",
+      "start": 13.927,
+      "end": 14.46
+    },
+    {
+      "text": "decide,",
+      "start": 14.66,
+      "end": 15.127
+    },
+    {
+      "text": "and take action toward a goal,",
+      "start": 15.327,
+      "end": 17.327
+    },
+    {
+      "text": "on its own.",
+      "start": 17.527,
+      "end": 18.26
+    },
+    {
+      "text": "It starts with a goal.",
+      "start": 18.98,
+      "end": 20.447
+    },
+    {
+      "text": "Say:",
+      "start": 20.767,
+      "end": 21.033
+    },
+    {
+      "text": "find three suppliers,",
+      "start": 21.293,
+      "end": 22.693
+    },
+    {
+      "text": "compare prices,",
+      "start": 22.893,
+      "end": 23.893
+    },
+    {
+      "text": "and email me a summary.",
+      "start": 24.093,
+      "end": 25.627
+    },
+    {
+      "text": "First,",
+      "start": 26.787,
+      "end": 27.187
+    },
+    {
+      "text": "the agent thinks,",
+      "start": 27.387,
+      "end": 28.52
+    },
+    {
+      "text": "breaking the goal into steps.",
+      "start": 28.72,
+      "end": 30.653
+    },
+    {
+      "text": "Then it acts,",
+      "start": 31.053,
+      "end": 31.92
+    },
+    {
+      "text": "using tools:",
+      "start": 32.12,
+      "end": 32.92
+    },
+    {
+      "text": "web search,",
+      "start": 33.18,
+      "end": 33.913
+    },
+    {
+      "text": "files,",
+      "start": 34.113,
+      "end": 34.513
+    },
+    {
+      "text": "email.",
+      "start": 34.713,
+      "end": 35.113
+    },
+    {
+      "text": "It observes the result,",
+      "start": 35.513,
+      "end": 37.047
+    },
+    {
+      "text": "and decides what to do next.",
+      "start": 37.247,
+      "end": 39.113
+    },
+    {
+      "text": "Think.",
+      "start": 39.553,
+      "end": 39.953
+    },
+    {
+      "text": "Act.",
+      "start": 40.293,
+      "end": 40.56
+    },
+    {
+      "text": "Observe.",
+      "start": 40.9,
+      "end": 41.433
+    },
+    {
+      "text": "Repeat,",
+      "start": 41.773,
+      "end": 42.24
+    },
+    {
+      "text": "until the job is done.",
+      "start": 42.44,
+      "end": 43.907
+    },
+    {
+      "text": "Every agent combines four parts:",
+      "start": 44.667,
+      "end": 46.8
+    },
+    {
+      "text": "a model to reason,",
+      "start": 47.06,
+      "end": 48.26
+    },
+    {
+      "text": "memory for context,",
+      "start": 48.46,
+      "end": 49.727
+    },
+    {
+      "text": "tools to act,",
+      "start": 49.927,
+      "end": 50.793
+    },
+    {
+      "text": "and instructions to stay on track.",
+      "start": 50.993,
+      "end": 53.26
+    },
+    {
+      "text": "Chatbots answer.",
+      "start": 53.94,
+      "end": 55.007
+    },
+    {
+      "text": "Agents get work done,",
+      "start": 55.347,
+      "end": 56.747
+    },
+    {
+      "text": "with you in control.",
+      "start": 56.947,
+      "end": 58.28
+    }
+  ],
+  "scenes": {
+    "s1": {
+      "start": 0,
+      "end": 10.443,
+      "duration": 10.443
+    },
+    "s2": {
+      "start": 9.743,
+      "end": 19.23,
+      "duration": 9.487
+    },
+    "s3": {
+      "start": 18.53,
+      "end": 27.037,
+      "duration": 8.507
+    },
+    "s4": {
+      "start": 26.337,
+      "end": 44.917,
+      "duration": 18.58
+    },
+    "s5": {
+      "start": 44.217,
+      "end": 54.19,
+      "duration": 9.973
+    },
+    "s6": {
+      "start": 53.49,
+      "end": 61.2,
+      "duration": 7.71
+    }
+  },
+  "total": 61.2,
+  "measured": false
+}

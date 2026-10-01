@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>What is an AI Agent — and how does it work?</title>
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; font-weight: 500; src: url("assets/fonts/inter-tight-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 600; src: url("assets/fonts/inter-tight-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 700; src: url("assets/fonts/inter-tight-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url("assets/fonts/inter-tight-latin-800-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 900; src: url("assets/fonts/inter-tight-latin-900-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); }
+
+      :root {
+        --ink: #04060c;
+        --ink-2: #0a0f1d;
+        --text: #eef2ff;
+        --muted: #8a93b5;
+        --dim: #4a5272;
+        --cyan: #3be8ff;
+        --blue: #5b8cff;
+        --violet: #8b5cff;
+        --amber: #ffb23e;
+        --mint: #3cf0a0;
+        --glass: rgba(255, 255, 255, 0.045);
+        --glass-2: rgba(255, 255, 255, 0.07);
+        --stroke: rgba(255, 255, 255, 0.11);
+        --display: "Inter Tight", system-ui, sans-serif;
+        --body: "Inter", system-ui, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--ink); color: var(--text); font-family: var(--body); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ink); }
+      .clip { position: absolute; inset: 0; }
+      .layer { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+
+      /* ---------- background ---------- */
+      .bg-base { background: radial-gradient(120% 90% at 50% 40%, #0b1226 0%, #060a16 45%, var(--ink) 100%); }
+      .bg-dots {
+        background-image: radial-gradient(rgba(150, 175, 255, 0.22) 1.2px, transparent 1.6px);
+        background-size: 44px 44px;
+        background-position: 22px 22px;
+        -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+        mask-image: radial-gradient(70% 70% at 50% 50%, #000 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+        opacity: 0.55;
+      }
+      .aurora { position: absolute; border-radius: 50%; filter: blur(120px); }
+      #aur1 { width: 1100px; height: 800px; left: -200px; top: -260px; background: radial-gradient(circle, rgba(91, 140, 255, 0.36), transparent 65%); }
+      #aur2 { width: 1000px; height: 900px; left: 1050px; top: 380px; background: radial-gradient(circle, rgba(139, 92, 255, 0.32), transparent 65%); }
+      #aur3 { width: 900px; height: 700px; left: 520px; top: 200px; background: radial-gradient(circle, rgba(255, 178, 62, 0.28), transparent 65%); opacity: 0; }
+      #aur4 { width: 900px; height: 700px; left: 520px; top: 200px; background: radial-gradient(circle, rgba(60, 240, 160, 0.22), transparent 65%); opacity: 0; }
+
+      /* ---------- shared UI ---------- */
+      .glass {
+        background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.03));
+        border: 1px solid var(--stroke);
+        border-radius: 26px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+      .kicker {
+        position: absolute; left: 120px; top: 92px;
+        font-family: var(--mono); font-size: 22px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 18px;
+      }
+      .kicker b { color: var(--cyan); font-weight: 700; }
+      .kicker i { display: block; width: 56px; height: 2px; background: linear-gradient(90deg, var(--cyan), transparent); }
+      .mono { font-family: var(--mono); }
+      .icon { width: 100%; height: 100%; display: block; }
+      .icon * { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .scene-inner { position: absolute; inset: 0; }
+
+      /* ---------- ORB (the agent's core) ---------- */
+      #orb { position: absolute; left: 0; top: 0; width: 360px; height: 360px; margin-left: -180px; margin-top: -180px; }
+      #orbp { position: absolute; inset: 0; }
+      #orbp > * { position: absolute; }
+      .orb-halo { inset: -55%; border-radius: 50%; background: radial-gradient(circle, rgba(59, 232, 255, 0.42) 0%, rgba(110, 90, 255, 0.28) 32%, transparent 66%); filter: blur(20px); }
+      .orb-halo-amber { inset: -55%; border-radius: 50%; background: radial-gradient(circle, rgba(255, 178, 62, 0.62) 0%, rgba(255, 120, 40, 0.25) 34%, transparent 66%); filter: blur(20px); opacity: 0; }
+      .orb-halo-mint { inset: -55%; border-radius: 50%; background: radial-gradient(circle, rgba(60, 240, 160, 0.6) 0%, rgba(40, 200, 160, 0.22) 34%, transparent 66%); filter: blur(20px); opacity: 0; }
+      .orb-core {
+        inset: 14%; border-radius: 50%; overflow: hidden;
+        background: radial-gradient(circle at 36% 30%, #ffffff 0%, #c9fbff 9%, #3be8ff 28%, #5b6dff 56%, #2a1670 82%, #12082e 100%);
+        box-shadow: 0 0 60px rgba(59, 232, 255, 0.55), 0 0 140px rgba(139, 92, 255, 0.35), inset -18px -24px 60px rgba(20, 8, 60, 0.85), inset 10px 12px 30px rgba(255, 255, 255, 0.35);
+      }
+      .orb-swirl { position: absolute; inset: -30%; background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.55) 40deg, transparent 90deg, rgba(139, 92, 255, 0.6) 180deg, transparent 230deg, rgba(59, 232, 255, 0.6) 300deg, transparent 360deg); mix-blend-mode: overlay; filter: blur(14px); }
+      .orb-swirl2 { position: absolute; inset: -20%; background: conic-gradient(from 90deg, transparent 0deg, rgba(59, 232, 255, 0.55) 60deg, transparent 140deg, rgba(255, 255, 255, 0.35) 220deg, transparent 300deg); mix-blend-mode: screen; filter: blur(18px); opacity: 0.7; }
+      .orb-tint-amber { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff4dc 0%, #ffcf7a 25%, #ff9a2e 60%, #6a2a08 100%); mix-blend-mode: hard-light; opacity: 0; }
+      .orb-tint-mint { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #eafff4 0%, #8dffd0 25%, #2fd59a 60%, #063a2a 100%); mix-blend-mode: hard-light; opacity: 0; }
+      .orb-spec { position: absolute; left: 20%; top: 14%; width: 34%; height: 22%; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.85), transparent 70%); filter: blur(6px); }
+      .orb-rings { inset: -6%; width: 112%; height: 112%; overflow: visible; }
+      .orb-rings circle { fill: none; }
+
+      /* ---------- S1 hook ---------- */
+      #chat { left: 530px; top: 330px; width: 860px; height: 420px; padding: 0; }
+      .chat-head { height: 70px; border-bottom: 1px solid var(--stroke); display: flex; align-items: center; padding: 0 28px; gap: 12px; }
+      .chat-head .dot { width: 13px; height: 13px; border-radius: 50%; background: rgba(255,255,255,0.16); }
+      .chat-head .tag { margin-left: auto; font-family: var(--mono); font-size: 18px; letter-spacing: 0.2em; color: var(--muted); }
+      .bubble { position: absolute; font-size: 30px; line-height: 1.38; padding: 20px 28px; border-radius: 24px; }
+      #b-user { right: 34px; top: 104px; max-width: 600px; background: linear-gradient(135deg, rgba(139, 92, 255, 0.55), rgba(91, 140, 255, 0.45)); border-bottom-right-radius: 8px; color: #fff; }
+      #b-ai { left: 34px; top: 214px; width: 640px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--stroke); border-bottom-left-radius: 8px; color: #dfe5ff; }
+      #b-ai .w { display: inline-block; }
+      .typing { display: flex; gap: 9px; position: absolute; left: 34px; top: 236px; padding: 22px 26px; border-radius: 22px; background: rgba(255,255,255,0.06); border: 1px solid var(--stroke); }
+      .typing span { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); }
+      #hook-head { left: 0; right: 0; top: 330px; text-align: center; font-family: var(--display); font-weight: 800; font-size: 132px; line-height: 1.02; letter-spacing: -0.035em; }
+      #hook-head .row { display: block; }
+      #hook-head .w { display: inline-block; margin: 0 0.12em; }
+      .grad { background: linear-gradient(95deg, #8ff4ff 0%, #3be8ff 30%, #8b7bff 70%, #c39bff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      #title-wrap { left: 0; right: 0; top: 380px; text-align: center; }
+      #title { font-family: var(--display); font-weight: 900; font-size: 250px; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
+      #title .ch { display: inline-block; background: linear-gradient(180deg, #ffffff 10%, #cdf7ff 55%, #9e8cff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      #title .sp { display: inline-block; width: 0.22em; }
+      #title-sub { margin-top: 26px; font-family: var(--mono); font-size: 28px; letter-spacing: 0.4em; color: #b9c3ea; text-transform: uppercase; }
+      #title-sub b { color: var(--cyan); font-weight: 500; }
+      #flash { inset: 0; background: radial-gradient(60% 60% at 50% 50%, rgba(200, 250, 255, 0.55), rgba(120, 100, 255, 0.15) 50%, transparent 75%); opacity: 0; mix-blend-mode: screen; }
+      #streak { left: -600px; top: 520px; width: 600px; height: 6px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.95), transparent); filter: blur(2px); opacity: 0; }
+
+      /* ---------- S2 definition ---------- */
+      #llm-label { left: 300px; top: 770px; width: 440px; text-align: center; }
+      #llm-label .k { font-family: var(--mono); font-size: 21px; letter-spacing: 0.24em; color: var(--cyan); }
+      #llm-label .v { font-family: var(--display); font-weight: 800; font-size: 60px; letter-spacing: -0.02em; margin-top: 6px; }
+      .cap-pill { position: absolute; left: 980px; width: 400px; height: 108px; display: flex; align-items: center; gap: 22px; padding: 0 28px; }
+      .cap-pill .ic { width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; color: var(--cyan); background: rgba(59, 232, 255, 0.1); border: 1px solid rgba(59, 232, 255, 0.3); }
+      .cap-pill .ic svg { width: 32px; height: 32px; }
+      .cap-pill .t { font-family: var(--display); font-weight: 800; font-size: 46px; letter-spacing: 0.01em; }
+      .cap-pill .n { margin-left: auto; font-family: var(--mono); color: var(--dim); font-size: 20px; }
+      #goal { left: 1590px; top: 450px; width: 180px; height: 180px; color: var(--amber); }
+      #goal-glow { left: 1530px; top: 390px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(255,178,62,0.45), transparent 65%); filter: blur(12px); opacity: 0; }
+      #goal-label { left: 1560px; top: 300px; width: 240px; text-align: center; font-family: var(--mono); font-size: 24px; letter-spacing: 0.3em; color: var(--amber); }
+      #auto { position: absolute; left: 1515px; top: 690px; width: 330px; height: 76px; display: flex; align-items: center; gap: 16px; padding: 0 22px; border-radius: 40px; }
+      #auto .lbl { font-family: var(--mono); font-size: 19px; letter-spacing: 0.16em; color: var(--muted); }
+      #auto .sw { margin-left: auto; width: 74px; height: 40px; border-radius: 22px; background: rgba(255,255,255,0.1); position: relative; border: 1px solid var(--stroke); }
+      #auto .sw-fill { position: absolute; inset: 0; border-radius: 22px; background: linear-gradient(90deg, #2fd59a, var(--mint)); opacity: 0; }
+      #auto .knob { position: absolute; left: 4px; top: 4px; width: 30px; height: 30px; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+      #own-txt { left: 1515px; top: 784px; width: 330px; text-align: center; font-family: var(--display); font-size: 36px; font-weight: 700; color: var(--mint); }
+
+      /* ---------- S3 goal ---------- */
+      #prompt { left: 190px; top: 560px; width: 1540px; height: 170px; display: flex; align-items: center; gap: 30px; padding: 0 30px 0 34px; border-color: rgba(255, 178, 62, 0.45); box-shadow: 0 0 0 1px rgba(255,178,62,0.15), 0 0 80px rgba(255, 178, 62, 0.16), 0 30px 80px rgba(0,0,0,0.5); }
+      #prompt .tag { font-family: var(--mono); font-size: 20px; letter-spacing: 0.22em; color: #1a1205; background: var(--amber); padding: 10px 16px; border-radius: 12px; font-weight: 700; }
+      #ptext { flex: 1; font-size: 44px; font-weight: 500; letter-spacing: -0.01em; color: #fff; white-space: nowrap; }
+      #ptext .ch { display: none; }
+      #ptext .ph { position: relative; display: inline; }
+      #ptext .mk { position: absolute; left: 0; bottom: -10px; width: 100%; height: 6px; border-radius: 3px; background: var(--amber); display: block; transform-origin: left center; }
+      #caret { display: inline-block; width: 4px; height: 52px; background: var(--amber); vertical-align: -9px; margin-left: 4px; border-radius: 2px; }
+      #send { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; background: var(--amber); color: #1a1205; flex: none; }
+      #send svg { width: 42px; height: 42px; }
+      #send svg * { stroke-width: 2.6; }
+      #goal-head { left: 0; right: 0; top: 820px; text-align: center; font-family: var(--display); font-weight: 700; font-size: 40px; color: var(--muted); letter-spacing: -0.01em; }
+      #packet { left: 930px; top: 615px; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, #fff3d6 0%, var(--amber) 45%, rgba(255,178,62,0) 72%); filter: blur(1px); opacity: 0; }
+
+      /* ---------- S4 loop ---------- */
+      #loop-svg { left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+      .station { position: absolute; width: 0; height: 0; }
+      .station .node { position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%; background: #0c1328; border: 2px solid rgba(255,255,255,0.22); display: grid; place-items: center; color: var(--muted); }
+      .station .node svg { width: 34px; height: 34px; }
+      .station .glow { position: absolute; left: -90px; top: -90px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(59,232,255,0.55), transparent 65%); opacity: 0; }
+      .station .lbl { position: absolute; font-family: var(--display); font-weight: 800; font-size: 44px; letter-spacing: 0.02em; color: var(--dim); white-space: nowrap; }
+      #st-think .lbl { left: -120px; width: 240px; text-align: center; top: -112px; }
+      #st-act .lbl { left: 56px; top: -26px; }
+      #st-obs .lbl { right: 56px; top: -26px; text-align: right; }
+      .comet { position: absolute; left: 0; top: 0; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: #fff; box-shadow: 0 0 18px 6px rgba(59, 232, 255, 0.9), 0 0 50px 14px rgba(139, 92, 255, 0.5); }
+      .trail { position: absolute; left: 0; top: 0; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: rgba(150, 240, 255, 0.9); box-shadow: 0 0 12px rgba(59, 232, 255, 0.8); }
+      #panel { left: 1040px; top: 196px; width: 790px; height: 700px; padding: 0; }
+      .p-head { height: 78px; display: flex; align-items: center; padding: 0 30px; border-bottom: 1px solid var(--stroke); gap: 14px; }
+      .p-head .ttl { font-family: var(--mono); font-size: 20px; letter-spacing: 0.22em; color: var(--muted); }
+      #status { margin-left: auto; position: relative; width: 210px; height: 42px; }
+      #status .st { position: absolute; inset: 0; border-radius: 22px; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--mono); font-size: 18px; font-weight: 700; letter-spacing: 0.16em; opacity: 0; }
+      #status .st i { display: block; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+      .st-think { color: var(--cyan); background: rgba(59,232,255,0.1); border: 1px solid rgba(59,232,255,0.35); }
+      .st-act { color: var(--amber); background: rgba(255,178,62,0.1); border: 1px solid rgba(255,178,62,0.35); }
+      .st-obs { color: #b9a4ff; background: rgba(139,92,255,0.14); border: 1px solid rgba(139,92,255,0.45); }
+      .st-done { color: var(--mint); background: rgba(60,240,160,0.12); border: 1px solid rgba(60,240,160,0.45); }
+      .p-sec { padding: 22px 30px 0; font-family: var(--mono); font-size: 17px; letter-spacing: 0.24em; color: var(--dim); }
+      .step { display: flex; align-items: center; gap: 18px; height: 56px; padding: 0 30px; font-size: 30px; color: #dfe5ff; }
+      .step .num { width: 36px; height: 36px; flex: none; border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.22); display: grid; place-items: center; font-family: var(--mono); font-size: 17px; color: var(--muted); position: relative; }
+      .step .num .ok { position: absolute; inset: -1.5px; border-radius: 10px; background: var(--mint); color: #04261a; display: grid; place-items: center; opacity: 0; }
+      .step .num .ok svg { width: 22px; height: 22px; }
+      .step .num .ok svg * { stroke-width: 3; }
+      .log { display: flex; align-items: center; gap: 16px; height: 54px; margin: 0 22px; padding: 0 12px; border-radius: 12px; font-family: var(--mono); font-size: 22px; color: #c9d2f5; }
+      .log .chip { width: 38px; height: 38px; flex: none; border-radius: 10px; display: grid; place-items: center; }
+      .log .chip svg { width: 22px; height: 22px; }
+      .log .fn { color: #fff; }
+      .log .arg { color: var(--muted); }
+      .log .res { margin-left: auto; width: 26px; height: 26px; position: relative; flex: none; }
+      .log .res .pend { position: absolute; inset: 5px; border-radius: 50%; border: 2.5px solid rgba(255,178,62,0.9); border-right-color: transparent; }
+      .log .res .done { position: absolute; inset: 0; border-radius: 50%; background: var(--mint); color: #04261a; display: grid; place-items: center; opacity: 0; }
+      .log .res .done svg { width: 16px; height: 16px; }
+      .log .res .done svg * { stroke-width: 3.4; }
+      .c-web { color: var(--cyan); background: rgba(59,232,255,0.12); }
+      .c-file { color: var(--blue); background: rgba(91,140,255,0.14); }
+      .c-mail { color: var(--amber); background: rgba(255,178,62,0.12); }
+      .c-eye { color: #b9a4ff; background: rgba(139,92,255,0.16); }
+      .c-next { color: var(--mint); background: rgba(60,240,160,0.12); }
+      .log.obs { background: rgba(139,92,255,0.08); border: 1px solid rgba(139,92,255,0.25); font-family: var(--body); font-size: 25px; }
+      .log.obs b { color: var(--mint); font-weight: 600; }
+      #toast { left: 1062px; top: 722px; width: 746px; height: 116px; display: flex; align-items: center; gap: 18px; padding: 0 26px; border-radius: 20px; background: rgba(60,240,160,0.12); border: 1px solid rgba(60,240,160,0.5); box-shadow: 0 0 60px rgba(60,240,160,0.18); font-size: 28px; color: #eafff4; }
+      #toast .chip { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: var(--mint); color: #04261a; }
+      #toast .chip svg { width: 26px; height: 26px; }
+      #toast .chip svg * { stroke-width: 2.6; }
+      #toast b { font-weight: 600; }
+      #toast .tm { margin-left: auto; font-family: var(--mono); font-size: 18px; color: var(--mint); letter-spacing: 0.14em; }
+      .beat-word { position: absolute; font-family: var(--display); font-weight: 900; font-size: 64px; letter-spacing: 0.02em; }
+
+      /* ---------- S5 anatomy ---------- */
+      .part { position: absolute; width: 470px; height: 150px; display: flex; align-items: center; gap: 24px; padding: 0 28px; }
+      .part .ic { width: 84px; height: 84px; flex: none; border-radius: 22px; display: grid; place-items: center; }
+      .part .ic svg { width: 44px; height: 44px; }
+      .part .t { font-family: var(--display); font-weight: 800; font-size: 44px; letter-spacing: -0.01em; line-height: 1.05; }
+      .part .d { font-size: 27px; color: var(--muted); margin-top: 6px; }
+      .p-model .ic { color: var(--cyan); background: rgba(59,232,255,0.12); border: 1px solid rgba(59,232,255,0.4); }
+      .p-memory .ic { color: #b9a4ff; background: rgba(139,92,255,0.14); border: 1px solid rgba(139,92,255,0.45); }
+      .p-tools .ic { color: var(--blue); background: rgba(91,140,255,0.14); border: 1px solid rgba(91,140,255,0.45); }
+      .p-instr .ic { color: var(--amber); background: rgba(255,178,62,0.12); border: 1px solid rgba(255,178,62,0.45); }
+      #anat-svg { left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+      #four { left: 0; right: 0; top: 150px; text-align: center; font-family: var(--display); font-weight: 800; font-size: 64px; letter-spacing: -0.02em; }
+      #four .n { color: var(--cyan); }
+
+      /* ---------- S6 close ---------- */
+      .vs { position: absolute; top: 300px; width: 760px; text-align: center; }
+      #vs-l { left: 140px; }
+      #vs-r { left: 1020px; }
+      .vs .ic { width: 120px; height: 120px; margin: 0 auto 34px; border-radius: 32px; display: grid; place-items: center; }
+      .vs .ic svg { width: 60px; height: 60px; }
+      #vs-l .ic { color: var(--muted); background: rgba(255,255,255,0.05); border: 1px solid var(--stroke); }
+      #vs-r .ic { color: #04261a; background: linear-gradient(135deg, var(--cyan), var(--violet)); box-shadow: 0 0 80px rgba(59,232,255,0.35); }
+      .vs .big { font-family: var(--display); font-weight: 900; font-size: 104px; letter-spacing: -0.035em; line-height: 1; }
+      .vs .sm { font-family: var(--display); font-weight: 600; font-size: 52px; letter-spacing: -0.02em; margin-top: 14px; }
+      #vs-l .big { color: #b3bad6; }
+      #vs-l .sm { color: var(--muted); }
+      #vs-r .sm { color: #fff; }
+      #vs-line { left: 959px; top: 280px; width: 2px; height: 420px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.22), transparent); transform-origin: center top; }
+      #control { position: absolute; left: 560px; top: 770px; width: 800px; height: 104px; display: flex; align-items: center; gap: 22px; padding: 0 16px 0 22px; border-radius: 60px; background: rgba(255,178,62,0.1); border: 1px solid rgba(255,178,62,0.5); box-shadow: 0 0 60px rgba(255,178,62,0.15); }
+      #control .ava { width: 70px; height: 70px; border-radius: 50%; display: grid; place-items: center; background: var(--amber); color: #1a1205; flex: none; }
+      #control .ava svg { width: 38px; height: 38px; }
+      #control .ava svg * { stroke-width: 2.4; }
+      #control .tx { font-family: var(--display); font-size: 42px; font-weight: 700; color: #fff; }
+      #control .tx span { color: var(--amber); }
+      #approve { margin-left: auto; height: 72px; padding: 0 30px; border-radius: 40px; background: var(--amber); color: #1a1205; display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-weight: 700; font-size: 22px; letter-spacing: 0.12em; }
+      #approve svg { width: 26px; height: 26px; }
+      #approve svg * { stroke-width: 3; }
+      #endcard { left: 0; right: 0; top: 0; bottom: 0; }
+      #ec-word { position: absolute; left: 0; right: 0; top: 420px; text-align: center; font-family: var(--display); font-weight: 900; font-size: 112px; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
+      #ec-word .ai { background: linear-gradient(95deg, #9ff6ff, #3be8ff 40%, #8b7bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      #ec-rule { position: absolute; left: 760px; top: 575px; width: 400px; height: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); }
+      #ec-sub { position: absolute; left: 0; right: 0; top: 610px; text-align: center; font-family: var(--mono); font-size: 26px; letter-spacing: 0.3em; color: #b9c3ea; text-transform: uppercase; }
+      #fadeout { inset: 0; background: #000; opacity: 0; }
+
+      /* ---------- captions + finishing ---------- */
+      #captions { pointer-events: none; }
+      .cap { position: absolute; left: 260px; right: 260px; top: 968px; text-align: center; font-family: var(--body); font-weight: 500; font-size: 36px; line-height: 1.25; color: #f4f6ff; letter-spacing: -0.005em; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0,0,0,0.8); opacity: 0; }
+      #vignette { inset: 0; background: radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%); }
+      #grain { inset: -100px; opacity: 0.075; mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>");
+        background-size: 240px 240px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{{total}}">
+
+      <!-- ===== persistent background ===== -->
+      <div id="bg" class="clip" data-start="0" data-duration="{{total}}" data-track-index="0">
+        <div class="layer bg-base"></div>
+        <div id="aurora" class="layer">
+          <div id="aur1" class="aurora"></div>
+          <div id="aur2" class="aurora"></div>
+          <div id="aur3" class="aurora"></div>
+          <div id="aur4" class="aurora"></div>
+        </div>
+        <div id="dots" class="layer bg-dots"></div>
+      </div>
+
+      <!-- ===== the agent core (persistent) ===== -->
+      <div id="orb-layer" class="clip" data-start="0" data-duration="{{total}}" data-track-index="1" style="z-index: 2">
+        <div id="orb"><div id="orbp">
+          <div class="orb-halo"></div>
+          <div class="orb-halo-amber"></div>
+          <div class="orb-halo-mint"></div>
+          <div class="orb-core">
+            <div class="orb-swirl"></div>
+            <div class="orb-swirl2"></div>
+            <div class="orb-tint-amber"></div>
+            <div class="orb-tint-mint"></div>
+            <div class="orb-spec"></div>
+          </div>
+          <svg class="orb-rings" viewBox="0 0 400 400">
+            <defs>
+              <linearGradient id="rg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3be8ff" /><stop offset="1" stop-color="#8b5cff" stop-opacity="0.2" /></linearGradient>
+            </defs>
+            <g id="ring-a"><circle cx="200" cy="200" r="196" stroke="url(#rg1)" stroke-width="1.6" stroke-dasharray="2 10" /></g>
+            <g id="ring-b"><circle cx="200" cy="200" r="182" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-dasharray="90 40 10 40" /></g>
+          </svg>
+        </div></div>
+      </div>
+
+      <!-- ===== S1 · HOOK ===== -->
+      <section id="s1" class="clip" data-start="{{s1.start}}" data-duration="{{s1.duration}}" data-track-index="2" style="z-index: 3">
+        <div class="scene-inner" id="s1i">
+          <div id="chat" class="glass abs">
+            <div class="chat-head"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="tag">CHATBOT</div></div>
+            <div id="b-user" class="bubble">Which packaging supplier is the cheapest?</div>
+            <div id="typing" class="typing"><span></span><span></span><span></span></div>
+            <div id="b-ai" class="bubble"></div>
+          </div>
+          <div id="hook-head" class="abs">
+            <span class="row"><span class="w">What</span><span class="w">if</span><span class="w">AI</span><span class="w">could</span></span>
+            <span class="row"><span class="w grad">do</span><span class="w grad">the</span><span class="w grad">work?</span></span>
+          </div>
+        </div>
+        <div class="scene-inner" id="s1t">
+          <div id="flash" class="abs"></div>
+          <div id="title-wrap" class="abs">
+            <div id="title"></div>
+            <div id="title-sub">What it is <b>·</b> How it works</div>
+          </div>
+          <div id="streak" class="abs"></div>
+        </div>
+      </section>
+
+      <!-- ===== S2 · DEFINITION ===== -->
+      <section id="s2" class="clip" data-start="{{s2.start}}" data-duration="{{s2.duration}}" data-track-index="2" style="z-index: 3">
+        <div class="scene-inner" id="s2i">
+          <div class="kicker" id="k2"><b>01</b><i></i>What is an AI agent</div>
+          <svg class="abs" style="left:0;top:0;width:1920px;height:1080px;overflow:visible">
+            <defs>
+              <linearGradient id="cg" x1="0" x2="1"><stop offset="0" stop-color="#3be8ff" /><stop offset="1" stop-color="#8b5cff" /></linearGradient>
+              <linearGradient id="cg2" x1="0" x2="1"><stop offset="0" stop-color="#8b5cff" /><stop offset="1" stop-color="#ffb23e" /></linearGradient>
+            </defs>
+            <path id="cn1" class="cn" d="M712,540 C850,540 850,380 980,380" stroke="url(#cg)" stroke-width="2.5" fill="none" />
+            <path id="cn2" class="cn" d="M712,540 C850,540 850,540 980,540" stroke="url(#cg)" stroke-width="2.5" fill="none" />
+            <path id="cn3" class="cn" d="M712,540 C850,540 850,700 980,700" stroke="url(#cg)" stroke-width="2.5" fill="none" />
+            <path id="cg1" class="cn" d="M1380,380 C1490,380 1490,540 1590,540" stroke="url(#cg2)" stroke-width="2.5" fill="none" />
+            <path id="cg2p" class="cn" d="M1380,540 C1490,540 1490,540 1590,540" stroke="url(#cg2)" stroke-width="2.5" fill="none" />
+            <path id="cg3" class="cn" d="M1380,700 C1490,700 1490,540 1590,540" stroke="url(#cg2)" stroke-width="2.5" fill="none" />
+            <path id="fl1" class="flow" d="M712,540 C850,540 850,380 980,380" stroke="#c9fbff" stroke-width="4" fill="none" stroke-linecap="round" />
+            <path id="fl2" class="flow" d="M712,540 C850,540 850,540 980,540" stroke="#c9fbff" stroke-width="4" fill="none" stroke-linecap="round" />
+            <path id="fl3" class="flow" d="M712,540 C850,540 850,700 980,700" stroke="#c9fbff" stroke-width="4" fill="none" stroke-linecap="round" />
+            <path id="fl4" class="flow" d="M1380,380 C1490,380 1490,540 1590,540" stroke="#ffe2b0" stroke-width="4" fill="none" stroke-linecap="round" />
+            <path id="fl5" class="flow" d="M1380,540 C1490,540 1490,540 1590,540" stroke="#ffe2b0" stroke-width="4" fill="none" stroke-linecap="round" />
+            <path id="fl6" class="flow" d="M1380,700 C1490,700 1490,540 1590,540" stroke="#ffe2b0" stroke-width="4" fill="none" stroke-linecap="round" />
+          </svg>
+          <div id="llm-label" class="abs"><div class="k">LARGE LANGUAGE MODEL</div><div class="v">The brain</div></div>
+          <div id="pill-plan" class="cap-pill glass" style="top: 326px">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" /><path d="M4 6h.01M4 12h.01M4 18h.01" /></svg></div>
+            <div class="t">Plan</div><div class="n">01</div>
+          </div>
+          <div id="pill-decide" class="cap-pill glass" style="top: 486px">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5" /><circle cx="6" cy="18" r="2.5" /><circle cx="18" cy="9" r="2.5" /><path d="M6 8.5v7M8.3 7.2c4 .8 7.4 1.3 7.4 1.3M6 15.5c0-4 6-6 9.6-6.3" /></svg></div>
+            <div class="t">Decide</div><div class="n">02</div>
+          </div>
+          <div id="pill-act" class="cap-pill glass" style="top: 646px">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" /></svg></div>
+            <div class="t">Act</div><div class="n">03</div>
+          </div>
+          <div id="goal-glow" class="abs"></div>
+          <div id="goal-label" class="abs">GOAL</div>
+          <div id="goal" class="abs"><svg class="icon" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" style="stroke-width:3" /><circle cx="50" cy="50" r="31" style="stroke-width:3" /><circle cx="50" cy="50" r="16" style="stroke-width:3" /><circle cx="50" cy="50" r="5" style="fill:currentColor" /></svg></div>
+          <div id="auto" class="glass">
+            <div class="lbl">AUTONOMOUS</div>
+            <div class="sw"><div class="sw-fill"></div><div class="knob"></div></div>
+          </div>
+          <div id="own-txt" class="abs">on its own</div>
+        </div>
+      </section>
+
+      <!-- ===== S3 · GOAL ===== -->
+      <section id="s3" class="clip" data-start="{{s3.start}}" data-duration="{{s3.duration}}" data-track-index="2" style="z-index: 3">
+        <div class="scene-inner" id="s3i">
+          <div class="kicker" id="k3"><b>02</b><i></i>It starts with a goal</div>
+          <div id="prompt" class="glass abs">
+            <div class="tag">GOAL</div>
+            <div id="ptext"></div>
+            <div id="send"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></div>
+          </div>
+          <div id="packet" class="abs"></div>
+        </div>
+      </section>
+
+      <!-- ===== S4 · LOOP ===== -->
+      <section id="s4" class="clip" data-start="{{s4.start}}" data-duration="{{s4.duration}}" data-track-index="2" style="z-index: 3">
+        <div class="scene-inner" id="s4i">
+          <div class="kicker" id="k4"><b>03</b><i></i>How it works · the agent loop</div>
+          <svg id="loop-svg" class="abs">
+            <defs>
+              <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3be8ff" /><stop offset="0.5" stop-color="#8b5cff" /><stop offset="1" stop-color="#3be8ff" /></linearGradient>
+              <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8fa2ff" /></marker>
+            </defs>
+            <circle id="ring-bg" cx="600" cy="585" r="290" stroke="rgba(255,255,255,0.07)" stroke-width="18" fill="none" />
+            <circle id="ring" cx="600" cy="585" r="290" stroke="url(#lg)" stroke-width="3" fill="none" />
+            <circle id="ring-done" cx="600" cy="585" r="290" stroke="#3cf0a0" stroke-width="4" fill="none" opacity="0" />
+            <path id="arc1" class="arc" fill="none" stroke="#8fa2ff" stroke-width="2" marker-end="url(#arr)" />
+            <path id="arc2" class="arc" fill="none" stroke="#8fa2ff" stroke-width="2" marker-end="url(#arr)" />
+            <path id="arc3" class="arc" fill="none" stroke="#8fa2ff" stroke-width="2" marker-end="url(#arr)" />
+          </svg>
+          <div id="trails"></div>
+          <div id="comet" class="comet"></div>
+          <div id="st-think" class="station">
+            <div class="glow"></div>
+            <div class="node"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" /><path d="M10 21h4" /></svg></div>
+            <div class="lbl">THINK</div>
+          </div>
+          <div id="st-act" class="station">
+            <div class="glow"></div>
+            <div class="node"><svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" /></svg></div>
+            <div class="lbl">ACT</div>
+          </div>
+          <div id="st-obs" class="station">
+            <div class="glow"></div>
+            <div class="node"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg></div>
+            <div class="lbl">OBSERVE</div>
+          </div>
+
+          <div id="panel" class="glass abs">
+            <div class="p-head">
+              <div class="ttl">AGENT RUN</div>
+              <div id="status">
+                <div class="st st-think" id="st1"><i></i>THINKING</div>
+                <div class="st st-act" id="st2"><i></i>ACTING</div>
+                <div class="st st-obs" id="st3"><i></i>OBSERVING</div>
+                <div class="st st-done" id="st4"><i></i>DONE</div>
+              </div>
+            </div>
+            <div class="p-sec" id="sec-plan">PLAN</div>
+            <div class="step" id="step1"><div class="num">1<div class="ok"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></div></div>Search for suppliers</div>
+            <div class="step" id="step2"><div class="num">2<div class="ok"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></div></div>Compare prices</div>
+            <div class="step" id="step3"><div class="num">3<div class="ok"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></div></div>Email a summary</div>
+            <div class="p-sec" id="sec-act" style="padding-top: 26px">ACTIVITY</div>
+            <div style="height: 10px"></div>
+            <div class="log" id="log1"><div class="chip c-web"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18" /></svg></div><span><span class="fn">web_search</span><span class="arg">("packaging suppliers")</span></span><div class="res"><div class="pend"></div><div class="done"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></div></div></div>
+            <div class="log" id="log2"><div class="chip c-file"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></svg></div><span><span class="fn">read_file</span><span class="arg">("price_list.xlsx")</span></span><div class="res"><div class="pend"></div><div class="done"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></div></div></div>
+            <div class="log" id="log3"><div class="chip c-mail"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg></div><span><span class="fn">draft_email</span><span class="arg">(to: "you")</span></span><div class="res"><div class="pend"></div><div class="done"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></div></div></div>
+            <div style="height: 8px"></div>
+            <div class="log obs" id="log4"><div class="chip c-eye"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg></div><span>Found 3 suppliers · best price <b>Supplier B</b></span></div>
+            <div style="height: 8px"></div>
+            <div class="log obs" id="log5" style="background: rgba(60,240,160,0.07); border-color: rgba(60,240,160,0.3)"><div class="chip c-next"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></div><span>Next: compare delivery times</span></div>
+          </div>
+          <div id="toast" class="abs">
+            <div class="chip"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg></div>
+            <div><b>Summary emailed to you</b></div>
+            <div class="tm">GOAL COMPLETE</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== S5 · ANATOMY ===== -->
+      <section id="s5" class="clip" data-start="{{s5.start}}" data-duration="{{s5.duration}}" data-track-index="2" style="z-index: 3">
+        <div class="scene-inner" id="s5i">
+          <div class="kicker" id="k5"><b>04</b><i></i>Anatomy of an agent</div>
+          <div id="four" class="abs"><span class="n">4</span> parts, one agent</div>
+          <svg id="anat-svg" class="abs">
+            <path id="an1" class="an" d="M880,505 C780,440 760,400 655,400" stroke="#3be8ff" stroke-width="2.5" fill="none" />
+            <path id="an2" class="an" d="M1040,505 C1140,440 1160,400 1265,400" stroke="#8b5cff" stroke-width="2.5" fill="none" />
+            <path id="an3" class="an" d="M880,665 C780,730 760,770 655,770" stroke="#5b8cff" stroke-width="2.5" fill="none" />
+            <path id="an4" class="an" d="M1040,665 C1140,730 1160,770 1265,770" stroke="#ffb23e" stroke-width="2.5" fill="none" />
+          </svg>
+          <div class="part glass p-model" id="part1" style="left: 185px; top: 325px">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z" /><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" /></svg></div>
+            <div><div class="t">Model</div><div class="d">to reason</div></div>
+          </div>
+          <div class="part glass p-memory" id="part2" style="left: 1265px; top: 325px">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6" /><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" /></svg></div>
+            <div><div class="t">Memory</div><div class="d">for context</div></div>
+          </div>
+          <div class="part glass p-tools" id="part3" style="left: 185px; top: 695px">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z" /></svg></div>
+            <div><div class="t">Tools</div><div class="d">to act</div></div>
+          </div>
+          <div class="part glass p-instr" id="part4" style="left: 1265px; top: 695px">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M15.5 8.5l-2 5-5 2 2-5z" /></svg></div>
+            <div><div class="t">Instructions</div><div class="d">to stay on track</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== S6 · CLOSE + END CARD ===== -->
+      <section id="s6" class="clip" data-start="{{s6.start}}" data-duration="{{s6.duration}}" data-track-index="2" style="z-index: 3">
+        <div class="scene-inner" id="s6i">
+          <div class="kicker" id="k6"><b>05</b><i></i>The difference</div>
+          <div id="vs-l" class="vs">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg></div>
+            <div class="big">Chatbots</div>
+            <div class="sm">answer.</div>
+          </div>
+          <div id="vs-line" class="abs"></div>
+          <div id="vs-r" class="vs">
+            <div class="ic"><svg class="icon" viewBox="0 0 24 24" style="color:#04261a"><path d="M5 12.5l4.5 4.5L19 7" style="stroke-width:3" /></svg></div>
+            <div class="big grad">Agents</div>
+            <div class="sm">get work done.</div>
+          </div>
+          <div id="control">
+            <div class="ava"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" /></svg></div>
+            <div class="tx">with <span>you</span> in control</div>
+            <div id="approve"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" /></svg>APPROVE</div>
+          </div>
+        </div>
+        <div id="endcard" class="abs">
+          <div id="ec-word"><span class="ai">AI</span> For Business</div>
+          <div id="ec-rule"></div>
+          <div id="ec-sub">What is an AI agent · How it works</div>
+        </div>
+      </section>
+
+      <!-- ===== captions ===== -->
+      <div id="captions" class="clip" data-start="0" data-duration="{{total}}" data-track-index="8" style="z-index: 8"></div>
+
+      <!-- ===== finishing ===== -->
+      <div id="finish" class="clip" data-start="0" data-duration="{{total}}" data-track-index="9" style="z-index: 9; pointer-events: none">
+        <div id="vignette" class="abs"></div>
+        <div id="grain" class="abs"></div>
+        <div id="fadeout" class="abs"></div>
+      </div>
+
+      <audio id="mix" src="audio/mix.wav" data-start="0" data-duration="{{total}}" data-track-index="10" data-volume="1"></audio>
+    </div>
+
+    <script>
+      /*TIMING_JSON*/
+    </script>
+    <script>
+      (function () {
+        const T = window.TIMING;
+        const TOTAL = T.total;
+        const C = (k) => {
+          if (!(k in T.cues)) throw new Error("missing cue " + k);
+          return T.cues[k];
+        };
+        const S = (k) => T.scenes[k];
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s) => Array.from(document.querySelectorAll(s));
+        const E3 = "power3.out";
+        const E3io = "power3.inOut";
+        const SFX = (window.__sfx = []);
+        const sfx = (name, t, o = {}) => SFX.push(Object.assign({ name, t: +t.toFixed(3) }, o));
+
+        function build() {
+          const tl = gsap.timeline({ paused: true });
+
+          // ---------------- helpers ----------------
+          const rise = (el, t, o = {}) =>
+            tl.fromTo(el, { opacity: 0, y: o.y ?? 34, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: o.d ?? 0.7, ease: E3, stagger: o.stagger ?? 0 }, t);
+          const pop = (el, t, o = {}) =>
+            tl.fromTo(el, { opacity: 0, scale: o.from ?? 0.82, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: o.d ?? 0.6, ease: o.ease ?? "expo.out" }, t);
+          const draw = (el, t, d = 0.8, ease = E3io) => {
+            const len = el.getTotalLength();
+            tl.fromTo(el, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: d, ease }, t);
+          };
+          // A bright packet running along a path (dash flow).
+          const flow = (el, t, d = 0.7) => {
+            const len = el.getTotalLength();
+            tl.fromTo(el, { strokeDasharray: `60 ${len + 80}`, strokeDashoffset: 60, opacity: 1 }, { strokeDashoffset: -len - 20, duration: d, ease: "power2.inOut" }, t);
+            tl.set(el, { opacity: 0 }, t + d);
+          };
+          // Scene hand-off: velocity-matched zoom-through.
+          const sceneOut = (inner, t, d = 0.6) =>
+            tl.to(inner, { opacity: 0, scale: 1.08, filter: "blur(14px)", duration: d, ease: "power2.in" }, t);
+          const sceneIn = (inner, t, d = 0.9) => {
+            sfx("whoosh", t - 0.15, { gain: 0.75 });
+            tl.fromTo(inner, { opacity: 0, scale: 0.93, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: d, ease: E3 }, t);
+          };
+          const kicker = (el, t) => {
+            tl.fromTo(el, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.8, ease: E3 }, t);
+            tl.fromTo(el.querySelector("i"), { scaleX: 0 }, { scaleX: 1, transformOrigin: "left center", duration: 0.8, ease: E3 }, t + 0.15);
+          };
+
+          // ---------------- static initial states ----------------
+          $$(".flow").forEach((p) => gsap.set(p, { opacity: 0 }));
+          gsap.set("#orb", { x: 960, y: 540, scale: 0, opacity: 0 });
+
+          // ---------------- background life (finite, subtle) ----------------
+          tl.fromTo("#aur1", { x: 0, y: 0 }, { x: 260, y: 120, duration: TOTAL, ease: "sine.inOut" }, 0);
+          tl.fromTo("#aur2", { x: 0, y: 0 }, { x: -320, y: -160, duration: TOTAL, ease: "sine.inOut" }, 0);
+          tl.fromTo("#dots", { backgroundPosition: "22px 22px" }, { backgroundPosition: "22px -110px", duration: TOTAL, ease: "none" }, 0);
+          tl.fromTo("#bg", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power2.out" }, 0);
+          // film grain: re-seeded every frame via stepped offsets
+          const grainSteps = Math.floor(TOTAL * 24);
+          tl.fromTo("#grain", { backgroundPosition: "0px 0px" }, { backgroundPosition: `${grainSteps * 37}px ${grainSteps * 53}px`, duration: TOTAL, ease: `steps(${grainSteps})` }, 0);
+          // orb internals keep turning — the core is always "thinking"
+          tl.fromTo("#ring-a", { rotation: 0 }, { rotation: 360 * 3, svgOrigin: "200 200", duration: TOTAL, ease: "none" }, 0);
+          tl.fromTo("#ring-b", { rotation: 0 }, { rotation: -360 * 2, svgOrigin: "200 200", duration: TOTAL, ease: "none" }, 0);
+          tl.fromTo(".orb-swirl", { rotation: 0 }, { rotation: 360 * 9, duration: TOTAL, ease: "none" }, 0);
+          tl.fromTo(".orb-swirl2", { rotation: 0 }, { rotation: -360 * 6, duration: TOTAL, ease: "none" }, 0);
+
+          // ======================= S1 · HOOK =======================
+          {
+            const aiText = "Here are a few suppliers you could look at. Prices change often, so check each website for current rates.";
+            const ai = $("#b-ai");
+            aiText.split(" ").forEach((w) => {
+              const s = document.createElement("span");
+              s.className = "w";
+              s.textContent = w;
+              ai.appendChild(s);
+              ai.appendChild(document.createTextNode(" "));
+            });
+            const l1 = T.lines.l1;
+            tl.fromTo("#chat", { opacity: 0, y: 60, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: E3 }, 0.15);
+            pop("#b-user", l1.start + 0.25, { from: 0.9 });
+            sfx("pop", l1.start + 0.25, { gain: 0.8 });
+            // "thinking" dots
+            tl.fromTo("#typing", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3, ease: E3 }, l1.start + 0.85);
+            $$("#typing span").forEach((d, i) =>
+              tl.fromTo(d, { opacity: 0.25 }, { opacity: 1, duration: 0.22, repeat: 3, yoyo: true, ease: "sine.inOut" }, l1.start + 0.9 + i * 0.12)
+            );
+            tl.to("#typing", { opacity: 0, duration: 0.15 }, C("l1.ans") - 0.1);
+            tl.fromTo("#b-ai", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: E3 }, C("l1.ans") - 0.05);
+            sfx("pop", C("l1.ans") - 0.05, { gain: 0.6, pitch: 0.8 });
+            tl.fromTo("#b-ai .w", { opacity: 0 }, { opacity: 1, duration: 0.18, stagger: 0.045, ease: "none" }, C("l1.ans"));
+
+            // L2: the chat recedes, the question takes over
+            const l2 = T.lines.l2;
+            tl.to("#chat", { opacity: 0.16, scale: 0.86, y: 30, filter: "blur(8px)", duration: 0.9, ease: E3io }, l2.start - 0.15);
+            sfx("whoosh_soft", l2.start - 0.15, { gain: 0.6 });
+            const w = $$("#hook-head .w");
+            tl.fromTo(w.slice(0, 4), { opacity: 0, y: 50, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.65, ease: E3, stagger: 0.11 }, l2.start + 0.05);
+            tl.fromTo(w.slice(4), { opacity: 0, y: 60, scale: 0.9, filter: "blur(14px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.7, ease: "expo.out", stagger: 0.1 }, C("l2.do"));
+            sfx("thump", C("l2.do") + 0.02, { gain: 0.7 });
+
+            // L3: zoom-through into the title
+            const ta = C("l3.agent");
+            sfx("riser", ta, { len: 2.4, gain: 0.9 });
+            sfx("impact", ta, { gain: 1.0 });
+            sfx("shimmer", ta + 0.05, { gain: 0.7 });
+            tl.to("#s1i", { opacity: 0, scale: 1.35, filter: "blur(18px)", duration: 0.5, ease: "power2.in" }, ta - 0.38);
+            const title = $("#title");
+            "AI AGENT".split("").forEach((ch) => {
+              const s = document.createElement("span");
+              s.className = ch === " " ? "sp" : "ch";
+              s.textContent = ch === " " ? "" : ch;
+              title.appendChild(s);
+            });
+            tl.fromTo("#flash", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, ta);
+            tl.to("#flash", { opacity: 0, duration: 1.2, ease: "power2.out" }, ta + 0.12);
+            tl.fromTo("#orb", { scale: 0, opacity: 0, x: 960, y: 520 }, { scale: 1.55, opacity: 1, duration: 1.1, ease: "expo.out" }, ta - 0.05);
+            tl.fromTo("#title .ch", { opacity: 0, y: 80, scale: 1.25, filter: "blur(20px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.9, ease: "expo.out", stagger: 0.045 }, ta + 0.02);
+            tl.fromTo("#title-sub", { opacity: 0, y: 20, scale: 1.08 }, { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: E3 }, ta + 0.5);
+            tl.fromTo("#streak", { x: 0, opacity: 0 }, { x: 2700, opacity: 1, duration: 0.9, ease: "power2.inOut" }, ta + 0.15);
+            tl.to("#streak", { opacity: 0, duration: 0.2 }, ta + 0.95);
+            // gentle settle of the orb behind the title
+            tl.to("#orb", { scale: 1.35, duration: Math.max(0.2, Math.min(2.2, S("s2").start - ta - 1.15)), ease: "sine.inOut" }, ta + 1.1);
+            sceneOut("#s1t", S("s2").start, 0.6);
+          }
+
+          // ======================= S2 · DEFINITION =======================
+          {
+            const s = S("s2").start;
+            tl.to("#orb", { x: 520, y: 540, scale: 1, duration: 1.2, ease: E3io }, s);
+            kicker($("#k2"), s + 0.35);
+            rise("#llm-label", C("l4.llm"), { y: 24 });
+            // ring flash on the core when "brain" lands
+            tl.fromTo(".orb-halo", { scale: 1 }, { scale: 1.25, duration: 0.35, ease: "power2.out", yoyo: true, repeat: 1 }, C("l4.llm") + 0.25);
+
+            const caps = [
+              ["#pill-plan", "#cn1", "#fl1", "l4.plan"],
+              ["#pill-decide", "#cn2", "#fl2", "l4.decide"],
+              ["#pill-act", "#cn3", "#fl3", "l4.act"],
+            ];
+            caps.forEach(([pill, cn, fl, cue]) => {
+              const t = C(cue) - 0.25;
+              draw($(cn), t, 0.5, "power2.out");
+              flow($(fl), t, 0.55);
+              tl.fromTo(pill, { opacity: 0, x: -40, filter: "blur(10px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.7, ease: E3 }, t + 0.3);
+              sfx("blip", t + 0.3, { note: { "l4.plan": 74, "l4.decide": 77, "l4.act": 81 }[cue], gain: 0.55 });
+            });
+            const tg = C("l4.goal");
+            [$("#cg1"), $("#cg2p"), $("#cg3")].forEach((p, i) => draw(p, tg - 0.35 + i * 0.05, 0.55, "power2.out"));
+            [$("#fl4"), $("#fl5"), $("#fl6")].forEach((p, i) => flow(p, tg - 0.3 + i * 0.05, 0.55));
+            tl.fromTo("#goal", { opacity: 0, scale: 0.4, rotation: -90 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.9, ease: "expo.out" }, tg);
+            sfx("lock", tg, { gain: 0.75 });
+            tl.fromTo("#goal-glow", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.8, ease: E3 }, tg + 0.05);
+            rise("#goal-label", tg + 0.15, { y: 16 });
+            const own = C("l4.own");
+            rise("#auto", own - 0.35, { y: 20, d: 0.5 });
+            tl.to("#auto .knob", { x: 34, duration: 0.35, ease: "power3.inOut" }, own + 0.05);
+            sfx("toggle", own + 0.05, { gain: 0.8 });
+            tl.to("#auto .sw-fill", { opacity: 1, duration: 0.3 }, own + 0.1);
+            tl.to("#auto .lbl", { color: "#3cf0a0", duration: 0.3 }, own + 0.1);
+            rise("#own-txt", own + 0.2, { y: 16 });
+            sceneOut("#s2i", S("s3").start, 0.6);
+          }
+
+          // ======================= S3 · GOAL =======================
+          {
+            const s = S("s3").start;
+            tl.to("#orb", { x: 960, y: 300, scale: 0.62, duration: 1.2, ease: E3io }, s);
+            tl.to("#aur3", { opacity: 1, duration: 1.4, ease: "sine.inOut" }, s + 0.2);
+            kicker($("#k3"), s + 0.3);
+            tl.fromTo("#prompt", { opacity: 0, y: 70, scale: 0.94, filter: "blur(12px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.9, ease: E3 }, C("l5.goal") - 0.2);
+
+            // typewriter: phrases carry amber markers that sweep when spoken
+            const pt = $("#ptext");
+            const phrases = [
+              ["Find ", null],
+              ["3 suppliers", "l6.task"],
+              [", ", null],
+              ["compare prices", "l6.compare"],
+              [", and ", null],
+              ["email me a summary", "l6.email"],
+              [".", null],
+            ];
+            const chars = [];
+            phrases.forEach(([txt, cue]) => {
+              let host = pt;
+              if (cue) {
+                host = document.createElement("span");
+                host.className = "ph";
+                host.dataset.cue = cue;
+                pt.appendChild(host);
+              }
+              txt.split("").forEach((c) => {
+                const sp = document.createElement("span");
+                sp.className = "ch";
+                sp.textContent = c;
+                host.appendChild(sp);
+                chars.push(sp);
+              });
+              if (cue) {
+                const mk = document.createElement("span");
+                mk.className = "mk";
+                host.appendChild(mk);
+              }
+            });
+            const caret = document.createElement("span");
+            caret.id = "caret";
+            pt.appendChild(caret);
+            // type speed paced so the line finishes as the VO does
+            const t0 = C("l6.task") - 0.35;
+            const t1 = C("l6.end") - 0.35;
+            const per = Math.min(0.06, (t1 - t0) / chars.length);
+            chars.forEach((c, i) => tl.set(c, { display: "inline" }, t0 + i * per));
+            chars.forEach((c, i) => { if (c.textContent !== " " || i % 2 === 0) sfx("key", t0 + i * per, { i, gain: c.textContent === " " ? 0.5 : 0.32 }); });
+            const typed = t0 + chars.length * per;
+            // caret blinks while idle, solid while typing
+            tl.fromTo(caret, { opacity: 0 }, { opacity: 1, duration: 0.01 }, C("l5.goal") + 0.4);
+            const blinkFrom = typed + 0.1;
+            const blinks = Math.max(0, Math.floor((S("s3").end - blinkFrom) / 0.5) - 1);
+            tl.fromTo(caret, { opacity: 1 }, { opacity: 0, duration: 0.25, ease: "steps(1)", repeat: blinks, yoyo: true, repeatDelay: 0.25 }, blinkFrom);
+            $$("#ptext .ph").forEach((ph) => {
+              const c = C(ph.dataset.cue);
+              const n = ph.querySelectorAll(".ch").length;
+              const done = Math.max(c + 0.1, t0 + (chars.indexOf(ph.querySelector(".ch")) + n) * per);
+              tl.fromTo(ph.querySelector(".mk"), { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: E3 }, done);
+              tl.to(ph.querySelectorAll(".ch"), { color: "#ffd48a", duration: 0.3 }, done);
+            });
+            // send: press, then the goal flies into the core
+            const tsend = typed + 0.25;
+            sfx("click", tsend, { gain: 0.9 });
+            sfx("zip", tsend + 0.3, { gain: 0.7 });
+            tl.to("#send", { scale: 0.86, duration: 0.12, ease: "power2.out" }, tsend);
+            tl.to("#send", { scale: 1, duration: 0.4, ease: "power3.out" }, tsend + 0.12);
+            tl.to("#prompt", { scale: 0.97, duration: 0.5, ease: E3io }, tsend + 0.1);
+            tl.fromTo("#packet", { opacity: 0, x: 0, y: 0, scale: 0.5 }, { opacity: 1, scale: 1.6, duration: 0.2 }, tsend + 0.2);
+            tl.to("#packet", { y: -320, scale: 0.6, duration: 0.55, ease: "power3.in" }, tsend + 0.3);
+            tl.to("#packet", { opacity: 0, duration: 0.1 }, tsend + 0.85);
+            const absorb = tsend + 0.85;
+            sfx("bloom", absorb, { gain: 0.85, color: "amber" });
+            tl.fromTo(".orb-tint-amber", { opacity: 0 }, { opacity: 0.85, duration: 0.18 }, absorb);
+            tl.fromTo(".orb-halo-amber", { opacity: 0 }, { opacity: 1, duration: 0.2 }, absorb);
+            tl.fromTo("#orbp", { scale: 1 }, { scale: 1.26, duration: 0.25, ease: "power2.out" }, absorb);
+            tl.to("#orbp", { scale: 1, duration: 0.8, ease: E3 }, absorb + 0.25);
+            tl.to(".orb-tint-amber", { opacity: 0, duration: 1.4, ease: "power2.out" }, absorb + 0.4);
+            tl.to(".orb-halo-amber", { opacity: 0, duration: 1.6, ease: "power2.out" }, absorb + 0.4);
+            tl.to("#aur3", { opacity: 0, duration: 1.2 }, S("s4").start);
+            sceneOut("#s3i", S("s4").start, 0.6);
+          }
+
+          // ======================= S4 · LOOP =======================
+          {
+            const s = S("s4").start;
+            const CX = 600, CY = 585, R = 290;
+            const pos = (deg) => [CX + R * Math.cos((deg * Math.PI) / 180), CY + R * Math.sin((deg * Math.PI) / 180)];
+            const ANG = { think: -90, act: 30, obs: 150 };
+            const place = (id, a) => {
+              const [x, y] = pos(a);
+              const el = $(id);
+              el.style.left = x + "px";
+              el.style.top = y + "px";
+            };
+            place("#st-think", ANG.think);
+            place("#st-act", ANG.act);
+            place("#st-obs", ANG.obs);
+            // direction arcs between stations (inside the ring)
+            const arcPath = (a0, a1, r) => {
+              const p0 = [CX + r * Math.cos((a0 * Math.PI) / 180), CY + r * Math.sin((a0 * Math.PI) / 180)];
+              const p1 = [CX + r * Math.cos((a1 * Math.PI) / 180), CY + r * Math.sin((a1 * Math.PI) / 180)];
+              return `M${p0[0].toFixed(1)},${p0[1].toFixed(1)} A${r},${r} 0 0 1 ${p1[0].toFixed(1)},${p1[1].toFixed(1)}`;
+            };
+            $("#arc1").setAttribute("d", arcPath(-90 + 22, 30 - 22, 240));
+            $("#arc2").setAttribute("d", arcPath(30 + 22, 150 - 22, 240));
+            $("#arc3").setAttribute("d", arcPath(150 + 22, 270 - 22, 240));
+
+            tl.to("#orb", { x: CX, y: CY, scale: 0.56, duration: 1.2, ease: E3io }, s);
+            kicker($("#k4"), s + 0.3);
+            draw($("#ring"), s + 0.3, 1.3, "power2.inOut");
+            sfx("sweep", s + 0.3, { len: 1.3, gain: 0.5 });
+            tl.fromTo("#ring-bg", { opacity: 0 }, { opacity: 1, duration: 1 }, s + 0.3);
+            ["#arc1", "#arc2", "#arc3"].forEach((a, i) => draw($(a), s + 0.9 + i * 0.15, 0.6, "power2.out"));
+            ["#st-think", "#st-act", "#st-obs"].forEach((st, i) =>
+              tl.fromTo(`${st} .node`, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, s + 0.6 + i * 0.15)
+            );
+            ["#st-think", "#st-act", "#st-obs"].forEach((st, i) =>
+              tl.fromTo(`${st} .lbl`, { opacity: 0 }, { opacity: 1, duration: 0.5 }, s + 0.75 + i * 0.15)
+            );
+            tl.fromTo("#panel", { opacity: 0, x: 80, filter: "blur(12px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 1.0, ease: E3 }, s + 0.5);
+
+            // comet + trail, driven by one seekable angle
+            const trails = $("#trails");
+            const NTR = 16;
+            const trailEls = [];
+            for (let i = 0; i < NTR; i++) {
+              const d = document.createElement("div");
+              d.className = "trail";
+              trails.appendChild(d);
+              trailEls.push(d);
+            }
+            const cometEl = $("#comet");
+            const st = { a: -200, v: 0, vis: 0 };
+            const render = () => {
+              const [x, y] = pos(st.a);
+              gsap.set(cometEl, { x, y, opacity: st.vis });
+              const spread = 1.6 + st.v; // degrees between trail dots, longer when fast
+              trailEls.forEach((el, i) => {
+                const [tx, ty] = pos(st.a - (i + 1) * spread);
+                const k = 1 - (i + 1) / (NTR + 1);
+                gsap.set(el, { x: tx, y: ty, opacity: st.vis * k * 0.85, scale: 0.35 + 0.65 * k });
+              });
+            };
+            render();
+            const keys = [
+              [C("l7.think"), ANG.think],
+              [C("l8.act"), ANG.act + 0],
+              [C("l9.observe"), ANG.obs],
+              [C("l10.t"), ANG.think + 360],
+              [C("l10.a"), ANG.act + 360],
+              [C("l10.o"), ANG.obs + 360],
+              [C("l10.done"), ANG.think + 360 * 3],
+            ];
+            tl.fromTo(st, { vis: 0 }, { vis: 1, duration: 0.4, onUpdate: render }, keys[0][0] - 1.0);
+            tl.fromTo(st, { a: -200 }, { a: keys[0][1], duration: 0.95, ease: "power2.out", onUpdate: render }, keys[0][0] - 0.95);
+            for (let i = 1; i < keys.length; i++) {
+              const [t, a] = keys[i];
+              const [tp, ap] = keys[i - 1];
+              const d = Math.max(0.15, Math.min(t - tp - 0.02, i === keys.length - 1 ? 1.5 : 0.9));
+              const fast = i === keys.length - 1;
+              tl.fromTo(st, { a: ap, v: 0 }, { a, duration: d, ease: fast ? "power2.inOut" : "power3.inOut", onUpdate: render }, t - d);
+              tl.fromTo(st, { v: 0 }, { v: fast ? 6 : 2.2, duration: d / 2, ease: "sine.in", yoyo: true, repeat: 1, onUpdate: render }, t - d);
+            }
+
+            const stationHit = (id, t, color) => {
+              sfx("tone", t, { note: { "#st-think": 74, "#st-act": 78, "#st-obs": 81 }[id], gain: 0.6 });
+              tl.fromTo(`${id} .glow`, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.1, duration: 0.25, ease: "power2.out" }, t);
+              tl.to(`${id} .glow`, { opacity: 0.35, scale: 1, duration: 0.8, ease: E3 }, t + 0.25);
+              tl.fromTo(`${id} .node`, { scale: 1 }, { scale: 1.22, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }, t);
+              tl.to(`${id} .node`, { borderColor: color, color: "#ffffff", backgroundColor: "#13204a", duration: 0.25 }, t);
+              tl.to(`${id} .lbl`, { color: "#ffffff", duration: 0.25 }, t);
+            };
+            const stationRest = (id, t) => {
+              tl.to(`${id} .glow`, { opacity: 0, duration: 0.5 }, t);
+              tl.to(`${id} .node`, { borderColor: "rgba(255,255,255,0.22)", color: "#8a93b5", backgroundColor: "#0c1328", duration: 0.4 }, t);
+              tl.to(`${id} .lbl`, { color: "#4a5272", duration: 0.4 }, t);
+            };
+            const status = (id, t) => {
+              ["#st1", "#st2", "#st3", "#st4"].forEach((x) => {
+                if (x !== id) tl.to(x, { opacity: 0, y: -8, duration: 0.2 }, t);
+              });
+              tl.fromTo(id, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: E3 }, t + 0.1);
+            };
+
+            // THINK
+            const tThink = C("l7.think");
+            stationHit("#st-think", tThink, "#3be8ff");
+            status("#st1", tThink - 0.1);
+            rise("#sec-plan", tThink + 0.1, { y: 10, d: 0.4 });
+            rise(["#step1", "#step2", "#step3"], C("l7.steps") - 0.05, { y: 18, d: 0.55, stagger: 0.28 });
+
+            // ACT
+            const tAct = C("l8.act");
+            stationRest("#st-think", tAct - 0.2);
+            stationHit("#st-act", tAct, "#ffb23e");
+            status("#st2", tAct - 0.1);
+            rise("#sec-act", tAct, { y: 10, d: 0.4 });
+            [["#log1", "l8.web"], ["#log2", "l8.files"], ["#log3", "l8.email"]].forEach(([el, cue]) => {
+              const t = C(cue) - 0.12;
+              tl.fromTo(el, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.45, ease: E3 }, t);
+              tl.fromTo(`${el} .chip`, { scale: 0.5 }, { scale: 1, duration: 0.5, ease: "expo.out" }, t);
+              sfx("tick", t, { gain: 0.6 });
+              tl.fromTo(`${el} .pend`, { rotation: 0 }, { rotation: 720, duration: 1.4, ease: "none" }, t);
+            });
+
+            // OBSERVE
+            const tObs = C("l9.observe");
+            stationRest("#st-act", tObs - 0.2);
+            stationHit("#st-obs", tObs, "#8b5cff");
+            status("#st3", tObs - 0.1);
+            ["#log1", "#log2", "#log3"].forEach((el, i) => {
+              const t = tObs - 0.1 + i * 0.12;
+              tl.to(`${el} .pend`, { opacity: 0, duration: 0.15 }, t);
+              tl.fromTo(`${el} .done`, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "expo.out" }, t);
+              sfx("check", t, { gain: 0.35, i });
+            });
+            rise("#log4", tObs + 0.25, { y: 16, d: 0.55 });
+            sfx("tick", tObs + 0.25, { gain: 0.45 });
+            rise("#log5", C("l9.next"), { y: 16, d: 0.55 });
+            sfx("tick", C("l9.next"), { gain: 0.45 });
+
+            // THINK · ACT · OBSERVE · REPEAT
+            const tT = C("l10.t"), tA = C("l10.a"), tO = C("l10.o"), tR = C("l10.r"), tD = C("l10.done");
+            sfx("spin", tR - 0.2, { len: tD - tR + 0.2, gain: 0.7 });
+            sfx("success", tD, { gain: 0.9 });
+            sfx("impact", tD, { gain: 0.55, soft: true });
+            stationRest("#st-obs", tT - 0.15);
+            stationHit("#st-think", tT, "#3be8ff");
+            status("#st1", tT - 0.05);
+            stationRest("#st-think", tA - 0.15);
+            stationHit("#st-act", tA, "#ffb23e");
+            status("#st2", tA - 0.05);
+            stationRest("#st-act", tO - 0.15);
+            stationHit("#st-obs", tO, "#8b5cff");
+            status("#st3", tO - 0.05);
+            stationRest("#st-obs", tR);
+            // repeat: the loop spins, the plan completes step by step
+            tl.fromTo("#ring", { strokeWidth: 3 }, { strokeWidth: 7, duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut" }, tR);
+            const span = Math.max(0.6, tD - tR);
+            ["#step1", "#step2", "#step3"].forEach((el, i) => {
+              const t = tR + (span * (i + 0.5)) / 3;
+              tl.fromTo(`${el} .ok`, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out" }, t);
+              sfx("check", t, { gain: 0.5, i });
+              tl.to(el, { color: "#8a93b5", duration: 0.3 }, t);
+            });
+            // done
+            status("#st4", tD);
+            ["#st-think", "#st-act", "#st-obs"].forEach((st) => {
+              tl.to(`${st} .node`, { borderColor: "#3cf0a0", color: "#3cf0a0", duration: 0.3 }, tD);
+            });
+            tl.fromTo("#ring-done", { opacity: 0 }, { opacity: 1, duration: 0.4 }, tD);
+            tl.to(st, { vis: 0, duration: 0.5, onUpdate: render }, tD + 0.1);
+            tl.fromTo(".orb-tint-mint", { opacity: 0 }, { opacity: 0.8, duration: 0.2 }, tD);
+            tl.fromTo(".orb-halo-mint", { opacity: 0 }, { opacity: 1, duration: 0.25 }, tD);
+            tl.fromTo("#orbp", { scale: 1 }, { scale: 1.25, duration: 0.25, ease: "power2.out" }, tD);
+            tl.to("#orbp", { scale: 1, duration: 0.8, ease: E3 }, tD + 0.25);
+            tl.to(".orb-tint-mint", { opacity: 0, duration: 1.2 }, tD + 0.6);
+            tl.to(".orb-halo-mint", { opacity: 0, duration: 1.4 }, tD + 0.6);
+            tl.fromTo("#aur4", { opacity: 0 }, { opacity: 1, duration: 0.6 }, tD);
+            tl.to("#aur4", { opacity: 0, duration: 1.4 }, tD + 0.8);
+            tl.to(["#log4", "#log5"], { opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }, tD);
+            tl.fromTo("#toast", { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "expo.out" }, tD + 0.1);
+            sceneOut("#s4i", S("s5").start, 0.6);
+          }
+
+          // ======================= S5 · ANATOMY =======================
+          {
+            const s = S("s5").start;
+            tl.to("#orb", { x: 960, y: 585, scale: 0.62, duration: 1.2, ease: E3io }, s);
+            kicker($("#k5"), s + 0.3);
+            rise("#four", T.lines.l11.start + 0.2, { y: 24 });
+            [["#part1", "#an1", "l11.model"], ["#part2", "#an2", "l11.memory"], ["#part3", "#an3", "l11.tools"], ["#part4", "#an4", "l11.instr"]].forEach(([p, a, cue], i) => {
+              const t = C(cue) - 0.2;
+              draw($(a), t, 0.5, "power2.out");
+              const fromX = i % 2 === 0 ? -50 : 50;
+              tl.fromTo(p, { opacity: 0, x: fromX, filter: "blur(10px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.7, ease: E3 }, t + 0.2);
+              tl.fromTo(`${p} .ic`, { scale: 0.5, rotation: -20 }, { scale: 1, rotation: 0, duration: 0.7, ease: "expo.out" }, t + 0.25);
+              sfx("blip", t + 0.2, { note: [62, 65, 69, 74][i], gain: 0.6, wide: true });
+              tl.fromTo(".orb-halo", { scale: 1 }, { scale: 1.18, duration: 0.2, yoyo: true, repeat: 1, ease: "sine.inOut" }, t + 0.15);
+            });
+            sceneOut("#s5i", S("s6").start, 0.6);
+          }
+
+          // ======================= S6 · CLOSE =======================
+          {
+            const s = S("s6").start;
+            tl.to("#orb", { x: 960, y: 140, scale: 0.0001, opacity: 0, duration: 1.0, ease: E3io }, s);
+            kicker($("#k6"), s + 0.3);
+            const tc = C("l12.chat");
+            sfx("pop", tc - 0.15, { gain: 0.5, pitch: 0.7 });
+            tl.fromTo("#vs-l", { opacity: 0, x: -50, filter: "blur(10px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.8, ease: E3 }, tc - 0.15);
+            tl.fromTo("#vs-line", { scaleY: 0 }, { scaleY: 1, duration: 0.8, ease: E3 }, tc + 0.2);
+            const ta = C("l12.agents");
+            sfx("hit", ta - 0.1, { gain: 0.8 });
+            tl.to("#vs-l", { opacity: 0.45, scale: 0.94, duration: 0.6, ease: E3 }, ta - 0.1);
+            tl.fromTo("#vs-r", { opacity: 0, x: 50, scale: 0.92, filter: "blur(12px)" }, { opacity: 1, x: 0, scale: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }, ta - 0.1);
+            tl.fromTo("#vs-r .ic", { scale: 0.4, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.8, ease: "expo.out" }, ta);
+            const tk = C("l12.control");
+            sfx("whoosh_soft", tk - 0.2, { gain: 0.5 });
+            sfx("click", tk + 0.9, { gain: 0.8 });
+            sfx("success", tk + 1.0, { gain: 0.6, short: true });
+            tl.fromTo("#control", { opacity: 0, y: 40, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: E3 }, tk - 0.2);
+            tl.fromTo("#approve", { scale: 1 }, { scale: 0.9, duration: 0.12, ease: "power2.out" }, tk + 0.9);
+            tl.to("#approve", { scale: 1, backgroundColor: "#3cf0a0", duration: 0.45, ease: E3 }, tk + 1.02);
+
+            // end card: the core returns as the brand mark
+            const te = C("end.card");
+            sfx("riser", te + 0.4, { len: 1.4, gain: 0.5 });
+            sfx("impact", te + 0.4, { gain: 0.9 });
+            sfx("shimmer", te + 0.45, { gain: 0.8 });
+            tl.to("#s6i", { opacity: 0, scale: 0.94, filter: "blur(14px)", duration: 0.6, ease: "power2.in" }, te);
+            tl.fromTo("#orb", { x: 960, y: 300, scale: 0, opacity: 0 }, { scale: 0.42, opacity: 1, duration: 1.1, ease: "expo.out" }, te + 0.35);
+            const ecw = $$("#ec-word");
+            tl.fromTo(ecw, { opacity: 0, y: 40, scale: 1.08, filter: "blur(16px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1.1, ease: E3 }, te + 0.45);
+            tl.fromTo("#ec-rule", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.9, ease: E3 }, te + 0.8);
+            tl.fromTo("#ec-sub", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, ease: E3 }, te + 0.95);
+            tl.fromTo("#fadeout", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.in" }, TOTAL - 0.75);
+          }
+
+          // ======================= scene entrances =======================
+          sceneIn("#s2i", S("s2").start + 0.1);
+          sceneIn("#s3i", S("s3").start + 0.1);
+          sceneIn("#s4i", S("s4").start + 0.1);
+          sceneIn("#s5i", S("s5").start + 0.1);
+          sceneIn("#s6i", S("s6").start + 0.1);
+          tl.set("#endcard", { opacity: 0 }, 0);
+          tl.set("#endcard", { opacity: 1 }, C("end.card") + 0.3);
+
+          // ======================= captions =======================
+          const capHost = $("#captions");
+          T.captions.forEach((c, i) => {
+            const d = document.createElement("div");
+            d.className = "cap";
+            d.id = "cap-" + i;
+            d.textContent = c.text;
+            capHost.appendChild(d);
+            const next = T.captions[i + 1];
+            const end = next ? Math.min(c.end + 0.35, next.start - 0.02) : c.end + 0.5;
+            tl.fromTo(d, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, c.start - 0.06);
+            tl.to(d, { opacity: 0, duration: 0.14, ease: "power1.in" }, Math.max(c.start + 0.2, end - 0.14));
+          });
+
+          window.__timelines["main"] = tl;
+        }
+
+        document.fonts.ready.then(build);
+      })();
+    </script>
+  </body>
+</html>

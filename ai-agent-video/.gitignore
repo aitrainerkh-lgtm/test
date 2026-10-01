@@ -1,0 +1,10 @@
+node_modules/
+snapshots/
+renders/draft*.mp4
+vo/takes/
+audio/music_only.wav
+.hyperframes/
+audio/mix.wav
+renders/work-*/
+renders/.*
+renders/master-*.mp4
