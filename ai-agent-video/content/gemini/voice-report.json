@@ -22,10 +22,10 @@
   },
   "L04": {
     "model": "gemini-3.8-flash-tts",
-    "seconds": 5.29,
+    "seconds": 5.85,
     "match": 1,
-    "heard": "វាមានបីផ្នែកគឺខួរក្បាល AI model ការចងចាំនិងឧបករណ៍",
-    "text": "វាមានបីផ្នែកគឺ ខួរក្បាល AI Model ការចងចាំ និងឧបករណ៍។"
+    "heard": "មានបីផ្នែក ខួរក្បាល AI model ការចងចាំ និងឧបករណ៍",
+    "text": "មានបីផ្នែក៖ ខួរក្បាល AI Model ការចងចាំ និងឧបករណ៍។"
   },
   "L05": {
     "model": "gemini-3.8-flash-tts",
@@ -50,10 +50,10 @@
   },
   "L08": {
     "model": "gemini-3.8-flash-tts",
-    "seconds": 3.93,
+    "seconds": 3.62,
     "match": 1,
-    "heard": "ជំហានមួយ ស្វែងយល់ ទទួលយកគោលដៅនិងព័ត៌មាន",
-    "text": "ជំហានមួយ ស្វែងយល់៖ ទទួលយកគោលដៅនិងព័ត៌មាន។"
+    "heard": "ជំហាន មួយ ស្វែងយល់ ទទួល គោលដៅ និង ព័ត៌មាន",
+    "text": "ជំហានមួយ ស្វែងយល់៖ ទទួលគោលដៅ និងព័ត៌មាន។"
   },
   "L09": {
     "model": "gemini-3.8-flash-lite-tts",
@@ -63,11 +63,11 @@
     "text": "ជំហានពីរ គិតរៀបចំ៖ បំបែកការងារជាជំហានតូចៗ។"
   },
   "L10": {
-    "model": "gemini-3.8-flash-tts",
-    "seconds": 4.13,
-    "match": 0.951,
-    "heard": "ជំហាន ៣ អនុវត្ត ប្រើ web search email ឬ calendar",
-    "text": "ជំហានបី អនុវត្ត៖ ប្រើ Web Search Email ឬ Calendar។"
+    "model": "gemini-3.8-flash-lite-tts",
+    "seconds": 5.08,
+    "match": 0.94,
+    "heard": "ជំហាន ៣ អនុវត្ត ចាប់ផ្ដើមប្រើ web search, email ឬ calendar",
+    "text": "ជំហានបី អនុវត្ត៖ ចាប់ផ្តើមប្រើ Web Search Email ឬ Calendar។"
   },
   "L11": {
     "model": "gemini-3.8-flash-tts",
