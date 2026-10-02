@@ -1,0 +1,9 @@
+snapshots/
+node_modules/
+.hyperframes/
+renders/.hf-segments/
+__pycache__/
+tools/__pycache__/
+assets/audio/stems/
+renders/work-*/
+renders/.*

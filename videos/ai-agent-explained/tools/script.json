@@ -1,0 +1,71 @@
+[
+ {
+  "id": "01-hook-a",
+  "text": "You ask a chatbot a question, and it gives you an answer.",
+  "speed": 0.92
+ },
+ {
+  "id": "02-hook-b",
+  "text": "But what if AI could do more than answer?",
+  "speed": 0.92
+ },
+ {
+  "id": "03-hook-c",
+  "text": "What if it could actually get the work done?",
+  "speed": 0.92
+ },
+ {
+  "id": "04-define-a",
+  "text": "That's an AI agent.",
+  "speed": 0.92
+ },
+ {
+  "id": "05-define-b",
+  "text": "An AI system that understands your goal, makes a plan, and takes action on its own.",
+  "speed": 1.04
+ },
+ {
+  "id": "06-loop",
+  "text": "Here's how it works. It runs on a simple loop.",
+  "speed": 1.04
+ },
+ {
+  "id": "07-perceive",
+  "text": "First, perceive. It reads your request, and gathers information from your files, emails, and apps.",
+  "speed": 1.04
+ },
+ {
+  "id": "08-reason",
+  "text": "Next, reason. A large language model, the agent's brain, breaks the goal into clear steps.",
+  "speed": 1.04
+ },
+ {
+  "id": "09-act",
+  "text": "Then, act. It uses tools to search the web, update systems, and send messages.",
+  "speed": 1.04
+ },
+ {
+  "id": "10-learn",
+  "text": "Finally, learn. It checks the result, remembers what worked, and repeats until the job is done.",
+  "speed": 1.04
+ },
+ {
+  "id": "11-example-a",
+  "text": "Ask an agent for your weekly sales report."
+ },
+ {
+  "id": "12-example-b",
+  "text": "It collects the data, builds the charts, writes a summary, and emails your team.",
+  "speed": 1.04
+ },
+ {
+  "id": "13-close-a",
+  "text": "A chatbot talks.",
+  "speed": 0.92
+ },
+ {
+  "id": "14-close-b",
+  "text": "An AI agent works.",
+  "speed": 0.9
+ }
+]
