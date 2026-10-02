@@ -2,3 +2,4 @@ node_modules/
 .remotion/
 out/*
 !out/.gitkeep
+!out/promo.mp4
