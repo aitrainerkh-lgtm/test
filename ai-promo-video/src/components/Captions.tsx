@@ -49,12 +49,13 @@ const CaptionCard: React.FC<{line: CaptionLine}> = ({line}) => {
   const t = frame / fps;
   const words = useMemo(() => buildWords(line), [line]);
 
-  const fade = 0.12;
-  const opacity = interpolate(t, [line.start - fade, line.start, line.end, line.end + fade], [0, 1, 1, 0], {
+  // Fade fully inside [start, end] so back-to-back lines never overlap.
+  const fade = 0.1;
+  const opacity = interpolate(t, [line.start, line.start + fade, line.end - fade, line.end], [0, 1, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const rise = interpolate(t, [line.start - fade, line.start + 0.1], [24, 0], {
+  const rise = interpolate(t, [line.start, line.start + 0.2], [24, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
