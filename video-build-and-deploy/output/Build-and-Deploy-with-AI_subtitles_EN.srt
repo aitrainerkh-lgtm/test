@@ -1,0 +1,59 @@
+1
+00:00:00,300 --> 00:00:02,900
+Every night… the same notebook.
+
+2
+00:00:03,100 --> 00:00:06,900
+Sales on paper. Stock lists in chat. Totals on a calculator.
+
+3
+00:00:07,200 --> 00:00:10,800
+It works — until the business grows.
+
+4
+00:00:11,100 --> 00:00:14,900
+So what if this page could become a tool your whole team uses?
+
+5
+00:00:15,200 --> 00:00:18,400
+Start by describing what you need, in plain words.
+
+6
+00:00:18,500 --> 00:00:21,800
+That is your prompt.
+
+7
+00:00:22,200 --> 00:00:25,200
+AI tools like ChatGPT, Claude, Gemini or Copilot
+
+8
+00:00:25,300 --> 00:00:27,600
+can help you build a first version:
+
+9
+00:00:27,700 --> 00:00:29,800
+a form, a table, a daily summary.
+
+10
+00:00:30,200 --> 00:00:36,800
+Then you test it. Enter real examples. Check every total.
+
+11
+00:00:37,200 --> 00:00:40,800
+Something missing? Ask AI to add it.
+
+12
+00:00:41,200 --> 00:00:46,800
+When it works, share it with your team.
+
+13
+00:00:47,200 --> 00:00:51,800
+Every sale goes into one shared record.
+
+14
+00:00:52,200 --> 00:00:55,800
+Less copying. Clearer numbers. More time to run the business.
+
+15
+00:00:56,300 --> 00:00:59,800
+Build and deploy with AI. AI For Business.
