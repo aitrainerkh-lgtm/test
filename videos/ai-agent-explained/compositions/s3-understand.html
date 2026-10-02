@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/SpaceGrotesk.ttf') format('truetype'); font-weight: 300 700; }
+        #s3 { position: absolute; inset: 0; overflow: hidden; }
+        #s3-words, #s3-world, #s3-fg { position: absolute; left: 0; top: 0; width: 4000px; height: 1080px; transform-origin: 0 0; }
+        #s3 .bgw { position: absolute; top: 96px; opacity: 0; height: 240px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 230px; letter-spacing: -.04em; line-height: 240px; white-space: nowrap; }
+        #s3 .bgw .ol { position: absolute; left: 0; top: 0; color: rgba(255,255,255,.35); -webkit-text-stroke: 2px rgba(29,33,37,.10); }
+        #s3 .bgw .fl { position: absolute; left: 0; top: 0; color: rgba(30,158,88,.13); }
+        #s3 .node { position: absolute; }
+        #s3 .nhead { position: absolute; left: 26px; top: 22px; display: flex; align-items: center; gap: 12px; }
+        #s3 .nicon { width: 42px; height: 42px; border-radius: 13px; display: flex; align-items: center; justify-content: center; }
+        #s3 .nnum { position: absolute; right: 24px; top: 26px; font: 700 16px 'JetBrains Mono', monospace; color: #9AA1A7; }
+        #s3-line-base { position: absolute; left: 630px; top: 559px; width: 2202px; height: 3px; border-radius: 2px; background: repeating-linear-gradient(90deg, rgba(29,33,37,.16) 0 10px, rgba(0,0,0,0) 10px 18px); }
+        #s3-line { position: absolute; left: 630px; top: 558px; width: 2202px; height: 5px; border-radius: 3px; background: linear-gradient(90deg, #1E9E58, #33C27A 60%, #F0832A); transform-origin: left center; }
+        #s3-packet { position: absolute; left: 618px; top: 548px; width: 26px; height: 26px; border-radius: 50%; background: #F0832A; box-shadow: 0 0 0 6px rgba(240,131,42,.18), 0 0 26px 6px rgba(240,131,42,.55); }
+        #s3 .sent { position: absolute; left: 30px; top: 100px; font: 600 33px 'Inter', sans-serif; color: #1D2125; white-space: nowrap; }
+        #s3 .hl { position: absolute; top: 96px; height: 50px; border-radius: 10px; transform-origin: left center; }
+        #s3-beam { position: absolute; left: 22px; top: 84px; width: 4px; height: 80px; border-radius: 2px; background: #33C27A; box-shadow: 0 0 18px 4px rgba(51,194,122,.6); }
+        #s3 .xchip { position: absolute; height: 42px; padding: 0 14px 0 8px; border-radius: 999px; display: flex; align-items: center; gap: 8px; font: 600 16px 'Inter', sans-serif; color: #1D2125; background: #fff; box-shadow: 0 0 0 1px rgba(29,33,37,.07), 0 10px 22px -10px rgba(20,36,28,.3); white-space: nowrap; }
+        #s3 .xchip .d { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        #s3 .prow { position: absolute; left: 30px; height: 50px; display: flex; align-items: center; gap: 16px; font: 600 22px 'Inter', sans-serif; color: #1D2125; white-space: nowrap; }
+        #s3 .pnum { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: 700 16px 'JetBrains Mono', monospace; color: #fff; background: #1E9E58; flex: none; }
+        #s3-pline { position: absolute; left: 47px; top: 120px; width: 2px; height: 220px; background: rgba(30,158,88,.3); transform-origin: top center; }
+        #s3 .erow { position: absolute; left: 28px; width: 520px; height: 38px; display: flex; align-items: center; gap: 12px; font: 600 20px 'Inter', sans-serif; color: #1D2125; white-space: nowrap; }
+        #s3 .st { position: relative; width: 24px; height: 24px; flex: none; }
+        #s3 .st .wait { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(29,33,37,.18); }
+        #s3 .st .spin { position: absolute; inset: 0; border-radius: 50%; border: 3px solid rgba(30,158,88,.18); border-top-color: #1E9E58; opacity: 0; }
+        #s3 .st .ok { position: absolute; inset: 0; border-radius: 50%; background: #1E9E58; display: flex; align-items: center; justify-content: center; opacity: 0; }
+        #s3-prog { position: absolute; left: 28px; right: 28px; bottom: 26px; height: 10px; border-radius: 5px; background: rgba(29,33,37,.07); overflow: hidden; }
+        #s3-prog i { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; display: block; background: linear-gradient(90deg, #1E9E58, #33C27A); transform-origin: left center; }
+        #s3-pct { position: absolute; right: 28px; bottom: 44px; font: 700 18px 'JetBrains Mono', monospace; color: #157A41; }
+        #s3-agent { position: absolute; left: 305px; top: 245px; width: 110px; height: 110px; }
+        #s3 .fgd { position: absolute; border-radius: 50%; filter: blur(5px); }
+        #s3-mon { position: absolute; left: 160px; top: 90px; width: 1600px; height: 900px; border-radius: 30px; transform-origin: 0 0; opacity: 0; }
+        #s3 .monbar { position: absolute; left: 0; top: 0; right: 0; height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 24px; border-bottom: 1px solid rgba(29,33,37,.07); font: 600 18px 'Inter', sans-serif; color: #59616A; }
+        #s3 .monpill { margin-left: auto; height: 32px; padding: 0 14px; border-radius: 999px; background: rgba(30,158,88,.12); color: #1E9E58; font: 700 14px 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; letter-spacing: .04em; }
+      </style>
+
+      <div id="s3" data-composition-id="s3-understand" data-width="1920" data-height="1080" data-duration="7.54" class="af">
+        <div id="s3-words">
+          <div class="bgw" id="s3-w2" style="left:536px;"><span class="ol">UNDERSTAND</span><span class="fl" id="s3-w2f">UNDERSTAND</span></div>
+          <div class="bgw" id="s3-w3" style="left:1450px;"><span class="ol">PLAN</span><span class="fl" id="s3-w3f">PLAN</span></div>
+          <div class="bgw" id="s3-w4" style="left:1820px;"><span class="ol">EXECUTE</span><span class="fl" id="s3-w4f">EXECUTE</span></div>
+        </div>
+        <div id="s3-world">
+          <div id="s3-line-base"></div>
+          <div id="s3-line"></div>
+          <!-- N1 instruction -->
+          <div class="node glass" id="s3-n1" style="left:210px;top:465px;width:420px;height:190px;">
+            <div class="nhead"><div class="nicon" style="background:rgba(240,131,42,.14)">__I1__</div><div class="eyebrow" style="color:#F0832A">Instruction</div></div>
+            <div class="nnum">01</div>
+            <div style="position:absolute;left:28px;top:96px;width:370px;font:600 27px 'Inter',sans-serif;color:#1D2125;line-height:1.25;">Prepare today’s business report.</div>
+          </div>
+          <!-- N2 understand -->
+          <div class="node glass" id="s3-n2" style="left:1040px;top:395px;width:560px;height:330px;">
+            <div class="nhead"><div class="nicon" style="background:rgba(30,158,88,.13)">__I2__</div><div class="eyebrow">Understand</div></div>
+            <div class="nnum">02</div>
+            <div class="hl" id="s3-hl1" style="background:rgba(240,131,42,.20)"></div>
+            <div class="hl" id="s3-hl2" style="background:rgba(30,158,88,.20)"></div>
+            <div class="sent" id="s3-sent"><span>Prepare </span><span id="s3-k1">today’s</span><span> </span><span id="s3-k2">business report</span><span>.</span></div>
+            <div id="s3-beam"></div>
+            <div id="s3-chips"></div>
+          </div>
+          <!-- N3 plan -->
+          <div class="node glass" id="s3-n3" style="left:1960px;top:350px;width:520px;height:420px;">
+            <div class="nhead"><div class="nicon" style="background:rgba(30,158,88,.13)">__I3__</div><div class="eyebrow">Plan</div></div>
+            <div class="nnum">03</div>
+            <div id="s3-pline"></div>
+            <div id="s3-prows"></div>
+          </div>
+          <!-- N4 execute (16:9) -->
+          <div class="node glass" id="s3-n4" style="left:2832px;top:398px;width:576px;height:324px;">
+            <div class="nhead"><div class="nicon" style="background:rgba(240,131,42,.14)">__I4__</div><div class="eyebrow" style="color:#F0832A">Execute</div></div>
+            <div class="nnum">04</div>
+            <div id="s3-erows"></div>
+            <div id="s3-pct">0%</div>
+            <div id="s3-prog"><i id="s3-progf"></i></div>
+          </div>
+          <div id="s3-packet"></div>
+        </div>
+        <div id="s3-fg"></div>
+        <!-- the workspace monitor that scene 4 opens on -->
+        <div class="glass" id="s3-mon"><div class="monbar"><div class="win-dots"><i></i><i></i><i></i></div>AI Agent Workspace<div class="monpill">__BOLT__ EXECUTING</div></div></div>
+        <div id="s3-agent"></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.getElementById('s3');
+          const ic = { __I1__: AF.icon('chat', 22, '#F0832A'), __I2__: AF.icon('eye', 22, '#1E9E58'), __I3__: AF.icon('list', 22, '#1E9E58'), __I4__: AF.icon('play', 20, '#F0832A', 2.2), __BOLT__: AF.icon('bolt', 15, '#1E9E58', 2.4) };
+          root.querySelectorAll('.nicon, .monpill').forEach(function (el) { Object.keys(ic).forEach(function (k) { if (el.innerHTML.indexOf(k) >= 0) el.innerHTML = el.innerHTML.replace(k, ic[k]); }); });
+          document.getElementById('s3-agent').innerHTML = AF.agent('s3-ag', 110);
+          const chips = [['calendar', 'Date: Today', '#F0832A'], ['chart', 'Sales data', '#1E9E58'], ['dollar', 'Finance', '#1E9E58'], ['users', 'HR updates', '#13927F'], ['report', 'Report format', '#F0832A']];
+          const chipPos = [[30, 178], [214, 178], [372, 178], [30, 236], [204, 236]];
+          document.getElementById('s3-chips').innerHTML = chips.map(function (c, i) {
+            return '<div class="xchip s3-chip" id="s3-chip' + i + '" style="left:' + chipPos[i][0] + 'px;top:' + chipPos[i][1] + 'px;"><div class="d" style="background:' + c[2] + '22">' + AF.icon(c[0], 16, c[2], 2.2) + '</div>' + c[1] + '</div>';
+          }).join('');
+          const steps = ['Collect sales data', 'Check finance numbers', 'Review HR updates', 'Build charts', 'Write the report'];
+          document.getElementById('s3-prows').innerHTML = steps.map(function (t, i) {
+            return '<div class="prow s3-prow" id="s3-prow' + i + '" style="top:' + (100 + i * 60) + 'px;"><div class="pnum">' + (i + 1) + '</div>' + t + '</div>';
+          }).join('');
+          document.getElementById('s3-erows').innerHTML = steps.slice(0, 4).map(function (t, i) {
+            return '<div class="erow" style="top:' + (82 + i * 44) + 'px;"><div class="st"><div class="wait"></div><div class="spin" id="s3-sp' + i + '"></div><div class="ok" id="s3-ok' + i + '">' + AF.icon('check', 15, '#fff', 3) + '</div></div><span id="s3-et' + i + '" style="color:#6B737A">' + t + '</span></div>';
+          }).join('');
+          // foreground depth dots
+          const R = AF.rng(31); let fg = '';
+          for (let i = 0; i < 14; i++) {
+            const s = 8 + R() * 18;
+            fg += '<div class="fgd" style="left:' + (R() * 3600) + 'px;top:' + (R() * 1000) + 'px;width:' + s + 'px;height:' + s + 'px;background:' + (R() < 0.5 ? 'rgba(30,158,88,.35)' : 'rgba(240,131,42,.3)') + '"></div>';
+          }
+          document.getElementById('s3-fg').innerHTML = fg;
+
+          function build() {
+            const tl = gsap.timeline({ paused: true });
+            // ---- camera: world pans node to node, words at 0.6x, foreground at 1.35x
+            const cam = { x: -60, y: 0, s: 1 };
+            function applyCam() {
+              const w = document.getElementById('s3-world');
+              w.style.transform = 'translate(' + cam.x + 'px,' + cam.y + 'px) scale(' + cam.s + ')';
+              document.getElementById('s3-words').style.transform = 'translate(' + (cam.x * 0.6) + 'px,' + (cam.y * 0.6) + 'px)';
+              document.getElementById('s3-fg').style.transform = 'translate(' + (cam.x * 1.35) + 'px,' + (cam.y * 1.35) + 'px)';
+            }
+            applyCam();
+            [['#s3-w2', 1320, 0.8, 2.9], ['#s3-w3', 2220, 2.9, 4.55], ['#s3-w4', 3120, 4.55, 6.2]].forEach(function (w) {
+              const el = root.querySelector(w[0]);
+              el.style.left = (960 + 0.6 * (w[1] - 960) - AF.measure(el.querySelector('.ol').textContent, '700 230px "Space Grotesk"', -9.2) / 2) + 'px';
+              tl.fromTo(w[0], { opacity: 0 }, { opacity: 1, duration: 0.45, ease: 'power2.out' }, w[2]);
+              tl.to(w[0], { opacity: 0, duration: 0.4, ease: 'power2.in' }, w[3]);
+            });
+            tl.fromTo(cam, { x: -60 }, { x: -360, duration: 0.65, ease: 'power3.inOut', onUpdate: applyCam }, 0.72);
+            tl.to(cam, { x: -1260, duration: 0.7, ease: 'power3.inOut', onUpdate: applyCam }, 2.85);
+            tl.to(cam, { x: -2160, duration: 0.65, ease: 'power3.inOut', onUpdate: applyCam }, 4.55);
+            // overview pull-back
+            tl.to(cam, { x: 216.6, y: 304.8, s: 0.42, duration: 0.7, ease: 'power3.inOut', onUpdate: applyCam }, 6.2);
+            
+            // ---- agent hovers above the active node
+            AF.agentLife(tl, 's3-ag', 0, 7.54, 1.6);
+            AF.blink(tl, 's3-ag', 1.9); AF.blink(tl, 's3-ag', 4.2);
+            tl.to('#s3-agent', { x: 700 - 360, y: 330 - 300, duration: 0.65, ease: 'power3.inOut' }, 0.72);
+            tl.to('#s3-agent', { x: 700 - 360, y: 290 - 300, duration: 0.7, ease: 'power3.inOut' }, 2.85);
+            tl.to('#s3-agent', { x: 672 - 360, y: 330 - 300, duration: 0.65, ease: 'power3.inOut' }, 4.55);
+            tl.to('#s3-agent', { x: 1395 - 360, y: 440 - 300, scale: 0.6, duration: 0.7, ease: 'power3.inOut' }, 6.2);
+            tl.to('#s3-agent', { x: 1290 - 360, y: 500 - 300, scale: 150 / 110, duration: 0.55, ease: 'power3.inOut' }, 6.97);
+
+            // ---- N1
+            tl.fromTo('#s3-n1', { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' }, 0.0);
+            // line + packet progress (world x of nodes: N1 right 630 -> N2 1040 -> N3 1960 -> N4 2832)
+            const L = 2202; const pk = { p: 0 };
+            function applyPk() { document.getElementById('s3-line').style.transform = 'scaleX(' + pk.p / L + ')'; document.getElementById('s3-packet').style.transform = 'translateX(' + pk.p + 'px)'; }
+            applyPk();
+            tl.to(pk, { p: 410, duration: 0.7, ease: 'power2.inOut', onUpdate: applyPk }, 0.6);
+            tl.to(pk, { p: 1330, duration: 0.8, ease: 'power2.inOut', onUpdate: applyPk }, 2.8);
+            tl.to(pk, { p: 2202, duration: 0.75, ease: 'power2.inOut', onUpdate: applyPk }, 4.5);
+
+            // ---- N2 UNDERSTAND
+            tl.fromTo('#s3-n2', { opacity: 0, y: 40, rotationY: -18 }, { opacity: 1, y: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' }, 0.85);
+            tl.fromTo('#s3-w2f', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power3.inOut' }, 1.0);
+            const sent = document.getElementById('s3-sent');
+            const k1 = document.getElementById('s3-k1'), k2 = document.getElementById('s3-k2');
+            const SF = '600 33px Inter';
+            const k1L = AF.measure('Prepare ', SF), k1W = AF.measure('today’s', SF);
+            const k2L = AF.measure('Prepare today’s ', SF), k2W = AF.measure('business report', SF);
+            gsap.set('#s3-hl1', { left: 30 + k1L - 6, width: k1W + 12 });
+            gsap.set('#s3-hl2', { left: 30 + k2L - 6, width: k2W + 12 });
+            const endX = AF.measure('Prepare today’s business report.', SF) + 20;
+            tl.fromTo('#s3-beam', { x: 0, opacity: 0 }, { opacity: 1, duration: 0.1 }, 1.25);
+            tl.to('#s3-beam', { x: endX, duration: 0.85, ease: 'power1.inOut' }, 1.25);
+            tl.to('#s3-beam', { opacity: 0, duration: 0.15 }, 2.08);
+            const t1 = 1.25 + 0.85 * (k1L / endX), t2 = 1.25 + 0.85 * (k2L / endX);
+            tl.fromTo('#s3-hl1', { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: 'power2.out' }, t1);
+            tl.fromTo('#s3-hl2', { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: 'power2.out' }, t2);
+            tl.to('#s3-k1', { color: '#C2621A', duration: 0.2 }, t1);
+            tl.to('#s3-k2', { color: '#127A43', duration: 0.2 }, t2);
+            tl.fromTo('.s3-chip', { opacity: 0, y: -24, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'expo.out', stagger: 0.1 }, 2.05);
+
+            // ---- chips fly to the plan and become steps
+            const n2 = { x: 1040, y: 395 }, n3 = { x: 1960, y: 350 };
+            chipPos.forEach(function (p, i) {
+              const tx = n3.x + 30 - (n2.x + p[0]), ty = n3.y + 100 + i * 60 + 4 - (n2.y + p[1]);
+              tl.to('#s3-chip' + i, { x: tx, y: ty, duration: 0.75, ease: 'power3.inOut' }, 2.85 + i * 0.05);
+              tl.to('#s3-chip' + i, { opacity: 0, duration: 0.2 }, 3.5 + i * 0.05);
+            });
+            tl.fromTo('#s3-n3', { opacity: 0, y: 40, rotationY: -18 }, { opacity: 1, y: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' }, 2.95);
+            tl.fromTo('#s3-w3f', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power3.inOut' }, 3.3);
+            tl.fromTo('.s3-prow', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power3.out', stagger: 0.12 }, 3.45);
+            tl.fromTo('#s3-pline', { scaleY: 0 }, { scaleY: 1, duration: 0.7, ease: 'power2.inOut' }, 3.55);
+            tl.to('#s3-n2', { opacity: 0.55, duration: 0.4 }, 3.3);
+
+            // ---- N4 EXECUTE: steps run one by one
+            tl.fromTo('#s3-n4', { opacity: 0, y: 40, rotationY: -18 }, { opacity: 1, y: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' }, 4.6);
+            tl.fromTo('#s3-w4f', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.8, ease: 'power3.inOut' }, 4.95);
+            tl.to('#s3-n3', { opacity: 0.55, duration: 0.4 }, 5.0);
+            const runs = [[5.0, 5.55], [5.55, 6.05], [6.05, 6.55], [6.55, 7.6]];
+            runs.forEach(function (r, i) {
+              tl.set('#s3-sp' + i, { opacity: 1 }, r[0]);
+              tl.set('#s3-et' + i, { color: '#1D2125' }, r[0]);
+              tl.fromTo('#s3-sp' + i, { rotation: 0 }, { rotation: 360 * (r[1] - r[0]) * 2.2, duration: Math.min(r[1], 7.54) - r[0], ease: 'none' }, r[0]);
+              if (r[1] < 7.54) {
+                tl.set('#s3-sp' + i, { opacity: 0 }, r[1]);
+                tl.fromTo('#s3-ok' + i, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'expo.out' }, r[1]);
+              }
+            });
+            tl.fromTo('#s3-progf', { scaleX: 0 }, { scaleX: 0.62, duration: 2.4, ease: 'power1.inOut' }, 5.0);
+            AF.count(tl, document.getElementById('s3-pct'), 0, 62, 5.0, 2.4, function (v) { return Math.round(v) + '%'; }, 'power1.inOut');
+
+            // ---- the Execute node grows into the full workspace (scene 4 opens on it)
+            tl.set('#s3-mon', { opacity: 1, x: 1246, y: 381.96, scale: 0.1512 }, 6.95);
+            tl.set('#s3-n4', { opacity: 0 }, 6.95);
+            tl.to('#s3-mon', { x: 0, y: 0, scale: 1, duration: 0.57, ease: 'power3.inOut' }, 6.97);
+            tl.to(['#s3-n1', '#s3-n2', '#s3-n3', '#s3-line', '#s3-line-base', '#s3-packet'], { opacity: 0, duration: 0.3 }, 7.0);
+
+            AF.allow('#s3 .bgw, #s3 .bgw span, #s3 .nnum, #s3 .eyebrow'); AF.allow('#s3 .bgw .ol', 'ignore');
+            window.__timelines['s3-understand'] = tl;
+          }
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); else build();
+        })();
+      </script>
+    </template>
+  </body>
+</html>

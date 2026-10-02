@@ -1,0 +1,10 @@
+{
+ "S1": {"text": "ចុះបើ AI អាចធ្វើបានច្រើនជាងត្រឹមតែឆ្លើយសំណួររបស់អ្នក?", "dir": "Open with gentle curiosity, an inviting question."},
+ "S2": {"text": "អ្នកគ្រាន់តែប្រាប់ថា៖ រៀបចំរបាយការណ៍អាជីវកម្មថ្ងៃនេះ។ ហើយ AI Agent ចាប់ផ្តើមធ្វើការភ្លាម។", "dir": "Clear and confident, a small pause after the colon."},
+ "S3": {"text": "ដំបូង វាស្វែងយល់ពីអ្វីដែលអ្នកត្រូវការ។ បន្ទាប់មក វារៀបចំផែនការ ហើយអនុវត្តម្តងមួយជំហានៗ។", "dir": "Educational, step by step, steady rhythm."},
+ "S4": {"text": "ខុសពី Chatbot ធម្មតា AI Agent ចេះប្រើ Tools។ វាបើក Browser ស្វែងរកព័ត៌មាន អានឯកសារ ប្រើ Spreadsheet និងពិនិត្យប្រតិទិន ដូចបុគ្គលិកម្នាក់កំពុងធ្វើការលើកុំព្យូទ័រ។", "dir": "Energetic but clear, like listing actions on screen."},
+ "S5": {"text": "បន្ទាប់មក វាចាប់ផ្តើមអនុវត្ត៖ ទិន្នន័យចូលទៅក្នុង Spreadsheet បង្កើតជាក្រាហ្វ រួចចេញជារបាយការណ៍ពេញលេញ។ វាមិនត្រឹមតែនិយាយទេ តែធ្វើការងារពិតៗ។", "dir": "Building momentum, confident emphasis on the last sentence."},
+ "S6": {"text": "សម្រាប់ការងារធំៗ AI Agent អាចបែងចែកភារកិច្ចទៅក្រុម Agent ជំនាញ ឱ្យធ្វើការព្រមគ្នា រួចបូកសរុបលទ្ធផលមកតែមួយ។", "dir": "Confident and smooth."},
+ "S7": {"text": "ប៉ុន្តែ មនុស្សនៅតែជាអ្នកសម្រេចចិត្ត។ អ្នកគ្រប់គ្រងត្រួតពិនិត្យ និងអនុម័តលទ្ធផលចុងក្រោយ។", "dir": "Calm, reassuring, trustworthy; slightly slower."},
+ "S8": {"text": "មនុស្សដឹកនាំ។ AI Agent អនុវត្ត។ ការងារសម្រេចបាន។", "dir": "Strong, deliberate closing tagline with a short confident pause between the three sentences."}
+}
