@@ -6,6 +6,7 @@ import {Chip, SectionLabel} from '../components/UI';
 import {RichText} from '../components/RichText';
 import {ToolTile3D} from '../components/ToolIcons';
 import {clamp, enterStyle, springAt} from '../anim';
+import {Sfx, popFor} from '../components/Sfx';
 
 const S = 270; // tile size when active
 const ICON_Y = 560; // top of the icon block
@@ -66,7 +67,7 @@ export const UseAI: React.FC<{duration: number}> = ({duration}) => {
             style={{
               position: 'absolute',
               left: x - tileW / 2,
-              top: ICON_Y + (1 - sc) * S * 0.6 + g * 110,
+              top: ICON_Y + (1 - sc) * S * 0.6 + g * 190,
               width: tileW,
               transformOrigin: '50% 0%',
               transform: `scale(${sc})`,
@@ -116,7 +117,7 @@ export const UseAI: React.FC<{duration: number}> = ({duration}) => {
           key={tool.id}
           style={{
             position: 'absolute',
-            top: 985,
+            top: 1068,
             left: 540 + (i - (n - 1) / 2) * 252 - 120,
             width: 240,
             textAlign: 'center',
@@ -135,7 +136,7 @@ export const UseAI: React.FC<{duration: number}> = ({duration}) => {
       <div
         style={{
           position: 'absolute',
-          top: 1110,
+          top: 1200,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
@@ -146,6 +147,17 @@ export const UseAI: React.FC<{duration: number}> = ({duration}) => {
           <RichText text={u.endLine} />
         </Chip>
       </div>
+
+      {u.tools.map((tool, i) => (
+        <React.Fragment key={tool.id}>
+          {i > 0 && <Sfx name="swipe" at={c0 + i * step - 2} volume={0.75} />}
+          {tool.chips.map((chip, j) => (
+            <Sfx key={chip} name={popFor(j + i)} at={c0 + i * step + 6 + j * 5} volume={0.35} />
+          ))}
+        </React.Fragment>
+      ))}
+      <Sfx name="whoosh" at={endStart - 6} volume={0.5} />
+      <Sfx name="sparkle" at={endStart + 24} volume={0.55} />
     </AbsoluteFill>
   );
 };

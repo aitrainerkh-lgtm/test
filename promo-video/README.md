@@ -65,6 +65,12 @@ npm run sync -- --noise=-30 --pause=0.2
 You can also type exact times (seconds) into `src/generated/voice-timing.json`.
 When synced, each scene starts just before its voice line, and the video length follows the voiceover.
 
+## Sound effects
+
+Whooshes, pops, clicks, coin, printer, message and notification sounds are timed to the animations.
+They are synthesised by `scripts/make-sfx.mjs` (no third-party audio) and saved in `public/sfx/`.
+Turn them off or change the level in `sfx` in `src/config.ts` (volume 0–1, the voice is 1).
+
 ## 5. Preview and render
 
 ```bash
@@ -99,6 +105,7 @@ promo-video/
 ├── scripts/
 │   ├── check-assets.mjs     finds your files (runs before studio/render)
 │   ├── generate-voiceover.mjs   Gemini Khmer voice → voiceover.mp3 + exact timing
+│   ├── make-sfx.mjs         synthesises the sound effects into public/sfx/
 │   └── sync-voiceover.mjs   voiceover → scene timing
 └── src/
     ├── config.ts            ALL editable text and timing

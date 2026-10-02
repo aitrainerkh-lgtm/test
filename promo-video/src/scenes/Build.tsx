@@ -7,6 +7,7 @@ import {RichText} from '../components/RichText';
 import {BottleIcon, CheckIcon, CursorIcon, MessengerIcon, SheetsIcon, TelegramIcon} from '../components/Icons';
 import {clamp, countTo, ease, enterStyle, prog, springAt, usd} from '../anim';
 import {OVERLAP, Slot} from '../timeline';
+import {Sfx, popFor} from '../components/Sfx';
 
 const B = config.build;
 const CARD_TOP = 480;
@@ -198,6 +199,14 @@ const StockCard: React.FC<{duration: number}> = ({duration}) => {
           <RichText text={s.toast} symbolColor="#fff" />
         </div>
       </div>
+      <Sfx name="pop1" at={18} volume={0.4} />
+      {s.items.map((item, i) => (
+        <Sfx key={item.name} name={popFor(i)} at={26 + i * 6} volume={0.3} />
+      ))}
+      <Sfx name="click" at={sale - 2} volume={0.6} />
+      <Sfx name="coin" at={sale + t(4)} volume={0.85} />
+      <Sfx name="pop4" at={sale + t(30)} volume={0.5} />
+      <Sfx name="success" at={sale + t(40)} volume={0.55} />
     </Card>
   );
 };
@@ -286,6 +295,11 @@ const BillingCard: React.FC<{duration: number}> = ({duration}) => {
           fill="#fff"
         />
       </svg>
+      {b.lines.map((l, i) => (
+        <Sfx key={l.item} name="print" at={lineAt(i)} volume={0.8} />
+      ))}
+      <Sfx name="swipe" at={totalAt - 2} volume={0.6} />
+      <Sfx name="coin" at={totalAt + 6} volume={0.85} />
     </div>
   );
 };
@@ -302,14 +316,14 @@ const LeaveCard: React.FC<{duration: number}> = ({duration}) => {
   // Cursor path: from the lower right to the Approve button.
   const move = prog(frame, t(50), clickAt - t(50) - 4, ease);
   const cx = interpolate(move, [0, 1], [880, 300]);
-  const cy = interpolate(move, [0, 1], [1080, 838]);
+  const cy = interpolate(move, [0, 1], [1140, 898]);
   const press = interpolate(frame, [clickAt - 2, clickAt + 2, clickAt + 8], [1, 0.9, 1], clamp);
   const cursorOpacity = interpolate(frame, [t(46), t(54), clickAt + 30, clickAt + 42], [0, 1, 1, 0], clamp);
   const ripple = prog(frame, clickAt, 20);
 
   return (
     <>
-      <Card style={{position: 'absolute', top: CARD_TOP, left: 64, right: 64, padding: 40, ...enterStyle(frame, fps, 8, {y: 80})}}>
+      <Card style={{position: 'absolute', top: CARD_TOP + 60, left: 64, right: 64, padding: 40, ...enterStyle(frame, fps, 8, {y: 80})}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 30}}>
           <div
             style={{
@@ -395,7 +409,7 @@ const LeaveCard: React.FC<{duration: number}> = ({duration}) => {
         </div>
       </Card>
 
-      <Card style={{position: 'absolute', top: 890, left: 64, right: 64, padding: '34px 30px', ...enterStyle(frame, fps, 20, {y: 80})}}>
+      <Card style={{position: 'absolute', top: 960, left: 64, right: 64, padding: '34px 30px', ...enterStyle(frame, fps, 20, {y: 80})}}>
         <div style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 30, color: C.navy, marginLeft: 10}}>{l.weekLabel}</div>
         <div style={{display: 'flex', gap: 12, marginTop: 24}}>
           {l.week.map((d, i) => {
@@ -436,6 +450,13 @@ const LeaveCard: React.FC<{duration: number}> = ({duration}) => {
       >
         <CursorIcon size={80} />
       </div>
+      <Sfx name="click" at={clickAt} volume={1} />
+      <Sfx name="success" at={clickAt + 4} volume={0.6} />
+      {l.week.map((d, i) =>
+        'leave' in d && d.leave ? (
+          <Sfx key={d.day} name={popFor(i)} at={clickAt + t(16) + l.week.filter((w, j) => j < i && 'leave' in w).length * t(10)} volume={0.45} />
+        ) : null,
+      )}
     </>
   );
 };
@@ -671,6 +692,14 @@ const AgentCard: React.FC<{duration: number}> = ({duration}) => {
           <RichText text={a.sticker} />
         </div>
       </div>
+      {[m1, m3].map((m) => (
+        <Sfx key={m} name="message" at={m} volume={0.7} />
+      ))}
+      {[m2, m4].map((m) => (
+        <Sfx key={m} name="message" at={m} volume={0.55} />
+      ))}
+      <Sfx name="notify" at={notifyAt} volume={0.7} />
+      <Sfx name="pop4" at={stickerAt} volume={0.6} />
     </>
   );
 };
@@ -699,12 +728,15 @@ export const Build: React.FC<{slots: Slot[]; duration: number}> = ({slots, durat
         const last = i === PARTS.length - 1;
         const len = last ? duration - from : slot.duration + OVERLAP;
         return (
-          <Sequence key={key} from={from} durationInFrames={len} layout="none">
+          <React.Fragment key={key}>
+          {i > 0 && <Sfx name="whoosh" at={from - 10} volume={0.6} />}
+          <Sequence from={from} durationInFrames={len} layout="none">
             <SceneFade duration={len} overlap={OVERLAP} fadeIn={i > 0} fadeOut={!last}>
               <PartHeader title={title} subtitle={subtitle} />
               <Comp duration={slot.duration} />
             </SceneFade>
           </Sequence>
+          </React.Fragment>
         );
       })}
     </AbsoluteFill>

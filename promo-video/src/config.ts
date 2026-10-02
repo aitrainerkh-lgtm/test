@@ -64,6 +64,12 @@ export const config = {
     endTail: 1.5,
   },
 
+  /** Sound effects (whoosh, pops, clicks, coin ...). Volume 0–1, voice = 1. */
+  sfx: {
+    enabled: true,
+    volume: 0.32,
+  },
+
   /**
    * Khmer voiceover made with Gemini text-to-speech (`npm run voice`).
    * Voices to try: Kore (clear, firm), Aoede (light), Leda (young),

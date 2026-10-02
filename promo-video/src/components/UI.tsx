@@ -142,12 +142,16 @@ export const SceneFade: React.FC<{
   const inP = fadeIn ? interpolate(frame, [0, overlap], [0, 1], clamp) : 1;
   const outP = fadeOut ? interpolate(frame, [duration - overlap, duration], [1, 0], clamp) : 1;
   const blur = (1 - inP) * 14 + (1 - outP) * 14;
+  // Slow camera drift keeps long scenes alive; transitions slide left.
+  const drift = 1 + 0.022 * Math.min(1, frame / Math.max(1, duration));
+  const slide = (1 - inP) * 70 - (1 - outP) * 70;
   return (
     <AbsoluteFill
       style={{
         opacity: Math.min(inP, outP),
         filter: blur > 0.05 ? `blur(${blur}px)` : undefined,
-        transform: `scale(${1 + (1 - inP) * 0.025 - (1 - outP) * 0.02})`,
+        transform: `translateX(${slide}px) scale(${drift + (1 - inP) * 0.025 - (1 - outP) * 0.02})`,
+        transformOrigin: '50% 40%',
       }}
     >
       {children}

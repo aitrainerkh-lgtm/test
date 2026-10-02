@@ -5,6 +5,7 @@ import {config} from '../config';
 import {C, FONT_KH_BODY, FONT_KH_HEAD} from '../theme';
 import {RichText, clusterCount} from '../components/RichText';
 import {clamp, enterStyle, prog} from '../anim';
+import {Sfx} from '../components/Sfx';
 
 const PHOTO_H = 1000;
 
@@ -129,6 +130,10 @@ export const Hook: React.FC<{duration: number}> = ({duration}) => {
       >
         <RichText text={subline} />
       </div>
+
+      <Sfx name="typing" at={typeStart} length={typeEnd - typeStart} volume={0.8} />
+      <Sfx name="swipe" at={typeEnd + 2} volume={0.9} />
+      <Sfx name="pop2" at={subDelay} volume={0.7} />
     </AbsoluteFill>
   );
 };

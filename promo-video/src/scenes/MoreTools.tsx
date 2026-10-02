@@ -5,6 +5,7 @@ import {C, FONT_EN, FONT_KH_BODY, FONT_KH_HEAD, RADIUS, SHADOW_CARD} from '../th
 import {RichText} from '../components/RichText';
 import {LineIcon} from '../components/LineIcons';
 import {enterStyle, prog} from '../anim';
+import {Sfx, popFor} from '../components/Sfx';
 
 export const MoreTools: React.FC<{duration: number}> = ({duration}) => {
   const frame = useCurrentFrame();
@@ -85,6 +86,11 @@ export const MoreTools: React.FC<{duration: number}> = ({duration}) => {
           </div>
         ))}
       </div>
+
+      <Sfx name="swipe" at={12} volume={0.7} />
+      {m.tiles.map((tile, i) => (
+        <Sfx key={tile.label} name={popFor(i)} at={tileStart + i * tileStep} volume={0.32} />
+      ))}
     </AbsoluteFill>
   );
 };

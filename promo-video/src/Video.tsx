@@ -5,6 +5,7 @@ import assets from './generated/assets.json';
 import {config, SceneKey} from './config';
 import {Background, SceneFade} from './components/UI';
 import {Karaoke} from './components/Karaoke';
+import {Sfx} from './components/Sfx';
 import {OVERLAP, Slot, TIMELINE} from './timeline';
 import {Hook} from './scenes/Hook';
 import {Title} from './scenes/Title';
@@ -57,11 +58,14 @@ export const PromoVideo: React.FC = () => {
         const last = i === list.length - 1;
         const len = last ? total - b.from : b.duration + OVERLAP;
         return (
-          <Sequence key={b.key} from={b.from} durationInFrames={len} name={b.key}>
-            <SceneFade duration={len} overlap={OVERLAP} fadeIn={i > 0} fadeOut={!last}>
-              {b.render(len)}
-            </SceneFade>
-          </Sequence>
+          <React.Fragment key={b.key}>
+            <Sequence from={b.from} durationInFrames={len} name={b.key}>
+              <SceneFade duration={len} overlap={OVERLAP} fadeIn={i > 0} fadeOut={!last}>
+                {b.render(len)}
+              </SceneFade>
+            </Sequence>
+            {i > 0 && <Sfx name="whoosh" at={b.from - 10} volume={0.75} />}
+          </React.Fragment>
         );
       })}
 

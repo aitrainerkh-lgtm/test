@@ -4,7 +4,18 @@ import {config} from '../config';
 import {C, FONT_EN, FONT_KH_BODY, SHADOW_CARD} from '../theme';
 import {Logo} from '../components/UI';
 import {RichText} from '../components/RichText';
+import {ToolTile3D} from '../components/ToolIcons';
+import {Sfx, popFor} from '../components/Sfx';
 import {clamp, enterStyle, prog, springAt} from '../anim';
+
+// Small tool tiles floating around the big "AI".
+const FLOAT = [
+  {id: 'chatgpt', x: 60, y: 520, rot: -10},
+  {id: 'claude', x: 860, y: 500, rot: 9},
+  {id: 'gemini', x: 80, y: 745, rot: 7},
+  {id: 'copilot', x: 855, y: 735, rot: -8},
+];
+const TILE = 118;
 
 export const Title: React.FC<{duration: number}> = () => {
   const frame = useCurrentFrame();
@@ -13,17 +24,20 @@ export const Title: React.FC<{duration: number}> = () => {
 
   const aSpring = springAt(frame, fps, 16, 120, 13);
   const pulse = (frame % 50) / 50;
+  const floatStart = 70;
+  // Shimmer sweep across "AI", repeating.
+  const sweep = ((frame - 40) % 150) / 60;
 
   return (
     <AbsoluteFill style={{alignItems: 'center'}}>
-      <div style={{position: 'absolute', top: 230, ...enterStyle(frame, fps, 2)}}>
+      <div style={{position: 'absolute', top: 210, ...enterStyle(frame, fps, 2)}}>
         <Logo height={84} />
       </div>
 
       <div
         style={{
           position: 'absolute',
-          top: 410,
+          top: 390,
           display: 'flex',
           alignItems: 'center',
           gap: 16,
@@ -54,16 +68,42 @@ export const Title: React.FC<{duration: number}> = () => {
         {t.livePill}
       </div>
 
+      {FLOAT.map((f, i) => {
+        const at = floatStart + i * 7;
+        const s = springAt(frame, fps, at, 160, 12);
+        const bob = Math.sin((frame - at) / 28 + i * 1.7) * 12;
+        return (
+          <div
+            key={f.id}
+            style={{
+              position: 'absolute',
+              left: f.x,
+              top: f.y + bob,
+              opacity: interpolate(frame, [at, at + 6], [0, 1], clamp),
+              transform: `rotate(${f.rot + Math.sin((frame - at) / 40 + i) * 3}deg) scale(${s})`,
+            }}
+          >
+            <ToolTile3D id={f.id} size={TILE} />
+          </div>
+        );
+      })}
+
       <div
         style={{
           position: 'absolute',
-          top: 500,
+          top: 480,
           fontFamily: FONT_EN,
           fontWeight: 800,
           fontSize: 440,
           lineHeight: 1,
           letterSpacing: -20,
-          color: C.navy,
+          paddingRight: 20,
+          color: 'transparent',
+          backgroundImage: `linear-gradient(105deg, ${C.navy} 0%, ${C.navy} 40%, #4A6CF7 47%, ${C.lime} 50%, #4A6CF7 53%, ${C.navy} 60%, ${C.navy} 100%)`,
+          backgroundSize: '300% 100%',
+          backgroundPosition: `${interpolate(sweep, [0, 1], [100, 0], clamp)}% 0`,
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text',
           opacity: interpolate(frame, [16, 26], [0, 1], clamp),
           transform: `translateY(${(1 - aSpring) * 80}px) scale(${0.75 + 0.25 * aSpring})`,
         }}
@@ -74,7 +114,7 @@ export const Title: React.FC<{duration: number}> = () => {
       <div
         style={{
           position: 'absolute',
-          top: 950,
+          top: 940,
           fontFamily: FONT_EN,
           fontWeight: 800,
           fontSize: 128,
@@ -90,7 +130,7 @@ export const Title: React.FC<{duration: number}> = () => {
       <div
         style={{
           position: 'absolute',
-          top: 1190,
+          top: 1200,
           background: C.white,
           borderRadius: 999,
           boxShadow: SHADOW_CARD,
@@ -105,6 +145,15 @@ export const Title: React.FC<{duration: number}> = () => {
       >
         <RichText text={t.noCodePill} />
       </div>
+
+      <Sfx name="riser" at={0} volume={0.55} length={18} />
+      <Sfx name="impact" at={16} volume={0.9} />
+      <Sfx name="pop1" at={8} volume={0.6} />
+      <Sfx name="swipe" at={44} volume={0.8} />
+      <Sfx name="pop3" at={58} volume={0.7} />
+      {FLOAT.map((f, i) => (
+        <Sfx key={f.id} name={popFor(i)} at={floatStart + i * 7} volume={0.45} />
+      ))}
     </AbsoluteFill>
   );
 };

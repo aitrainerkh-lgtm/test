@@ -7,6 +7,7 @@ import {Logo} from '../components/UI';
 import {RichText} from '../components/RichText';
 import {TelegramIcon} from '../components/Icons';
 import {clamp, enterStyle} from '../anim';
+import {Sfx} from '../components/Sfx';
 
 const QR = 520;
 
@@ -93,6 +94,9 @@ export const Close: React.FC<{duration: number}> = () => {
         <TelegramIcon size={84} />
         <span style={{fontFamily: FONT_EN, fontWeight: 800, fontSize: 52, color: C.navy, letterSpacing: -0.5}}>{config.brand.telegram}</span>
       </div>
+
+      <Sfx name="pop2" at={14} volume={0.6} />
+      <Sfx name="notify" at={30} volume={0.5} />
     </AbsoluteFill>
   );
 };

@@ -5,6 +5,7 @@ import {C, FONT_EN, FONT_KH_BODY} from '../theme';
 import {Logo} from '../components/UI';
 import {RichText} from '../components/RichText';
 import {clamp, enterStyle, prog, springAt} from '../anim';
+import {Sfx} from '../components/Sfx';
 
 export const Offer: React.FC<{duration: number}> = ({duration}) => {
   const frame = useCurrentFrame();
@@ -20,29 +21,29 @@ export const Offer: React.FC<{duration: number}> = ({duration}) => {
 
   return (
     <AbsoluteFill style={{alignItems: 'center'}}>
-      <div style={{position: 'absolute', top: 150, ...enterStyle(frame, fps, 0)}}>
+      <div style={{position: 'absolute', top: 180, ...enterStyle(frame, fps, 0)}}>
         <Logo height={72} />
       </div>
 
-      <div style={{position: 'absolute', top: 300, width: '100%', textAlign: 'center', fontFamily: FONT_KH_BODY, fontWeight: 700, fontSize: 54, color: C.navy, ...enterStyle(frame, fps, 6)}}>
+      <div style={{position: 'absolute', top: 330, width: '100%', textAlign: 'center', fontFamily: FONT_KH_BODY, fontWeight: 700, fontSize: 54, color: C.navy, ...enterStyle(frame, fps, 6)}}>
         <RichText text={o.dateLine} />
       </div>
-      <div style={{position: 'absolute', top: 402, width: '100%', textAlign: 'center', fontFamily: FONT_KH_BODY, fontWeight: 400, fontSize: 36, color: C.grey, ...enterStyle(frame, fps, 12)}}>
+      <div style={{position: 'absolute', top: 432, width: '100%', textAlign: 'center', fontFamily: FONT_KH_BODY, fontWeight: 400, fontSize: 36, color: C.grey, ...enterStyle(frame, fps, 12)}}>
         <RichText text={o.timeLine} />
       </div>
 
-      <div style={{position: 'absolute', top: 570, left: 76, textAlign: 'left', fontFamily: FONT_KH_BODY, fontWeight: 700, fontSize: 36, color: C.grey, ...enterStyle(frame, fps, priceAt - 8)}}>
+      <div style={{position: 'absolute', top: 625, left: 76, textAlign: 'left', fontFamily: FONT_KH_BODY, fontWeight: 700, fontSize: 36, color: C.grey, ...enterStyle(frame, fps, priceAt - 8)}}>
         <RichText text={o.priceLabel} />
       </div>
 
       <div
         style={{
           position: 'absolute',
-          top: 630,
+          top: 685,
           left: 60,
           display: 'flex',
           alignItems: 'baseline',
-          gap: 20,
+          gap: 34,
           ...enterStyle(frame, fps, priceAt, {y: 60, scale: 0.15}),
         }}
       >
@@ -70,8 +71,8 @@ export const Offer: React.FC<{duration: number}> = ({duration}) => {
       <div
         style={{
           position: 'absolute',
-          top: 590,
-          right: 30,
+          top: 645,
+          right: 48,
           width: 256,
           height: 256,
           opacity: interpolate(frame, [at(78), at(84)], [0, 1], clamp),
@@ -105,7 +106,7 @@ export const Offer: React.FC<{duration: number}> = ({duration}) => {
       <div
         style={{
           position: 'absolute',
-          top: 1000,
+          top: 1065,
           left: 60,
           right: 60,
           textAlign: 'center',
@@ -119,7 +120,7 @@ export const Offer: React.FC<{duration: number}> = ({duration}) => {
         <RichText text={o.proofLine} symbolColor={C.successGreen} />
       </div>
 
-      <div style={{position: 'absolute', top: 1130, ...enterStyle(frame, fps, at(120), {y: 60, scale: 0.2})}}>
+      <div style={{position: 'absolute', top: 1200, ...enterStyle(frame, fps, at(120), {y: 60, scale: 0.2})}}>
         <div
           style={{
             display: 'flex',
@@ -139,6 +140,13 @@ export const Offer: React.FC<{duration: number}> = ({duration}) => {
           <RichText text={o.button} symbolColor={C.lime} />
         </div>
       </div>
+
+      <Sfx name="impact" at={priceAt} volume={0.9} />
+      <Sfx name="swipe" at={priceAt + 12} volume={0.6} />
+      <Sfx name="click" at={priceAt + 22} volume={0.5} />
+      <Sfx name="sparkle" at={at(78)} volume={0.7} />
+      <Sfx name="pop2" at={at(100)} volume={0.45} />
+      <Sfx name="pop4" at={at(120)} volume={0.6} />
     </AbsoluteFill>
   );
 };
