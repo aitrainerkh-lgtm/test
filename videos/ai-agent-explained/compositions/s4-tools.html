@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/SpaceGrotesk.ttf') format('truetype'); font-weight: 300 700; }
+        #s4 { position: absolute; inset: 0; overflow: hidden; }
+        #s4-cam { position: absolute; inset: 0; transform-origin: 960px 540px; }
+        #s4-persp { position: absolute; inset: 0; perspective: 2200px; }
+        #s4-mon3d { position: absolute; inset: 0; transform-origin: 960px 540px; }
+        #s4-mon { left: 160px; top: 90px; width: 1600px; height: 900px; border-radius: 30px; }
+        #s4 .monbar { position: absolute; left: 0; top: 0; right: 0; height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 24px; border-bottom: 1px solid rgba(29,33,37,.07); font: 600 18px 'Inter', sans-serif; color: #59616A; }
+        #s4 .monpill { margin-left: auto; height: 32px; padding: 0 14px; border-radius: 999px; background: rgba(30,158,88,.12); color: #1E9E58; font: 700 14px 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; letter-spacing: .04em; }
+        #s4-div { position: absolute; left: 959px; top: 190px; width: 2px; height: 760px; background: rgba(29,33,37,.08); transform-origin: top center; }
+        #s4 .lab { position: absolute; top: 182px; height: 40px; padding: 0 16px; border-radius: 999px; display: flex; align-items: center; gap: 8px; font: 700 15px 'Space Grotesk', sans-serif; letter-spacing: .14em; }
+        #s4 .bub { position: absolute; padding: 18px 22px; border-radius: 22px; font: 600 22px 'Inter', sans-serif; line-height: 1.35; }
+        #s4-left { position: absolute; left: 160px; top: 90px; width: 800px; height: 900px; }
+        #s4-ttl { position: absolute; left: 960px; width: 800px; top: 236px; text-align: center; font-size: 104px; }
+        #s4-ttl .ac { color: #1E9E58; }
+        #s4 .tool { position: absolute; width: 96px; height: 96px; border-radius: 26px; display: flex; align-items: center; justify-content: center; }
+        #s4 .tlab { position: absolute; width: 120px; text-align: center; font: 600 16px 'Inter', sans-serif; color: #59616A; }
+        #s4-dock { position: absolute; left: 744px; top: 896px; width: 432px; height: 76px; border-radius: 24px; }
+        #s4 .wn { position: absolute; transform-origin: 50% 50%; }
+        #s4 .addr { position: absolute; left: 18px; right: 18px; top: 58px; height: 46px; border-radius: 999px; background: rgba(29,33,37,.055); display: flex; align-items: center; gap: 10px; padding: 0 16px; font: 500 19px 'Inter', sans-serif; color: #1D2125; white-space: nowrap; }
+        #s4 .res { position: absolute; left: 18px; right: 18px; height: 92px; border-radius: 14px; padding: 14px 16px; }
+        #s4 .res b { display: block; font: 700 18px 'Inter', sans-serif; color: #127A43; margin-bottom: 10px; }
+        #s4 .cell { position: absolute; height: 40px; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; font: 500 16px 'JetBrains Mono', monospace; color: #1D2125; border-right: 1px solid rgba(29,33,37,.06); border-bottom: 1px solid rgba(29,33,37,.06); }
+        #s4 .chip4 { position: absolute; width: 250px; height: 52px; border-radius: 999px; display: flex; align-items: center; gap: 10px; padding: 0 16px 0 10px; font: 600 20px 'Inter', sans-serif; color: #1D2125; white-space: nowrap;
+          background: #fff; box-shadow: 0 0 0 1px rgba(29,33,37,.07), 0 14px 28px -12px rgba(20,36,28,.32); }
+        #s4 .chip4 .d { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; }
+        #s4-tray { position: absolute; left: 1446px; top: 168px; width: 290px; height: 700px; border-radius: 22px; background: rgba(29,33,37,.03); border: 1.5px dashed rgba(29,33,37,.10); }
+        #s4 .ripple { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 3px solid #1E9E58; opacity: 0; }
+        #s4-agentw { position: absolute; left: 1215px; top: 425px; width: 150px; height: 150px; }
+        #s4 .scan { position: absolute; left: 0; right: 0; height: 3px; background: #33C27A; box-shadow: 0 0 14px 3px rgba(51,194,122,.55); }
+        #s4 .ev { position: absolute; border-radius: 10px; }
+      </style>
+
+      <div id="s4" data-composition-id="s4-tools" data-width="1920" data-height="1080" data-duration="10.67" class="af">
+        <div id="s4-cam"><div id="s4-persp"><div id="s4-mon3d">
+          <div class="glass" id="s4-mon"><div class="monbar"><div class="win-dots"><i></i><i></i><i></i></div>AI Agent Workspace<div class="monpill" id="s4-pill">__BOLT__ <span id="s4-pilltxt">EXECUTING</span></div></div></div>
+          <div id="s4-div"></div>
+          <!-- comparison: chatbot side -->
+          <div id="s4-left">
+            <div class="lab" id="s4-lab1" style="left:60px;background:rgba(29,33,37,.06);color:#59616A;">__CHAT__ CHATBOT</div>
+            <div class="bub" id="s4-q" style="right:60px;top:200px;background:#1D2125;color:#fff;border-radius:22px 22px 6px 22px;">Prepare today’s business report.</div>
+            <div class="bub glass" id="s4-dots" style="left:60px;top:320px;width:110px;height:62px;padding:0;display:flex;align-items:center;justify-content:center;gap:9px;">
+              <i class="s4-dot" style="display:block;width:11px;height:11px;border-radius:50%;background:#9AA1A7"></i><i class="s4-dot" style="display:block;width:11px;height:11px;border-radius:50%;background:#9AA1A7"></i><i class="s4-dot" style="display:block;width:11px;height:11px;border-radius:50%;background:#9AA1A7"></i></div>
+            <div class="bub glass" id="s4-a" style="left:60px;top:320px;width:600px;">Sure! Here are some tips for writing a good business report:
+              <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px;"><div class="sk" style="width:92%"></div><div class="sk" style="width:80%"></div><div class="sk" style="width:86%"></div></div></div>
+            <div id="s4-only" style="position:absolute;left:60px;top:610px;font:600 22px 'Inter',sans-serif;color:#9AA1A7;display:flex;align-items:center;gap:10px;">__CHAT2__ Only answers with text</div>
+          </div>
+          <!-- comparison: agent side -->
+          <div class="lab" id="s4-lab2" style="left:1020px;background:rgba(30,158,88,.12);color:#1E9E58;">__SPARK__ AI AGENT</div>
+          <div id="s4-ttl" class="kt"></div>
+          <div class="glass" id="s4-dock"></div>
+          <div id="s4-tools"></div>
+          <!-- desktop windows -->
+          <div class="wn win" data-layout-allow-overlap id="s4-w1" style="left:200px;top:178px;width:780px;height:470px;">
+            <div class="win-bar"><div class="win-dots"><i></i><i></i><i></i></div>Browser</div>
+            <div class="addr">__SEARCH__<span id="s4-q1"></span></div>
+            <div class="res" id="s4-r0" style="top:122px;background:rgba(30,158,88,.0);"><b>Cambodia market update · today</b><div class="sk" style="width:90%"></div><div class="sk" style="width:70%;margin-top:9px"></div></div>
+            <div class="res" id="s4-r1" style="top:226px;"><b style="color:#1D2125">Retail sales report · this week</b><div class="sk" style="width:85%"></div><div class="sk" style="width:60%;margin-top:9px"></div></div>
+            <div class="res" id="s4-r2" style="top:330px;"><b style="color:#1D2125">Business news summary</b><div class="sk" style="width:80%"></div><div class="sk" style="width:66%;margin-top:9px"></div></div>
+          </div>
+          <div class="wn win" data-layout-allow-overlap id="s4-w2" style="left:840px;top:250px;width:560px;height:540px;">
+            <div class="win-bar"><div class="win-dots"><i></i><i></i><i></i></div>Sales_Targets.pdf</div>
+            <div style="position:absolute;left:40px;top:72px;right:40px;bottom:30px;">
+              <div style="width:60%;height:18px;border-radius:6px;background:rgba(29,33,37,.2)"></div>
+              <div style="margin-top:26px;display:flex;flex-direction:column;gap:16px;">
+                <div class="sk"></div><div class="sk" style="width:94%"></div><div class="sk" id="s4-h1" style="width:88%"></div><div class="sk" style="width:96%"></div>
+                <div class="sk" style="width:72%"></div><div class="sk" id="s4-h2" style="width:90%"></div><div class="sk" style="width:84%"></div><div class="sk" style="width:94%"></div><div class="sk" style="width:60%"></div>
+              </div>
+              <div class="scan" id="s4-scan" style="top:30px;"></div>
+            </div>
+          </div>
+          <div class="wn win" data-layout-allow-overlap id="s4-w3" style="left:260px;top:430px;width:720px;height:440px;">
+            <div class="win-bar"><div class="win-dots"><i></i><i></i><i></i></div>Daily_Sales.xlsx</div>
+            <div id="s4-grid" style="position:relative;height:398px;"></div>
+          </div>
+          <div class="wn win" data-layout-allow-overlap id="s4-w4" style="left:900px;top:190px;width:520px;height:460px;">
+            <div class="win-bar"><div class="win-dots"><i></i><i></i><i></i></div>Calendar · Today</div>
+            <div id="s4-cal" data-layout-allow-overlap style="position:absolute;left:0;top:42px;right:0;bottom:0;"></div>
+          </div>
+          <!-- collected tray -->
+          <div id="s4-tray"><div class="eyebrow" style="position:absolute;left:20px;top:22px;">Collected</div></div>
+          <div id="s4-chips"></div>
+          <div class="ripple" id="s4-rip"></div>
+          <div id="s4-cursor-wrap" data-layout-allow-overlap></div>
+        </div></div></div>
+        <div id="s4-out"></div>
+        <div id="s4-agentw"></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.getElementById('s4');
+          const rep = { __BOLT__: AF.icon('bolt', 15, '#1E9E58', 2.4), __CHAT__: AF.icon('chat', 16, '#59616A', 2.2), __CHAT2__: AF.icon('chat', 20, '#9AA1A7', 2), __SPARK__: AF.icon('sparkle', 16, '#1E9E58', 2.2), __SEARCH__: AF.icon('search', 20, '#59616A', 2.2) };
+          root.querySelectorAll('.monpill, .lab, #s4-only, .addr').forEach(function (el) { Object.keys(rep).forEach(function (k) { if (el.innerHTML.indexOf(k) >= 0) el.innerHTML = el.innerHTML.replace(k, rep[k]); }); });
+          document.getElementById('s4-agentw').innerHTML = AF.agent('s4-ag', 150);
+          document.getElementById('s4-cursor-wrap').innerHTML = AF.cursor('s4-cur', '#1E9E58', 'AI Agent');
+          document.getElementById('s4-ttl').innerHTML = '<span class="wmask"><span class="w s4-tw">USE</span></span><span class="wsp"> </span><span class="wmask"><span class="w s4-tw ac">TOOLS</span></span>';
+          const T = [['globe', 'Browser', '#1E9E58'], ['doc', 'Documents', '#F0832A'], ['sheet', 'Sheets', '#1E9E58'], ['calendar', 'Calendar', '#F0832A'], ['mail', 'Email', '#1E9E58'], ['folder', 'Files', '#F0832A']];
+          let th = '';
+          T.forEach(function (t, i) {
+            const x = 1027 + i * 114, y = 640;
+            th += '<div class="tool glass s4-tool" id="s4-t' + i + '" style="left:' + x + 'px;top:' + y + 'px;">' + AF.icon(t[0], 44, t[2], 2) + '</div>';
+            th += '<div class="tlab s4-tlab" id="s4-tl' + i + '" style="left:' + (x - 12) + 'px;top:' + (y + 106) + 'px;">' + t[1] + '</div>';
+          });
+          document.getElementById('s4-tools').innerHTML = th;
+          // chips
+          const C = [['globe', 'Market update', '#1E9E58'], ['doc', 'Sales targets', '#F0832A'], ['sheet', 'Sales data', '#1E9E58'], ['calendar', 'Review at 4 PM', '#F0832A']];
+          document.getElementById('s4-chips').innerHTML = C.map(function (c, i) {
+            return '<div class="chip4 s4-chip" id="s4-c' + i + '" style="left:1466px;top:' + (232 + i * 68) + 'px;"><div class="d" style="background:' + c[2] + '20">' + AF.icon(c[0], 18, c[2], 2.2) + '</div>' + c[1] + '</div>';
+          }).join('');
+          document.getElementById('s4-out').innerHTML = C.map(function (c, i) {
+            return '<div class="chip4" id="s4-o' + i + '" style="position:absolute;left:0;top:0;opacity:0;"><div class="d" style="background:' + c[2] + '20">' + AF.icon(c[0], 18, c[2], 2.2) + '</div>' + c[1] + '</div>';
+          }).join('');
+          // spreadsheet
+          const rows = [['Branch', 'Sales', 'Orders', 'Growth'], ['Phnom Penh', '$18,450', '142', '+12%'], ['Siem Reap', '$9,820', '76', '+8%'], ['Battambang', '$7,310', '58', '+5%'], ['Sihanoukville', '$8,640', '61', '+9%'], ['Kampot', '$4,700', '39', '+4%'], ['Total', '$48,920', '376', '+9%']];
+          const cw = [230, 170, 150, 150]; let gh = '';
+          rows.forEach(function (r, ri) {
+            let x = 10;
+            r.forEach(function (v, ci) {
+              const hd = ri === 0, tot = ri === rows.length - 1;
+              gh += '<div class="cell' + (hd ? '' : ' s4-cell') + (tot && ci === 1 ? ' s4-tot' : '') + '" style="left:' + x + 'px;top:' + (10 + ri * 52) + 'px;width:' + cw[ci] + 'px;' +
+                (ci === 0 ? "justify-content:flex-start;padding-left:14px;font-family:Inter;font-weight:600;" : '') + (hd ? 'font-family:Inter;font-weight:700;color:#59616A;background:rgba(29,33,37,.03);' : '') +
+                (tot ? 'font-weight:700;background:rgba(30,158,88,.06);' : '') + '">' + v + '</div>';
+              x += cw[ci];
+            });
+          });
+          document.getElementById('s4-grid').innerHTML = gh;
+          // calendar
+          let ch = '';
+          ['9:00', '11:00', '1:00', '3:00', '4:00', '5:00'].forEach(function (h, i) {
+            ch += '<div style="position:absolute;left:18px;top:' + (18 + i * 64) + 'px;font:600 14px Inter;color:#9AA1A7;">' + h + '</div><div style="position:absolute;left:76px;right:18px;top:' + (28 + i * 64) + 'px;height:1px;background:rgba(29,33,37,.07)"></div>';
+          });
+          ch += '<div class="ev" style="left:90px;top:36px;width:200px;height:52px;background:rgba(19,146,127,.18)"></div>';
+          ch += '<div class="ev" style="left:300px;top:100px;width:190px;height:80px;background:rgba(29,33,37,.07)"></div>';
+          ch += '<div class="ev" style="left:90px;top:166px;width:180px;height:56px;background:rgba(240,131,42,.16)"></div>';
+          ch += '<div class="ev" id="s4-newev" style="left:90px;top:286px;width:400px;height:58px;background:#1E9E58;color:#fff;font:700 18px Inter;display:flex;align-items:center;gap:10px;padding:0 16px;transform-origin:left top;">' + AF.icon('check', 18, '#fff', 3) + '<span id="s4-evt">4:00 PM · Report review</span></div>';
+          document.getElementById('s4-cal').innerHTML = ch;
+
+          function build() {
+            const tl = gsap.timeline({ paused: true });
+            const cam = document.getElementById('s4-cam');
+            AF.agentLife(tl, 's4-ag', 0, 3.6, 1.6);
+            AF.blink(tl, 's4-ag', 1.1);
+
+            // ===== Phase A: chatbot vs agent
+            tl.fromTo('#s4-div', { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: 'power3.out' }, 0.05);
+            tl.fromTo('#s4-lab1', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.15);
+            tl.fromTo('#s4-q', { opacity: 0, y: 20, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power3.out' }, 0.3);
+            tl.fromTo('#s4-dots', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.55);
+            tl.fromTo('.s4-dot', { y: 0 }, { y: -7, duration: 0.15, ease: 'sine.inOut', stagger: 0.08, yoyo: true, repeat: 1 }, 0.6);
+            tl.to('#s4-dots', { opacity: 0, duration: 0.1 }, 0.95);
+            tl.fromTo('#s4-a', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, 0.98);
+            tl.fromTo('#s4-only', { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.4 }, 1.35);
+            tl.to('#s4-left', { opacity: 0.42, filter: 'grayscale(1)', duration: 0.6 }, 1.55);
+            tl.to('#s4-agentw', { x: 70, y: 20, duration: 0.8, ease: 'power3.inOut' }, 0.15);
+            tl.fromTo('#s4-lab2', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 1.4);
+            tl.fromTo('.s4-tw', { yPercent: 105 }, { yPercent: 0, duration: 0.65, ease: 'expo.out', stagger: 0.1 }, 1.55);
+            // tools burst out of the agent then settle into a row
+            for (let i = 0; i < T.length; i++) {
+              const ang = -Math.PI / 2 + (i - 2.5) * 0.55;
+              const tx = 1027 + i * 114 + 48, ty = 640 + 48;
+              const fx = 1360 + Math.cos(ang) * 30 - tx, fy = 520 + Math.sin(ang) * 30 - ty;
+              tl.fromTo('#s4-t' + i, { x: fx, y: fy, scale: 0.2, opacity: 0 }, { x: fx + Math.cos(ang) * 120, y: fy + Math.sin(ang) * 90 - 40, scale: 0.8, opacity: 1, duration: 0.35, ease: 'power2.out' }, 1.75 + i * 0.07);
+              tl.to('#s4-t' + i, { x: 0, y: 0, scale: 1, duration: 0.55, ease: 'power3.inOut' }, 2.1 + i * 0.07);
+              tl.fromTo('#s4-tl' + i, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3 }, 2.45 + i * 0.07);
+            }
+            tl.set('#s4-dock', { opacity: 0, y: 30 }, 0);
+
+            // ===== transition into the desktop
+            tl.to('#s4-left', { x: -220, opacity: 0, duration: 0.45, ease: 'power3.in' }, 3.15);
+            tl.to(['#s4-div', '#s4-lab2'], { opacity: 0, duration: 0.3 }, 3.15);
+            tl.to('.s4-tw', { yPercent: -110, duration: 0.4, ease: 'power3.in', stagger: 0.05 }, 3.15);
+            tl.to('#s4-dock', { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, 3.3);
+            tl.to('.s4-tlab', { opacity: 0, duration: 0.2 }, 3.2);
+            for (let i = 0; i < T.length; i++) {
+              const dx = 744 + 18 + i * 68 + 28 - (1027 + i * 114 + 48), dy = 896 + 38 - (640 + 48);
+              tl.to('#s4-t' + i, { x: dx, y: dy, scale: 56 / 96, duration: 0.55, ease: 'power3.inOut' }, 3.2 + i * 0.03);
+            }
+            // agent condenses into its cursor
+            tl.to('#s4-agentw', { x: 70 + 0, y: 20 + 0, scale: 0.15, opacity: 0, duration: 0.4, ease: 'power3.in' }, 3.25);
+            const cur = '#s4-cur';
+            tl.fromTo(cur, { x: 1430, y: 520, opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(2)' }, 3.5);
+            function click(t, x, y) {
+              tl.to(cur, { scale: 0.85, duration: 0.06 }, t); tl.to(cur, { scale: 1, duration: 0.12 }, t + 0.07);
+              tl.fromTo('#s4-rip', { x: x + 4, y: y + 4, scale: 0.3, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.45, ease: 'power2.out', immediateRender: false }, t);
+            }
+            function move(t, d, x, y) { tl.to(cur, { x: x, y: y, duration: d, ease: 'power3.inOut' }, t); }
+            function camTo(t, d, fx, fy, s) { tl.to(cam, { x: (960 - fx) * 0.3, y: (540 - fy) * 0.3, scale: s, duration: d, ease: 'power3.inOut' }, t); }
+            function fly(i, t, sx, sy) {
+              tl.fromTo('#s4-c' + i, { x: sx - 1466, y: sy - (232 + i * 68), opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.15 }, t);
+              tl.to('#s4-c' + i, { x: 0, y: 0, duration: 0.5, ease: 'power3.inOut' }, t + 0.05);
+            }
+            tl.set('#s4-rip', { opacity: 0 }, 0);
+            tl.fromTo('#s4-tray', { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out' }, 3.45);
+            tl.set('.s4-chip', { opacity: 0 }, 0);
+
+            // ===== Browser
+            tl.fromTo('#s4-w1', { opacity: 0, scale: 0.15, x: 790 - 590, y: 934 - 413 }, { opacity: 1, scale: 1, x: 0, y: 0, duration: 0.5, ease: 'expo.out' }, 3.38);
+            camTo(3.38, 0.6, 590, 413, 1.08);
+            move(3.55, 0.3, 360, 255); click(3.85, 360, 255);
+            AF.type(tl, document.getElementById('s4-q1'), 'today’s sales and market update', 3.9, 0.45);
+            tl.fromTo(['#s4-r0', '#s4-r1', '#s4-r2'], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power3.out', stagger: 0.08 }, 4.38);
+            move(4.4, 0.25, 520, 345); click(4.66, 520, 345);
+            tl.to('#s4-r0', { backgroundColor: 'rgba(30,158,88,0.10)', duration: 0.2 }, 4.68);
+            fly(0, 4.75, 380, 330);
+            // ===== Document
+            tl.fromTo('#s4-w2', { opacity: 0, x: 90, rotationY: -14 }, { opacity: 1, x: 0, rotationY: 0, duration: 0.5, ease: 'power3.out' }, 4.95);
+            camTo(4.95, 0.6, 1120, 520, 1.08);
+            move(5.0, 0.35, 1040, 470);
+            tl.fromTo('#s4-scan', { y: 0, opacity: 0 }, { y: 330, opacity: 1, duration: 0.55, ease: 'power1.inOut' }, 5.05);
+            tl.to('#s4-scan', { opacity: 0, duration: 0.15 }, 5.6);
+            tl.to('#s4-h1', { backgroundColor: 'rgba(30,158,88,0.45)', duration: 0.15 }, 5.2);
+            tl.to('#s4-h2', { backgroundColor: 'rgba(240,131,42,0.5)', duration: 0.15 }, 5.38);
+            fly(1, 5.5, 900, 470);
+            // ===== Spreadsheet
+            tl.fromTo('#s4-w3', { opacity: 0, y: 90, rotationX: 12 }, { opacity: 1, y: 0, rotationX: 0, duration: 0.5, ease: 'power3.out' }, 5.62);
+            camTo(5.62, 0.6, 620, 650, 1.08);
+            tl.fromTo('.s4-cell', { opacity: 0 }, { opacity: 1, duration: 0.1, stagger: 0.022 }, 5.8);
+            move(5.75, 0.6, 520, 790); click(6.42, 520, 790);
+            tl.fromTo('.s4-tot', { backgroundColor: 'rgba(30,158,88,0.06)' }, { backgroundColor: 'rgba(30,158,88,0.30)', duration: 0.2 }, 6.45);
+            fly(2, 6.55, 440, 790);
+            // ===== Calendar
+            tl.fromTo('#s4-w4', { opacity: 0, x: 60, y: -50, scale: 0.92 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' }, 6.75);
+            camTo(6.75, 0.6, 1160, 420, 1.08);
+            move(6.85, 0.3, 1000, 525); click(7.15, 1000, 525);
+            tl.fromTo('#s4-newev', { scaleX: 0.05, scaleY: 0.6, opacity: 0 }, { scaleX: 1, scaleY: 1, opacity: 1, duration: 0.35, ease: 'power3.out' }, 7.15);
+            move(7.18, 0.32, 1370, 560);
+            fly(3, 7.5, 1100, 525);
+
+            // ===== Phase C: pull back — it works like an employee at a computer
+            camTo(7.9, 0.8, 960, 540, 0.86);
+            tl.to('#s4-mon3d', { rotationY: -13, rotationX: 6, duration: 0.9, ease: 'power3.inOut' }, 7.9);
+            const tiles = [['#s4-w1', 200, 175, 610, 340], ['#s4-w2', 830, 175, 590, 340], ['#s4-w3', 200, 530, 610, 340], ['#s4-w4', 830, 530, 590, 340]];
+            tiles.forEach(function (t, i) {
+              const el = root.querySelector(t[0]);
+              const bx = AF.box(el); const w = bx.w, h = bx.h, s = Math.min(t[3] / w, t[4] / h);
+              const nx = t[1] + (t[3] - w * s) / 2, ny = t[2] + (t[4] - h * s) / 2;
+              // transform-origin is center: shift so the scaled box lands in its tile
+              tl.to(t[0], { x: nx + w * s / 2 - (bx.l + w / 2), y: ny + h * s / 2 - (bx.t + h / 2), scale: s, duration: 0.8, ease: 'power3.inOut' }, 7.95 + i * 0.04);
+            });
+            move(8.3, 0.5, 560, 760); click(8.82, 560, 760);
+            move(8.95, 0.45, 1150, 330); click(9.42, 1150, 330);
+            tl.set('#s4-pilltxt', { textContent: '4 TOOLS USED' }, 8.4);
+            tl.to('#s4-mon3d', { rotationY: 0, rotationX: 0, duration: 0.5, ease: 'power3.inOut' }, 9.15);
+
+            // ===== hand-off: collected items fly out to scene 5
+            const S5 = [[330, 300], [1590, 300], [330, 780], [1590, 780]];
+            for (let i = 0; i < 4; i++) {
+              // tray chip screen position under cam (scale .86 around 960,540)
+              const lx = 1466 + 125, ly = 232 + i * 68 + 26;
+              const sx = 960 + 0.86 * (lx - 960), sy = 540 + 0.86 * (ly - 540);
+              tl.set('#s4-c' + i, { opacity: 0 }, 9.68);
+              tl.fromTo('#s4-o' + i, { x: sx - 125, y: sy - 26, scale: 0.86, opacity: 0 }, { opacity: 1, duration: 0.01 }, 9.67);
+              tl.to('#s4-o' + i, { x: S5[i][0] - 125, y: S5[i][1] - 26, scale: 1, duration: 0.85, ease: 'power3.inOut' }, 9.7 + i * 0.04);
+            }
+            tl.to('#s4-cam', { scale: 0.6, opacity: 0, filter: 'blur(10px)', duration: 0.7, ease: 'power3.in' }, 9.75);
+
+            AF.allow('#s4 .wn *, #s4-cur, #s4-cur *, #s4-cal *');
+            window.__timelines['s4-tools'] = tl;
+          }
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); else build();
+        })();
+      </script>
+    </template>
+  </body>
+</html>

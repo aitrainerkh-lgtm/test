@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #s1 { position: absolute; inset: 0; overflow: hidden; }
+        #s1-cam { position: absolute; inset: 0; transform-origin: 1330px 900px; }
+        #s1-video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; object-fit: cover; }
+        #s1-ui { position: absolute; inset: 0; perspective: 1400px; }
+        #s1 .card { position: absolute; }
+        #s1 .far { filter: blur(1.6px); }
+        #s1 .row { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 16px; border-bottom: 1px solid rgba(29,33,37,.05); }
+        #s1 .av { width: 26px; height: 26px; border-radius: 50%; flex: none; }
+        #s1 .nm { font: 600 14px 'Inter', sans-serif; color: #1D2125; width: 104px; white-space: nowrap; }
+        #s1 .badge { margin-left: auto; min-width: 44px; height: 26px; padding: 0 9px; border-radius: 999px; background: #B9541A; color: #fff; font: 700 14px 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; }
+        #s1 .tab { height: 30px; width: 84px; border-radius: 8px 8px 0 0; background: rgba(29,33,37,.06); margin-right: 4px; display: flex; align-items: center; gap: 6px; padding: 0 8px; }
+        #s1 .cell { position: absolute; height: 34px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font: 500 13px 'JetBrains Mono', monospace; color: #1D2125; border-right: 1px solid rgba(29,33,37,.06); border-bottom: 1px solid rgba(29,33,37,.06); }
+        #s1 .toast { position: absolute; left: 1540px; top: 36px; width: 340px; height: 66px; border-radius: 16px; display: flex; align-items: center; gap: 12px; padding: 0 14px; }
+        #s1 .toast .ti { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex: none; }
+        #s1 .toast b { display: block; font: 700 15px 'Inter', sans-serif; color: #1D2125; }
+        #s1 .toast span { display: block; font: 500 13px 'Inter', sans-serif; color: #59616A; margin-top: 2px; }
+        #s1 .bubble { position: absolute; padding: 14px 18px; border-radius: 18px 18px 18px 6px; font: 600 17px 'Inter', sans-serif; color: #1D2125; white-space: nowrap; }
+        #s1 .tag { position: absolute; height: 38px; padding: 0 14px; border-radius: 999px; display: flex; align-items: center; gap: 8px; font: 700 14px 'Inter', sans-serif; color: #fff; letter-spacing: .02em; }
+        #s1-flash { position: absolute; inset: 0; background: #F7F9F8; opacity: 0; }
+        #s1-shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 40% 50%, rgba(255,255,255,0) 50%, rgba(30,40,35,.16) 100%); }
+      </style>
+
+      <div id="s1" data-composition-id="s1-hook" data-width="1920" data-height="1080" data-duration="4.45" class="af">
+        <div id="s1-cam">
+          <video id="s1-video" class="clip" src="assets/media/employee.mp4" data-start="0" data-duration="4.45" data-media-start="1.3" data-track-index="2" muted playsinline></video>
+          <div id="s1-shade"></div>
+          <div id="s1-ui">
+            <!-- top-left: mini chart (far) -->
+            <div class="card glass far" id="s1-c6" style="left:40px;top:60px;width:250px;height:160px;">
+              <div style="position:absolute;left:18px;top:14px;" class="eyebrow">Sales</div>
+              <div id="s1-bars" style="position:absolute;left:18px;bottom:16px;width:214px;height:90px;display:flex;align-items:flex-end;gap:10px;">
+                <i style="display:block;flex:1;height:40%;border-radius:5px 5px 0 0;background:#BFE8D0"></i>
+                <i style="display:block;flex:1;height:65%;border-radius:5px 5px 0 0;background:#8FD8B0"></i>
+                <i style="display:block;flex:1;height:50%;border-radius:5px 5px 0 0;background:#5FC892"></i>
+                <i style="display:block;flex:1;height:85%;border-radius:5px 5px 0 0;background:#1E9E58"></i>
+                <i style="display:block;flex:1;height:70%;border-radius:5px 5px 0 0;background:#F0832A"></i>
+              </div>
+            </div>
+            <!-- left: document (far) -->
+            <div class="card win far" id="s1-c5" style="left:34px;top:300px;width:230px;height:300px;">
+              <div class="win-bar"><div class="win-dots"><i></i><i></i><i></i></div>Report.docx</div>
+              <div style="padding:18px;display:flex;flex-direction:column;gap:12px;">
+                <div class="sk" style="width:70%;height:14px;background:rgba(29,33,37,.18)"></div>
+                <div class="sk" style="width:100%"></div><div class="sk" style="width:92%"></div><div class="sk" style="width:96%"></div>
+                <div class="sk g" style="width:60%"></div><div class="sk" style="width:88%"></div><div class="sk" style="width:74%"></div>
+              </div>
+            </div>
+            <!-- inbox -->
+            <div class="card win" id="s1-c1" style="left:1150px;top:96px;width:400px;height:262px;">
+              <div class="win-bar"><div class="win-dots"><i></i><i></i><i></i></div>Inbox<div class="badge" id="s1-count">12</div></div>
+              <div id="s1-rows" style="position:relative;height:220px;overflow:hidden;">
+                <div class="row s1-mail"><div class="av" style="background:#1E9E58"></div><div class="nm">Finance Team</div><div class="sk" style="width:150px"></div></div>
+                <div class="row s1-mail"><div class="av" style="background:#F0832A"></div><div class="nm">Sales Dept.</div><div class="sk" style="width:130px"></div></div>
+                <div class="row s1-mail"><div class="av" style="background:#13927F"></div><div class="nm">HR Office</div><div class="sk" style="width:160px"></div></div>
+                <div class="row s1-mail"><div class="av" style="background:#59616A"></div><div class="nm">Director</div><div class="sk" style="width:120px"></div></div>
+              </div>
+            </div>
+            <!-- chat bubbles near her -->
+            <div class="bubble glass" id="s1-b1" style="left:800px;top:150px;">Can you send the sales report?</div>
+            <div class="bubble glass" id="s1-b2" style="left:860px;top:236px;">Need it before 5 PM</div>
+            <!-- browser -->
+            <div class="card win" id="s1-c2" style="left:1110px;top:420px;width:540px;height:300px;">
+              <div style="height:40px;display:flex;align-items:flex-end;padding:0 10px;background:rgba(246,248,247,.95);" id="s1-tabs">
+                <div class="tab s1-tab"><div class="sk" style="width:50px;height:8px"></div></div>
+                <div class="tab s1-tab"><div class="sk" style="width:50px;height:8px"></div></div>
+                <div class="tab s1-tab"><div class="sk" style="width:50px;height:8px"></div></div>
+                <div class="tab s1-tab"><div class="sk" style="width:50px;height:8px"></div></div>
+                <div class="tab s1-tab"><div class="sk" style="width:50px;height:8px"></div></div>
+                <div class="tab s1-tab"><div class="sk" style="width:50px;height:8px"></div></div>
+              </div>
+              <div style="height:38px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid rgba(29,33,37,.06);">
+                <div style="flex:1;height:24px;border-radius:999px;background:rgba(29,33,37,.06);position:relative;overflow:hidden;"><div id="s1-load" style="position:absolute;left:0;top:0;bottom:0;width:100%;background:rgba(30,158,88,.35);transform-origin:left center;"></div></div>
+              </div>
+              <div style="padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <div style="height:90px;border-radius:12px;background:rgba(29,33,37,.06)"></div>
+                <div style="display:flex;flex-direction:column;gap:10px;"><div class="sk" style="width:90%"></div><div class="sk"></div><div class="sk" style="width:70%"></div><div class="sk o" style="width:50%"></div></div>
+                <div style="display:flex;flex-direction:column;gap:10px;"><div class="sk"></div><div class="sk" style="width:80%"></div></div>
+                <div style="display:flex;flex-direction:column;gap:10px;"><div class="sk" style="width:85%"></div><div class="sk g" style="width:60%"></div></div>
+              </div>
+            </div>
+            <!-- calendar (far) -->
+            <div class="card win far" id="s1-c4" style="left:1676px;top:430px;width:220px;height:220px;">
+              <div class="win-bar">Calendar</div>
+              <div style="position:relative;height:178px;padding:12px;">
+                <div style="position:absolute;left:12px;top:14px;width:90px;height:34px;border-radius:8px;background:rgba(30,158,88,.25)" class="s1-ev"></div>
+                <div style="position:absolute;left:108px;top:30px;width:90px;height:50px;border-radius:8px;background:rgba(240,131,42,.3)" class="s1-ev"></div>
+                <div style="position:absolute;left:12px;top:60px;width:90px;height:44px;border-radius:8px;background:rgba(19,146,127,.25)" class="s1-ev"></div>
+                <div style="position:absolute;left:108px;top:92px;width:90px;height:30px;border-radius:8px;background:rgba(30,158,88,.25)" class="s1-ev"></div>
+                <div style="position:absolute;left:12px;top:116px;width:90px;height:40px;border-radius:8px;background:rgba(240,131,42,.3)" class="s1-ev"></div>
+                <div style="position:absolute;left:108px;top:132px;width:90px;height:26px;border-radius:8px;background:rgba(89,97,106,.2)" class="s1-ev"></div>
+              </div>
+            </div>
+            <!-- spreadsheet (near) -->
+            <div class="card win" id="s1-c3" style="left:1450px;top:720px;width:430px;height:300px;">
+              <div class="win-bar"><div class="win-dots"><i></i><i></i><i></i></div>Q3_Sales.xlsx</div>
+              <div id="s1-grid" style="position:relative;height:258px;"></div>
+            </div>
+            <!-- clock -->
+            <div class="chip" id="s1-clock" style="left:110px;top:940px;height:58px;padding:0 22px 0 14px;font-size:24px;">
+              <div class="dot" style="background:rgba(240,131,42,.15);width:34px;height:34px;">__CLOCK__</div>
+              <span id="s1-time" class="mono" style="font-weight:700;">09:00</span>
+            </div>
+            <!-- pressure tags -->
+            <div class="tag" id="s1-t1" style="left:880px;top:560px;background:#B9541A;">URGENT</div>
+            <div class="tag" id="s1-t2" style="left:1290px;top:372px;background:#1D2125;">+12 TASKS</div>
+            <div class="tag" id="s1-t3" style="left:1180px;top:742px;background:#B83A32;">OVERDUE</div>
+            <!-- toasts -->
+            <div class="toast glass s1-toast" id="s1-n0"><div class="ti" style="background:rgba(30,158,88,.14)">__MAIL__</div><div><b>New email</b><span>Finance Team · 2 files</span></div></div>
+            <div class="toast glass s1-toast" id="s1-n1"><div class="ti" style="background:rgba(240,131,42,.16)">__CAL__</div><div><b>Meeting in 10 min</b><span>Weekly sales review</span></div></div>
+            <div class="toast glass s1-toast" id="s1-n2"><div class="ti" style="background:rgba(29,33,37,.08)">__CHAT__</div><div><b>3 new messages</b><span>Operations group</span></div></div>
+            <div class="toast glass s1-toast" id="s1-n3"><div class="ti" style="background:rgba(240,131,42,.16)">__BELL__</div><div><b>Report due today</b><span>Daily business report</span></div></div>
+            <div class="toast glass s1-toast" id="s1-n4"><div class="ti" style="background:rgba(30,158,88,.14)">__DOC__</div><div><b>Document shared</b><span>Budget_2026.xlsx</span></div></div>
+          </div>
+        </div>
+        <div id="s1-flash"></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.getElementById('s1');
+          // icons
+          const rep = { __CLOCK__: AF.icon('clock', 20, '#F0832A', 2.2), __MAIL__: AF.icon('mail', 20, '#1E9E58'), __CAL__: AF.icon('calendar', 20, '#F0832A'),
+            __CHAT__: AF.icon('chat', 20, '#1D2125'), __BELL__: AF.icon('bell', 20, '#F0832A'), __DOC__: AF.icon('doc', 20, '#1E9E58') };
+          root.querySelectorAll('.dot, .ti').forEach(function (el) { const k = el.textContent.trim(); if (rep[k]) el.innerHTML = rep[k]; });
+          // spreadsheet grid
+          const grid = document.getElementById('s1-grid');
+          const vals = ['$12,480', '$9,820', '$7,310', '$8,640', '$4,700', '$15,230', '$6,950', '$11,200', '$3,980', '$9,140', '$5,560', '$13,720', '$8,090', '$10,450', '$7,770'];
+          let html = '';
+          for (let r = 0; r < 6; r++) for (let c = 0; c < 4; c++) {
+            const head = r === 0;
+            const txt = head ? ['Branch', 'Mon', 'Tue', 'Wed'][c] : (c === 0 ? ['PP', 'SR', 'BB', 'SHV', 'KP'][r - 1] : vals[((r - 1) * 3 + c - 1) % vals.length]);
+            html += '<div class="cell s1-cell' + (head ? ' hd' : '') + '" style="left:' + (c === 0 ? 0 : 70 + (c - 1) * 120) + 'px;top:' + (r * 40 + 6) + 'px;width:' + (c === 0 ? 70 : 120) + 'px;' +
+              (head ? 'font-family:Inter;font-weight:700;color:#59616A;background:rgba(29,33,37,.03);' : '') + (c === 0 && !head ? 'font-family:Inter;font-weight:600;justify-content:flex-start;padding-left:12px;' : '') + '">' + txt + '</div>';
+          }
+          grid.innerHTML = html;
+
+          const tl = gsap.timeline({ paused: true });
+
+          // camera: slow push toward the laptop, then a zoom-through into it
+          tl.fromTo('#s1-cam', { scale: 1, filter: 'blur(0px)' }, { scale: 1.1, duration: 3.55, ease: 'sine.inOut' }, 0);
+          tl.to('#s1-cam', { scale: 3.6, duration: 0.9, ease: 'power3.in' }, 3.55);
+          tl.to('#s1-cam', { filter: 'blur(16px)', duration: 0.6, ease: 'power2.in' }, 3.85);
+          tl.fromTo('#s1-flash', { opacity: 0 }, { opacity: 1, duration: 0.42, ease: 'power2.in' }, 4.03);
+
+          // cards: staggered depth entrances
+          const cards = [['#s1-c6', 0.05, 0.4], ['#s1-c1', 0.22, 0.7], ['#s1-b1', 0.42, 0.8], ['#s1-c2', 0.62, 0.85], ['#s1-c5', 0.85, 0.35],
+            ['#s1-c4', 1.05, 0.4], ['#s1-c3', 1.25, 1.0], ['#s1-b2', 1.5, 0.8], ['#s1-clock', 0.12, 0.9]];
+          cards.forEach(function (c) {
+            tl.fromTo(c[0], { opacity: 0, scale: 0.72, y: 36, rotationX: 14 }, { opacity: 1, scale: 1, y: 0, rotationX: 0, duration: 0.55, ease: 'power3.out' }, c[1]);
+            // slow parallax drift while held (depth-scaled), then fly past camera on the zoom-through
+            const el = root.querySelector(c[0]);
+            const bx = AF.box(el); const bw = bx.w || 320, bh = bx.h || 60;
+            const cx = bx.l + bw / 2 - 1330, cy = bx.t + bh / 2 - 900;
+            const len = Math.max(1, Math.hypot(cx, cy));
+            tl.to(c[0], { x: (cx / len) * 26 * c[2], y: (cy / len) * 18 * c[2], duration: 3.55 - c[1] - 0.55, ease: 'none' }, c[1] + 0.55);
+            tl.to(c[0], { x: (cx / len) * 900 * c[2], y: (cy / len) * 700 * c[2], scale: 1 + 1.4 * c[2], opacity: 0, duration: 0.75, ease: 'power3.in' }, 3.58 + (1 - c[2]) * 0.08);
+          });
+
+          // inbox: new mails slide in, counter climbs
+          tl.fromTo('.s1-mail', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out', stagger: 0.32 }, 0.5);
+          AF.count(tl, document.getElementById('s1-count'), 12, 47, 0.35, 3.1, null, 'power1.in');
+          // browser tabs pile up + loader sweeps
+          tl.fromTo('.s1-tab', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out', stagger: 0.18 }, 0.85);
+          tl.fromTo('#s1-load', { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: 'power1.inOut' }, 1.0);
+          tl.to('#s1-load', { opacity: 0, duration: 0.2 }, 2.05);
+          tl.set('#s1-load', { scaleX: 0 }, 2.25);
+          tl.to('#s1-load', { opacity: 1, duration: 0.1 }, 2.25);
+          tl.to('#s1-load', { scaleX: 0.85, duration: 1.2, ease: 'power1.inOut' }, 2.26);
+          // spreadsheet cells fill
+          tl.fromTo('#s1 .s1-cell:not(.hd)', { opacity: 0 }, { opacity: 1, duration: 0.12, stagger: 0.06 }, 1.45);
+          // calendar events pop
+          tl.fromTo('.s1-ev', { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: 0.3, ease: 'power3.out', stagger: 0.16 }, 1.2);
+          // mini chart bars
+          tl.fromTo('#s1-bars i', { scaleY: 0, transformOrigin: 'bottom center' }, { scaleY: 1, duration: 0.5, ease: 'power3.out', stagger: 0.08 }, 0.2);
+          // clock races through the working day
+          const tEl = document.getElementById('s1-time'); const clk = { m: 540 };
+          tl.fromTo(clk, { m: 540 }, { m: 1065, duration: 3.4, ease: 'power1.in', onUpdate: function () {
+            const m = Math.round(clk.m); tEl.textContent = String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+          } }, 0.15);
+          // notifications stack in from the right, pushing older ones down
+          const nt = [0.55, 1.05, 1.5, 1.95, 2.4];
+          nt.forEach(function (t, i) {
+            tl.fromTo('#s1-n' + i, { x: 120, opacity: 0, y: 0 }, { x: 0, opacity: 1, duration: 0.42, ease: 'power3.out' }, t);
+            for (let j = 0; j < i; j++) tl.to('#s1-n' + j, { y: '+=76', duration: 0.35, ease: 'power3.out' }, t);
+          });
+          tl.to('.s1-toast', { x: 700, opacity: 0, duration: 0.6, ease: 'power3.in', stagger: 0.03 }, 3.55);
+          // pressure tags slam in late
+          [['#s1-t1', 2.55], ['#s1-t2', 2.75], ['#s1-t3', 2.95]].forEach(function (t) {
+            tl.fromTo(t[0], { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, t[1]);
+            tl.to(t[0], { opacity: 0, scale: 2.2, duration: 0.5, ease: 'power3.in' }, 3.6);
+          });
+
+          window.__timelines['s1-hook'] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

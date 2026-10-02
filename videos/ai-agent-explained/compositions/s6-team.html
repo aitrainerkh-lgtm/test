@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/SpaceGrotesk.ttf') format('truetype'); font-weight: 300 700; }
+        #s6 { position: absolute; inset: 0; overflow: hidden; }
+        #s6-persp { position: absolute; inset: 0; perspective: 2400px; }
+        #s6-stage { position: absolute; inset: 0; transform-origin: 960px 560px; }
+        #s6-title { position: absolute; left: 0; width: 1920px; top: 70px; text-align: center; font-size: 104px; }
+        #s6-title .ac { color: #178A4C; }
+        #s6-sub { position: absolute; left: 0; width: 1920px; top: 192px; text-align: center; font: 600 24px 'Inter', sans-serif; color: #59616A; }
+        #s6-lead { position: absolute; left: 860px; top: 460px; width: 200px; height: 200px; }
+        #s6-task { left: 660px; top: 470px; width: 600px; height: 190px; }
+        #s6 .seg { position: absolute; top: 96px; height: 64px; width: 128px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; font: 700 15px 'Inter', sans-serif; color: #fff; }
+        #s6 .tm { position: absolute; width: 380px; height: 226px; border-radius: 22px; }
+        #s6 .tm-h { position: absolute; left: 0; top: 0; right: 0; height: 74px; display: flex; align-items: center; gap: 12px; padding: 0 18px; }
+        #s6 .tm-h b { font: 700 21px 'Inter', sans-serif; color: #1D2125; white-space: nowrap; }
+        #s6 .tm-h span { display: block; font: 600 14px 'Inter', sans-serif; color: #59616A; margin-top: 2px; }
+        #s6 .ring { position: absolute; right: 16px; top: 16px; width: 46px; height: 46px; }
+        #s6 .ringok { position: absolute; right: 23px; top: 23px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; }
+        #s6 .tm-b { position: absolute; left: 18px; right: 18px; top: 84px; bottom: 16px; }
+        #s6 .rrow { position: absolute; left: 0; right: 0; height: 32px; display: flex; align-items: center; gap: 10px; }
+        #s6 .av { position: absolute; width: 40px; height: 40px; border-radius: 50%; }
+        #s6 .avok { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #1E9E58; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; }
+        #s6 .pk { position: absolute; left: 0; top: 0; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; }
+        #s6-result { left: 700px; top: 610px; width: 520px; height: 300px; border-radius: 24px; }
+        #s6 .rk { position: absolute; width: 228px; height: 44px; border-radius: 12px; background: rgba(30,158,88,.08); display: flex; align-items: center; gap: 10px; padding: 0 12px; font: 600 17px 'Inter', sans-serif; color: #1D2125; }
+        #s6 .rk i { width: 24px; height: 24px; border-radius: 50%; background: #1E9E58; display: flex; align-items: center; justify-content: center; }
+        #s6-burst { position: absolute; left: 860px; top: 460px; width: 200px; height: 200px; border-radius: 50%; border: 4px solid rgba(51,194,122,.8); opacity: 0; }
+      </style>
+
+      <div id="s6" data-composition-id="s6-team" data-width="1920" data-height="1080" data-duration="9.28" class="af">
+        <div id="s6-persp"><div id="s6-stage">
+          <svg id="s6-lines" width="1920" height="1080" style="position:absolute;left:0;top:0;overflow:visible"></svg>
+          <div id="s6-pks"></div>
+          <div id="s6-burst"></div>
+          <div id="s6-lead"></div>
+          <div id="s6-teams"></div>
+          <div class="glass" id="s6-task">
+            <div class="eyebrow" style="position:absolute;left:24px;top:24px;color:#F0832A">Big assignment</div>
+            <div style="position:absolute;left:24px;top:50px;font:700 26px 'Space Grotesk',sans-serif;color:#1D2125;">Monthly business review</div>
+            <div id="s6-segs"></div>
+          </div>
+          <div class="glass" id="s6-result">
+            <div class="eyebrow" style="position:absolute;left:26px;top:24px;">Final result</div>
+            <div style="position:absolute;left:26px;top:52px;font:700 30px 'Space Grotesk',sans-serif;color:#1D2125;">Daily Business Report</div>
+            <div style="position:absolute;right:22px;top:24px;height:34px;padding:0 14px;border-radius:999px;background:rgba(240,131,42,.14);color:#C2621A;font:700 14px 'Inter',sans-serif;display:flex;align-items:center;letter-spacing:.04em;">READY FOR REVIEW</div>
+            <div id="s6-rks"></div>
+          </div>
+          <div id="s6-title" class="kt"><span class="wmask"><span class="w s6-tw ac">AI</span></span><span class="wsp">&nbsp;</span><span class="wmask"><span class="w s6-tw">TEAM</span></span></div>
+          <div id="s6-sub"><span id="s6-subtxt"></span></div>
+        </div></div>
+      </div>
+
+      <script>
+        (function () {
+          const root = document.getElementById('s6');
+          document.getElementById('s6-lead').innerHTML = AF.agent('s6-ag', 200);
+          const A = [
+            { n: 'Research Agent', d: 'Market & news', ic: 'search', tone: 'green', col: '#1E9E58', box: [150, 236] },
+            { n: 'Finance Agent', d: 'Sales & cash', ic: 'dollar', tone: 'orange', col: '#F0832A', box: [1390, 236] },
+            { n: 'HR Agent', d: 'Staff & attendance', ic: 'users', tone: 'teal', col: '#13927F', box: [150, 650] },
+            { n: 'Reporting Agent', d: 'Charts & summary', ic: 'report', tone: 'amber', col: '#E8A317', box: [1390, 650] }
+          ];
+          // segments on the assignment card
+          document.getElementById('s6-segs').innerHTML = A.map(function (a, i) {
+            return '<div class="seg s6-seg" id="s6-seg' + i + '" style="left:' + (24 + i * 140) + 'px;background:' + a.col + ';">' + AF.icon(a.ic, 18, '#fff', 2.4) + a.n.split(' ')[0] + '</div>';
+          }).join('');
+          // team cards
+          let th = '';
+          A.forEach(function (a, i) {
+            th += '<div class="tm glass s6-tm" id="s6-tm' + i + '" style="left:' + a.box[0] + 'px;top:' + a.box[1] + 'px;">' +
+              '<div class="tm-h"><div style="position:relative;width:52px;height:52px;flex:none;" id="s6-mini' + i + '">' + AF.agent('s6-a' + i, 52, { tone: a.tone }) + '</div><div><b>' + a.n + '</b><span>' + a.d + '</span></div></div>' +
+              '<svg class="ring" viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="rgba(29,33,37,.08)" stroke-width="4"/><circle id="s6-rg' + i + '" cx="23" cy="23" r="19" fill="none" stroke="' + a.col + '" stroke-width="4" stroke-linecap="round" transform="rotate(-90 23 23)" stroke-dasharray="119.4" stroke-dashoffset="119.4"/></svg>' +
+              '<div class="ringok" id="s6-ok' + i + '" style="background:' + a.col + '">' + AF.icon('check', 18, '#fff', 3) + '</div>' +
+              '<div class="tm-b" id="s6-b' + i + '"></div></div>';
+          });
+          document.getElementById('s6-teams').innerHTML = th;
+          // card bodies (mini live work)
+          document.getElementById('s6-b0').innerHTML = [0, 1, 2].map(function (k) {
+            return '<div class="rrow s6-rr" style="top:' + (k * 40) + 'px;"><div style="width:30px;height:30px;border-radius:9px;background:rgba(30,158,88,.12);display:flex;align-items:center;justify-content:center;">' + AF.icon(['globe', 'doc', 'search'][k], 16, '#1E9E58', 2.2) + '</div><div class="sk" style="width:' + [230, 190, 210][k] + 'px"></div></div>';
+          }).join('');
+          document.getElementById('s6-b1').innerHTML = '<div id="s6-fin" style="position:absolute;left:0;top:0;font:700 34px \'Space Grotesk\',sans-serif;color:#1D2125;">$0</div><div style="position:absolute;left:0;top:44px;font:600 14px Inter;color:#59616A">Revenue today</div>' +
+            '<div style="position:absolute;right:0;bottom:4px;width:150px;height:96px;display:flex;align-items:flex-end;gap:8px;">' + [45, 70, 52, 88, 64].map(function (h) {
+              return '<i class="s6-fb" style="display:block;flex:1;height:' + h + '%;border-radius:5px 5px 0 0;background:' + (h === 88 ? '#F0832A' : 'rgba(240,131,42,.35)') + '"></i>';
+            }).join('') + '</div>';
+          let hr = '';
+          for (let k = 0; k < 6; k++) {
+            const x = (k % 6) * 56, y = 18;
+            hr += '<div class="av s6-av" style="left:' + x + 'px;top:' + y + 'px;background:' + ['#C9E9D8', '#F8D9BE', '#BFE3DC', '#DCE2DF', '#F8D9BE', '#C9E9D8'][k] + ';display:flex;align-items:center;justify-content:center;">' + AF.icon('user', 20, '#59616A', 2) + '</div>';
+            hr += '<div class="avok s6-avok" style="left:' + (x + 26) + 'px;top:' + (y + 26) + 'px;">' + AF.icon('check', 11, '#fff', 3.4) + '</div>';
+          }
+          hr += '<div style="position:absolute;left:0;top:76px;font:600 15px Inter;color:#59616A"><span id="s6-hrn">0</span>/6 checked in</div>';
+          document.getElementById('s6-b2').innerHTML = hr;
+          document.getElementById('s6-b3').innerHTML = '<div class="sk s6-dl" style="width:62%;height:14px;background:rgba(29,33,37,.18)"></div>' +
+            [88, 74, 92, 60].map(function (w, k) { return '<div class="sk s6-dl" style="margin-top:12px;width:' + w + '%"></div>'; }).join('') +
+            '<div style="position:absolute;right:0;top:0;width:92px;height:84px;border-radius:10px;background:rgba(232,163,23,.12);display:flex;align-items:flex-end;gap:6px;padding:10px;">' + [40, 65, 50, 85].map(function (h) { return '<i class="s6-rb" style="display:block;flex:1;height:' + h + '%;border-radius:3px;background:#E8A317"></i>'; }).join('') + '</div>';
+          // result rows
+          document.getElementById('s6-rks').innerHTML = A.map(function (a, i) {
+            return '<div class="rk s6-rk" style="left:' + (26 + (i % 2) * 242) + 'px;top:' + (128 + Math.floor(i / 2) * 56) + 'px;"><i style="background:' + a.col + '">' + AF.icon('check', 14, '#fff', 3.2) + '</i>' + a.n.replace(' Agent', '') + '</div>';
+          }).join('');
+          // connection lines lead -> cards (inner edge anchors)
+          const anchors = [[530, 349], [1390, 349], [530, 763], [1390, 763]];
+          const L = 960, T = 560;
+          document.getElementById('s6-lines').innerHTML = anchors.map(function (p, i) {
+            const mx = (L + p[0]) / 2;
+            return '<path id="s6-ln' + i + '" d="M' + L + ' ' + T + ' C ' + mx + ' ' + T + ', ' + mx + ' ' + p[1] + ', ' + p[0] + ' ' + p[1] + '" fill="none" stroke="' + A[i].col + '" stroke-width="3" stroke-linecap="round" opacity=".55"/>';
+          }).join('');
+          let pk = '';
+          for (let i = 0; i < 4; i++) for (let k = 0; k < 7; k++) pk += '<div class="pk s6-pk" id="s6-pk' + i + '-' + k + '" style="background:' + A[i].col + ';box-shadow:0 0 14px 4px ' + A[i].col + '88;"></div>';
+          document.getElementById('s6-pks').innerHTML = pk;
+
+          function build() {
+            const tl = gsap.timeline({ paused: true });
+            // camera: a tilted table that slowly settles
+            tl.fromTo('#s6-stage', { rotationX: 16, scale: 0.94, y: 30 }, { rotationX: 4, scale: 1.02, y: 0, duration: 9.28, ease: 'sine.inOut' }, 0);
+            // entry carried up from scene 5
+            tl.fromTo('#s6-task', { y: 230, opacity: 0.35 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power4.out' }, 0);
+            tl.fromTo('.s6-seg', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power3.out', stagger: 0.06 }, 0.15);
+            tl.fromTo('.s6-tw', { yPercent: 105 }, { yPercent: 0, duration: 0.6, ease: 'expo.out', stagger: 0.09 }, 0.25);
+            tl.set('#s6-subtxt', { textContent: '' }, 0);
+            AF.type(tl, document.getElementById('s6-subtxt'), 'One agent leads. Specialist agents work in parallel.', 1.1, 1.1);
+            // the lead agent rises from behind the assignment
+            tl.fromTo('#s6-lead', { y: 60, scale: 0.4, opacity: 0 }, { y: -10, scale: 0.85, opacity: 1, duration: 0.7, ease: 'expo.out' }, 0.9);
+            AF.agentLife(tl, 's6-ag', 0.9, 8.3, 1.4);
+            AF.blink(tl, 's6-ag', 2.6); AF.blink(tl, 's6-ag', 6.1);
+            // assignment splits: segments fly to the four specialists
+            const segX = [24, 164, 304, 444];
+            A.forEach(function (a, i) {
+              const sx = 660 + segX[i] + 64, sy = 470 + 96 + 32;
+              const tx = a.box[0] + 190, ty = a.box[1] + 113;
+              tl.to('#s6-seg' + i, { x: tx - sx, y: ty - sy, scale: 1.2, duration: 0.8, ease: 'power3.inOut' }, 1.45 + i * 0.08);
+              tl.to('#s6-seg' + i, { opacity: 0, scale: 2.2, duration: 0.25, ease: 'power2.in' }, 2.2 + i * 0.08);
+              tl.fromTo('#s6-tm' + i, { opacity: 0, scale: 0.6, rotationY: i % 2 ? -25 : 25 }, { opacity: 1, scale: 1, rotationY: 0, duration: 0.55, ease: 'expo.out' }, 2.15 + i * 0.08);
+              tl.fromTo('#s6-a' + i + '-orb', { scale: 0 }, { scale: 1, duration: 0.5, ease: 'expo.out' }, 2.3 + i * 0.08);
+              AF.agentLife(tl, 's6-a' + i, 2.3, 6.9, 2 + i * 0.3);
+            });
+            tl.to('#s6-task', { scale: 0.6, opacity: 0, y: 40, duration: 0.5, ease: 'power3.in' }, 1.6);
+            tl.to('#s6-lead', { y: 0, scale: 1, duration: 0.7, ease: 'power3.inOut' }, 1.9);
+            // lines draw out from the lead (team named: 3.57–4.97)
+            for (let i = 0; i < 4; i++) {
+              const p = document.getElementById('s6-ln' + i); const len = p.getTotalLength();
+              tl.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 2.6 + i * 0.1);
+            }
+            // packets: outbound (tasks) then inbound (results)
+            function travel(i, k, t0, dur, inbound) {
+              const p = document.getElementById('s6-ln' + i); const len = p.getTotalLength(); const o = { u: 0 };
+              const el = document.getElementById('s6-pk' + i + '-' + k);
+              tl.fromTo(o, { u: 0 }, { u: 1, duration: dur, ease: 'power1.inOut', onUpdate: function () {
+                const pt = p.getPointAtLength((inbound ? 1 - o.u : o.u) * len); el.style.transform = 'translate(' + pt.x + 'px,' + pt.y + 'px)';
+              } }, t0);
+              tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.1 }, t0);
+              tl.to(el, { opacity: 0, duration: 0.1 }, t0 + dur - 0.1);
+            }
+            for (let i = 0; i < 4; i++) {
+              travel(i, 0, 3.3 + i * 0.12, 0.8, false);
+              travel(i, 1, 3.9 + i * 0.12, 0.8, false);
+              travel(i, 2, 7.2 + i * 0.1, 0.75, true);
+              travel(i, 3, 4.5 + i * 0.13, 0.7, true);
+              travel(i, 4, 5.0 + i * 0.13, 0.7, false);
+              travel(i, 5, 5.6 + i * 0.13, 0.7, true);
+              travel(i, 6, 6.2 + i * 0.13, 0.7, false);
+            }
+            // parallel work (4.97–6.82): every card busy at once, rings fill at different paces
+            const finish = [6.55, 6.85, 6.35, 6.95];
+            A.forEach(function (a, i) {
+              tl.fromTo('#s6-rg' + i, { attr: { 'stroke-dashoffset': 119.4 } }, { attr: { 'stroke-dashoffset': 0 }, duration: finish[i] - 4.2, ease: 'power1.inOut' }, 4.2);
+              tl.fromTo('#s6-ok' + i, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'expo.out' }, finish[i]);
+            });
+            tl.fromTo('.s6-rr', { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power3.out', stagger: 0.55 }, 4.3);
+            AF.count(tl, document.getElementById('s6-fin'), 0, 48920, 4.3, 2.4, AF.usd, 'power2.inOut');
+            tl.fromTo('.s6-fb', { scaleY: 0, transformOrigin: 'bottom center' }, { scaleY: 1, duration: 0.5, ease: 'power3.out', stagger: 0.25 }, 4.4);
+            tl.fromTo('.s6-avok', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: 'back.out(2)', stagger: 0.3 }, 4.4);
+            AF.count(tl, document.getElementById('s6-hrn'), 0, 6, 4.4, 1.75, null, 'none');
+            tl.fromTo('.s6-dl', { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: 0.4, ease: 'power2.out', stagger: 0.4 }, 4.3);
+            tl.fromTo('.s6-rb', { scaleY: 0, transformOrigin: 'bottom center' }, { scaleY: 1, duration: 0.4, ease: 'power3.out', stagger: 0.3 }, 5.4);
+
+            // combine: results land in the lead, a single result card emerges
+            tl.set('#s6-burst', { opacity: 0 }, 0);
+            [7.95, 8.15].forEach(function (t) {
+              tl.fromTo('#s6-burst', { scale: 0.7, opacity: 0.9 }, { scale: 2.4, opacity: 0, duration: 0.6, ease: 'expo.out', immediateRender: false }, t);
+            });
+            tl.to('#s6-lead', { y: -150, scale: 0.7, duration: 0.6, ease: 'power3.inOut' }, 7.95);
+            tl.to(['#s6-title', '#s6-sub'], { y: -40, opacity: 0, duration: 0.45, ease: 'power3.in' }, 7.9);
+            tl.fromTo('#s6-result', { opacity: 0, scale: 0.5, y: -60 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'expo.out' }, 8.05);
+            tl.fromTo('.s6-rk', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power3.out', stagger: 0.08 }, 8.3);
+            // hand-off: everything slides out left, the result card glides into scene 7's review position
+            tl.to(['#s6-teams', '#s6-lines', '#s6-lead'], { x: -300, opacity: 0, duration: 0.36, ease: 'power4.in' }, 8.92);
+            tl.to('#s6-result', { x: 150 - 700, y: 300 - 610, duration: 0.36, ease: 'power3.in' }, 8.92);
+
+            AF.allow('#s6 .w');
+            window.__timelines['s6-team'] = tl;
+          }
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); else build();
+        })();
+      </script>
+    </template>
+  </body>
+</html>

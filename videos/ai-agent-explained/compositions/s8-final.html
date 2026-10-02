@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/SpaceGrotesk.ttf') format('truetype'); font-weight: 300 700; }
+        #s8 { position: absolute; inset: 0; overflow: hidden; }
+        #s8-persp { position: absolute; inset: 0; perspective: 2600px; }
+        #s8-world { position: absolute; inset: 0; transform-origin: 960px 540px; }
+        #s8 .tile { position: absolute; width: 576px; height: 324px; border-radius: 14px; overflow: hidden; background: #F2F4F3;
+          box-shadow: 0 0 0 1px rgba(255,255,255,.9), 0 30px 60px -24px rgba(20,36,28,.35); }
+        #s8 .tile img { display: block; width: 576px; height: 324px; object-fit: cover; }
+        #s8-inner { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; transform: scale(0.3); background: #F2F4F3; }
+        #s8-inner .still { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+        #s8-inner .wash { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(242,244,243,.55) 0%, rgba(242,244,243,.18) 45%, rgba(242,244,243,0) 60%); }
+        #s8 .rv-btn-fill { transform: scaleX(0); }
+        #s8 .flow { position: absolute; height: 4px; border-radius: 2px; background: linear-gradient(90deg, rgba(30,158,88,0), rgba(51,194,122,.9), rgba(240,131,42,.8), rgba(240,131,42,0)); }
+        #s8-haze { position: absolute; inset: 0; background: radial-gradient(ellipse 62% 55% at 50% 47%, rgba(246,248,247,.95) 0%, rgba(246,248,247,.84) 50%, rgba(246,248,247,.25) 80%, rgba(246,248,247,0) 100%); }
+        #s8 .line { position: absolute; left: 0; width: 1920px; text-align: center; font-size: 124px; }
+        #s8 .g { color: #1E9E58; }
+        #s8-ul { position: absolute; left: 0; top: 0; height: 12px; border-radius: 6px; background: linear-gradient(90deg, #F0832A, #FFB066); transform-origin: left center; }
+        #s8-brand { position: absolute; left: 0; width: 1920px; top: 900px; display: flex; align-items: center; justify-content: center; gap: 16px; font: 700 30px 'Space Grotesk', sans-serif; color: #1D2125; letter-spacing: -.01em; }
+        #s8-brandag { position: relative; width: 46px; height: 46px; }
+        #s8-end { position: absolute; inset: 0; background: #F2F4F3; }
+      </style>
+
+      <div id="s8" data-composition-id="s8-final" data-width="1920" data-height="1080" data-duration="6.2" class="af">
+        <div id="s8-persp"><div id="s8-world">
+          <div id="s8-flows"></div>
+          <div id="s8-tiles" data-layout-allow-overlap></div>
+        </div></div>
+        <div id="s8-haze"></div>
+        <div class="line kt" data-layout-allow-overlap id="s8-l1" style="top:250px;"><span class="wmask"><span class="w s8-w1">HUMAN</span></span><span class="wsp">&nbsp;</span><span class="wmask"><span class="w s8-w1">LEADS.</span></span></div>
+        <div class="line kt" data-layout-allow-overlap id="s8-l2" style="top:400px;"><span class="wmask"><span class="w s8-w2 g">AI</span></span><span class="wsp">&nbsp;</span><span class="wmask"><span class="w s8-w2 g">AGENTS</span></span><span class="wsp">&nbsp;</span><span class="wmask"><span class="w s8-w2">EXECUTE.</span></span></div>
+        <div class="line kt" data-layout-allow-overlap id="s8-l3" style="top:550px;"><span class="wmask"><span class="w s8-w3">WORK</span></span><span class="wsp">&nbsp;</span><span class="wmask"><span class="w s8-w3">GETS</span></span><span class="wsp">&nbsp;</span><span class="wmask"><span class="w s8-w3">DONE.</span></span></div>
+        <div id="s8-ul"></div>
+        <div id="s8-brand"><div id="s8-brandag"></div><span>AI For Business</span></div>
+        <div id="s8-end"></div>
+      </div>
+
+      <script>
+        (function () {
+          // 3x3 mosaic of the film's workspace; the centre tile is the live scene-7 end frame
+          const TW = 576, TH = 324, GAP = 40;
+          const layout = [['r_10.9', 'r_13.95', 'r_18.45'], ['r_21.9', null, 'r_26.4'], ['r_34.4', 'r_36.5', 'r_46.6']];
+          let th = '', fl = '';
+          for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+            const x = 960 + (c - 1) * (TW + GAP) - TW / 2, y = 540 + (r - 1) * (TH + GAP) - TH / 2;
+            const k = layout[r][c];
+            th += '<div class="tile s8-tile' + (k ? ' s8-side' : '') + '" id="s8-t' + r + c + '" style="left:' + x + 'px;top:' + y + 'px;">' +
+              (k ? '<img src="assets/recap/' + k + '.jpg" alt="" />' :
+                '<div id="s8-inner"><img class="still" src="assets/recap/manager_last.jpg" alt="" /><div class="wash"></div>' + AF.reviewCard('s8c') + '</div>') + '</div>';
+          }
+          // data streams running along the gaps
+          for (let i = 0; i < 2; i++) {
+            const y = 540 + (i - 0.5) * (TH + GAP);
+            fl += '<div class="flow s8-flow-h" style="left:' + (960 - 1.5 * TW - GAP) + 'px;top:' + (y - 2) + 'px;width:340px;"></div>';
+            const x = 960 + (i - 0.5) * (TW + GAP);
+            fl += '<div class="flow s8-flow-v" style="left:' + (x - 2) + 'px;top:' + (540 - 1.5 * TH - GAP) + 'px;width:4px;height:340px;background:linear-gradient(180deg, rgba(30,158,88,0), rgba(51,194,122,.9), rgba(240,131,42,.8), rgba(240,131,42,0));"></div>';
+          }
+          document.getElementById('s8-tiles').innerHTML = th;
+          document.getElementById('s8-flows').innerHTML = fl;
+          document.getElementById('s8-brandag').innerHTML = AF.agent('s8-ag', 46);
+
+          function build() {
+            const tl = gsap.timeline({ paused: true });
+            // start exactly on scene 7's last frame (its camera ended at 1.05x), then pull back through the workspace
+            tl.set('#s8-world', { scale: 1.05 / 0.3, rotationX: 0, rotationY: 0, y: 0, filter: 'blur(0px)' }, 0);
+            tl.to('#s8-world', { scale: 0.92, duration: 1.6, ease: 'expo.out' }, 0.02);
+            tl.to('#s8-world', { rotationX: 16, rotationY: -12, y: -10, duration: 1.8, ease: 'power2.inOut' }, 0.3);
+            tl.to('#s8-world', { scale: 0.84, duration: 4.0, ease: 'sine.inOut' }, 1.65);
+            tl.to('#s8-world', { rotationY: -6, duration: 3.6, ease: 'sine.inOut' }, 2.15);
+            tl.fromTo('.s8-side', { opacity: 0.0 }, { opacity: 1, duration: 0.5, ease: 'power1.out', stagger: 0.03 }, 0.15);
+            tl.to('#s8-world', { filter: 'blur(3px)', duration: 1.0, ease: 'power1.inOut' }, 0.9);
+            // streams of data along the grid
+            tl.fromTo('.s8-flow-h', { x: -200, opacity: 0 }, { x: 1700, opacity: 1, duration: 2.2, ease: 'none', stagger: 0.5 }, 0.6);
+            tl.fromTo('.s8-flow-v', { y: -200, opacity: 0 }, { y: 1100, opacity: 1, duration: 2.0, ease: 'none', stagger: 0.6 }, 0.9);
+            tl.fromTo('#s8-haze', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power2.out' }, 0.15);
+            // the three lines land on the narration
+            tl.fromTo('.s8-w1', { yPercent: 108 }, { yPercent: 0, duration: 0.6, ease: 'expo.out', stagger: 0.09 }, 0.28);
+            tl.fromTo('.s8-w2', { yPercent: 108 }, { yPercent: 0, duration: 0.6, ease: 'expo.out', stagger: 0.09 }, 1.52);
+            tl.fromTo('.s8-w3', { yPercent: 108 }, { yPercent: 0, duration: 0.6, ease: 'expo.out', stagger: 0.09 }, 3.48);
+            tl.fromTo('#s8-l1', { scale: 1.06 }, { scale: 1, duration: 1.0, ease: 'power3.out' }, 0.28);
+            tl.fromTo('#s8-l2', { scale: 1.06 }, { scale: 1, duration: 1.0, ease: 'power3.out' }, 1.52);
+            tl.fromTo('#s8-l3', { scale: 1.06 }, { scale: 1, duration: 1.0, ease: 'power3.out' }, 3.48);
+            // orange underline under WORK GETS DONE.
+            const w3 = AF.measure('WORK GETS DONE.', '700 124px "Space Grotesk"', -4.34);
+            gsap.set('#s8-ul', { x: 960 - w3 / 2, y: 550 + 132, width: w3 });
+            tl.fromTo('#s8-ul', { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: 'power3.inOut' }, 3.95);
+            // brand sign-off
+            tl.fromTo('#s8-brand', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 4.75);
+            tl.fromTo('#s8-ag-orb', { scale: 0 }, { scale: 1, duration: 0.5, ease: 'expo.out' }, 4.8);
+            AF.agentLife(tl, 's8-ag', 4.8, 1.4, 1.5);
+            // elegant close
+            tl.fromTo('#s8-end', { opacity: 0 }, { opacity: 1, duration: 0.45, ease: 'power1.in' }, 5.75);
+
+            AF.allow('#s8 .line, #s8 .line *'); AF.allow('#s8-tiles, #s8-tiles *', 'ignore');
+            window.__timelines['s8-final'] = tl;
+          }
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); else build();
+        })();
+      </script>
+    </template>
+  </body>
+</html>
