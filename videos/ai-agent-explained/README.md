@@ -33,7 +33,10 @@ python3 tools/timeline.py && python3 tools/timing_js.py
 python3 tools/audio_mix.py
 # 3. validate and render
 npx hyperframes lint && npx hyperframes check
-npx hyperframes render --fps 60 --quality high --output renders/what-is-an-ai-agent.mp4
+npx hyperframes render --fps 60 --quality high --workers 4 --output master.mp4
+# delivery encode (film grain makes CRF files very large; two-pass keeps it under 90 MB)
+ffmpeg -i master.mp4 -c:v libx264 -preset slow -tune film -b:v 11500k -pass 1 -an -f mp4 /dev/null
+ffmpeg -i master.mp4 -c:v libx264 -preset slow -tune film -b:v 11500k -pass 2 -movflags +faststart -c:a copy renders/what-is-an-ai-agent.mp4
 ```
 
 `<models-dir>` must contain `kokoro-v1.0-timed.onnx` and `voices-v1.0.bin`. Build the timed model from the release `kokoro-v1.0.onnx` ([kokoro-onnx releases](https://github.com/thewh1teagle/kokoro-onnx/releases)) by adding an `Identity` node that exposes `/encoder/Clip_output_0` as a graph output named `duration`.
