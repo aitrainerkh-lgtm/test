@@ -1,6 +1,12 @@
 {
   "source": "gemini:gemini-3.8-flash",
-  "voice": null,
+  "voice": {
+    "name": "Charon",
+    "models": [
+      "gemini-3.8-flash-tts",
+      "gemini-3.8-flash-lite-tts"
+    ]
+  },
   "lines": [
     {
       "id": "L01",
@@ -20,7 +26,7 @@
     {
       "id": "L04",
       "scene": "anatomy",
-      "text": "វាមានបីផ្នែក៖ ខួរក្បាល AI Model ការចងចាំ និងឧបករណ៍។"
+      "text": "វាមានបីផ្នែកគឺ ខួរក្បាល AI Model ការចងចាំ និងឧបករណ៍។"
     },
     {
       "id": "L05",
@@ -35,22 +41,22 @@
     {
       "id": "L07",
       "scene": "loop",
-      "text": "តើដំណើរការបែបណា? AI Agent ដើរជាវដ្តបួនជំហាន។"
+      "text": "តើដំណើរការយ៉ាងណា? AI Agent ដើរវិលជុំបួនជំហាន។"
     },
     {
       "id": "L08",
       "scene": "loop",
-      "text": "ជំហានមួយ ស្វែងយល់៖ ទទួលគោលដៅ និងព័ត៌មាន។"
+      "text": "ជំហានមួយ ស្វែងយល់៖ ទទួលយកគោលដៅនិងព័ត៌មាន។"
     },
     {
       "id": "L09",
       "scene": "loop",
-      "text": "ជំហានពីរ គិតរៀបចំ៖ បំបែកជាជំហានតូចៗ។"
+      "text": "ជំហានពីរ គិតរៀបចំ៖ បំបែកការងារជាជំហានតូចៗ។"
     },
     {
       "id": "L10",
       "scene": "loop",
-      "text": "ជំហានបី អនុវត្ត៖ ប្រើ Web Search Email ឬ Calendar។"
+      "text": "ជំហានបី អនុវត្ត៖ ចាប់ផ្តើមប្រើ Web Search Email ឬ Calendar។"
     },
     {
       "id": "L11",
