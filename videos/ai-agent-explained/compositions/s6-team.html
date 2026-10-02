@@ -109,7 +109,7 @@
             return '<path id="s6-ln' + i + '" d="M' + L + ' ' + T + ' C ' + mx + ' ' + T + ', ' + mx + ' ' + p[1] + ', ' + p[0] + ' ' + p[1] + '" fill="none" stroke="' + A[i].col + '" stroke-width="3" stroke-linecap="round" opacity=".55"/>';
           }).join('');
           let pk = '';
-          for (let i = 0; i < 4; i++) for (let k = 0; k < 3; k++) pk += '<div class="pk s6-pk" id="s6-pk' + i + '-' + k + '" style="background:' + A[i].col + ';box-shadow:0 0 14px 4px ' + A[i].col + '88;"></div>';
+          for (let i = 0; i < 4; i++) for (let k = 0; k < 7; k++) pk += '<div class="pk s6-pk" id="s6-pk' + i + '-' + k + '" style="background:' + A[i].col + ';box-shadow:0 0 14px 4px ' + A[i].col + '88;"></div>';
           document.getElementById('s6-pks').innerHTML = pk;
 
           function build() {
@@ -158,6 +158,10 @@
               travel(i, 0, 3.3 + i * 0.12, 0.8, false);
               travel(i, 1, 3.9 + i * 0.12, 0.8, false);
               travel(i, 2, 7.2 + i * 0.1, 0.75, true);
+              travel(i, 3, 4.5 + i * 0.13, 0.7, true);
+              travel(i, 4, 5.0 + i * 0.13, 0.7, false);
+              travel(i, 5, 5.6 + i * 0.13, 0.7, true);
+              travel(i, 6, 6.2 + i * 0.13, 0.7, false);
             }
             // parallel work (4.97–6.82): every card busy at once, rings fill at different paces
             const finish = [6.55, 6.85, 6.35, 6.95];

@@ -34,6 +34,7 @@
         #s3-prog i { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; display: block; background: linear-gradient(90deg, #1E9E58, #33C27A); transform-origin: left center; }
         #s3-pct { position: absolute; right: 28px; bottom: 44px; font: 700 18px 'JetBrains Mono', monospace; color: #157A41; }
         #s3-agent { position: absolute; left: 305px; top: 245px; width: 110px; height: 110px; }
+        #s3 .fl-dot { position: absolute; left: 630px; top: 556px; width: 10px; height: 10px; border-radius: 50%; background: #33C27A; box-shadow: 0 0 10px 3px rgba(51,194,122,.55); opacity: 0; }
         #s3 .fgd { position: absolute; border-radius: 50%; filter: blur(5px); }
         #s3-mon { position: absolute; left: 160px; top: 90px; width: 1600px; height: 900px; border-radius: 30px; transform-origin: 0 0; opacity: 0; }
         #s3 .monbar { position: absolute; left: 0; top: 0; right: 0; height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 24px; border-bottom: 1px solid rgba(29,33,37,.07); font: 600 18px 'Inter', sans-serif; color: #59616A; }
@@ -80,6 +81,7 @@
             <div id="s3-pct">0%</div>
             <div id="s3-prog"><i id="s3-progf"></i></div>
           </div>
+          <div id="s3-flow"></div>
           <div id="s3-packet"></div>
         </div>
         <div id="s3-fg"></div>
@@ -113,6 +115,8 @@
             fg += '<div class="fgd" style="left:' + (R() * 3600) + 'px;top:' + (R() * 1000) + 'px;width:' + s + 'px;height:' + s + 'px;background:' + (R() < 0.5 ? 'rgba(30,158,88,.35)' : 'rgba(240,131,42,.3)') + '"></div>';
           }
           document.getElementById('s3-fg').innerHTML = fg;
+          let fd = ''; for (let i = 0; i < 9; i++) fd += '<div class="fl-dot s3-fd" id="s3-fd' + i + '"' + (i % 3 === 2 ? ' style="background:#F0832A;box-shadow:0 0 10px 3px rgba(240,131,42,.5)"' : '') + '></div>';
+          document.getElementById('s3-flow').innerHTML = fd;
 
           function build() {
             const tl = gsap.timeline({ paused: true });
@@ -146,6 +150,13 @@
             tl.to('#s3-agent', { x: 1395 - 360, y: 440 - 300, scale: 0.6, duration: 0.7, ease: 'power3.inOut' }, 6.2);
             tl.to('#s3-agent', { x: 1290 - 360, y: 500 - 300, scale: 150 / 110, duration: 0.55, ease: 'power3.inOut' }, 6.97);
 
+            // ---- continuous data flow along the whole pipeline (finite repeats, seek-safe)
+            for (let i = 0; i < 9; i++) {
+              const st = 0.4 + i * 0.27;
+              tl.fromTo('#s3-fd' + i, { x: 0, opacity: 0 }, { x: 2202, duration: 2.4, ease: 'none', repeat: 2, repeatDelay: 0.0 }, st);
+              tl.fromTo('#s3-fd' + i, { opacity: 0 }, { opacity: 0.95, duration: 0.3, ease: 'none' }, st);
+            }
+            tl.fromTo('#s3-words .bgw', { x: 0 }, { x: -70, duration: 7.54, ease: 'none' }, 0);
             // ---- N1
             tl.fromTo('#s3-n1', { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' }, 0.0);
             // line + packet progress (world x of nodes: N1 right 630 -> N2 1040 -> N3 1960 -> N4 2832)
