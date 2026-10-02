@@ -1,118 +1,118 @@
 {
-  "total": 68.6,
-  "endcard": 65.55,
+  "total": 63.81,
+  "endcard": 60.762,
   "gapScale": 0.7,
-  "voiceTotal": 58.5,
+  "voiceTotal": 53.71,
   "scenes": {
     "hook": {
       "start": 0,
-      "end": 8.571,
-      "dur": 8.571
+      "end": 7.885,
+      "dur": 7.885
     },
     "anatomy": {
-      "start": 8.021,
-      "end": 20.053,
-      "dur": 12.032
+      "start": 7.335,
+      "end": 19.729,
+      "dur": 12.394
     },
     "compare": {
-      "start": 19.503,
-      "end": 29.106,
-      "dur": 9.603
+      "start": 19.179,
+      "end": 27.369,
+      "dur": 8.19
     },
     "loop": {
-      "start": 28.556,
-      "end": 52.099,
-      "dur": 23.543
+      "start": 26.819,
+      "end": 48.917,
+      "dur": 22.098
     },
     "example": {
-      "start": 51.549,
-      "end": 60.479,
-      "dur": 8.93
+      "start": 48.367,
+      "end": 56.271,
+      "dur": 7.904
     },
     "close": {
-      "start": 59.929,
-      "end": 68.6,
-      "dur": 8.671
+      "start": 55.721,
+      "end": 63.81,
+      "dur": 8.089
     }
   },
   "lines": {
     "L01": {
       "start": 0.9,
-      "dur": 5.286,
+      "dur": 4.191,
       "scene": "hook",
-      "measured": false
+      "measured": true
     },
     "L02": {
-      "start": 6.571,
-      "dur": 1.286,
+      "start": 5.476,
+      "dur": 1.694,
       "scene": "hook",
-      "measured": false
+      "measured": true
     },
     "L03": {
-      "start": 8.521,
-      "dur": 5.929,
+      "start": 7.835,
+      "dur": 5.087,
       "scene": "anatomy",
-      "measured": false
+      "measured": true
     },
     "L04": {
-      "start": 14.695,
-      "dur": 4.643,
+      "start": 13.166,
+      "dur": 5.848,
       "scene": "anatomy",
-      "measured": false
+      "measured": true
     },
     "L05": {
-      "start": 20.003,
-      "dur": 2.714,
+      "start": 19.679,
+      "dur": 2.883,
       "scene": "compare",
-      "measured": false
+      "measured": true
     },
     "L06": {
-      "start": 22.962,
-      "dur": 5.429,
+      "start": 22.807,
+      "dur": 3.847,
       "scene": "compare",
-      "measured": false
+      "measured": true
     },
     "L07": {
-      "start": 29.056,
-      "dur": 4.071,
+      "start": 27.319,
+      "dur": 3.682,
       "scene": "loop",
-      "measured": false
+      "measured": true
     },
     "L08": {
-      "start": 33.477,
-      "dur": 3.5,
+      "start": 31.351,
+      "dur": 3.623,
       "scene": "loop",
-      "measured": false
+      "measured": true
     },
     "L09": {
-      "start": 37.327,
-      "dur": 3.571,
+      "start": 35.324,
+      "dur": 3.465,
       "scene": "loop",
-      "measured": false
+      "measured": true
     },
     "L10": {
-      "start": 41.249,
-      "dur": 4.786,
+      "start": 39.139,
+      "dur": 4.452,
       "scene": "loop",
-      "measured": false
+      "measured": true
     },
     "L11": {
-      "start": 46.384,
-      "dur": 5,
+      "start": 43.941,
+      "dur": 4.262,
       "scene": "loop",
-      "measured": false
+      "measured": true
     },
     "L12": {
-      "start": 52.049,
-      "dur": 7.714,
+      "start": 48.867,
+      "dur": 6.689,
       "scene": "example",
-      "measured": false
+      "measured": true
     },
     "L13": {
-      "start": 60.429,
-      "dur": 4.571,
+      "start": 56.221,
+      "dur": 3.991,
       "scene": "close",
-      "measured": false
+      "measured": true
     }
   }
 }

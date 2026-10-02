@@ -56,18 +56,18 @@
     "text": "ជំហានមួយ ស្វែងយល់៖ ទទួលគោលដៅ និងព័ត៌មាន។"
   },
   "L09": {
-    "model": "gemini-3.8-flash-lite-tts",
-    "seconds": 4.08,
-    "match": 0.921,
-    "heard": "ជំហាន ២ គិតរៀបចំ បំបែកការងារជាជំហានតូចៗ",
-    "text": "ជំហានពីរ គិតរៀបចំ៖ បំបែកការងារជាជំហានតូចៗ។"
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 3.46,
+    "match": 0.941,
+    "heard": "ជំហានទីពីរ គិតរៀបចំបំបែកជាជំហានតូចៗ",
+    "text": "ជំហានពីរ គិតរៀបចំ៖ បំបែកជាជំហានតូចៗ។"
   },
   "L10": {
-    "model": "gemini-3.8-flash-lite-tts",
-    "seconds": 5.08,
-    "match": 0.94,
-    "heard": "ជំហាន ៣ អនុវត្ត ចាប់ផ្ដើមប្រើ web search, email ឬ calendar",
-    "text": "ជំហានបី អនុវត្ត៖ ចាប់ផ្តើមប្រើ Web Search Email ឬ Calendar។"
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 4.45,
+    "match": 0.951,
+    "heard": "ជំហាន ៣ អនុវត្ត ប្រើ Web Search, Email ឬ Calendar",
+    "text": "ជំហានបី អនុវត្ត៖ ប្រើ Web Search Email ឬ Calendar។"
   },
   "L11": {
     "model": "gemini-3.8-flash-tts",
