@@ -15,10 +15,9 @@ BASE = ("Modern cinematic technology underscore for a premium explainer video, w
         "soft pulsing arpeggiated synths, gentle felt piano motif, deep clean sub bass, subtle electronic percussion, "
         "optimistic, inspiring, polished, instrumental, no vocals")
 SECTIONS = [  # (start fraction, extra prompt, density, brightness)
-    (0.00, "sparse, airy intro, slow build, pads and piano only", 0.30, 0.55),
-    (0.14, "steady confident groove, light drums enter, arpeggio forward", 0.50, 0.62),
-    (0.80, "uplifting resolution, bright and hopeful, fuller", 0.58, 0.72),
+    (0.00, "steady confident light groove with a gentle build, soft drums, forward arpeggio, airy pads, hopeful", 0.45, 0.62),
 ]
+# One continuous section: mid-stream prompt changes made Lyria drop out for ~2 s.
 
 
 async def run(out, duration, bpm):

@@ -43,7 +43,7 @@ const baseGaps = lines.map((_, i) => gapAfter(i));
 const gapTotal = baseGaps.reduce((s, g) => s + g, 0);
 // Stretch or squeeze the pauses (within taste limits) to land near TARGET.
 const room = TARGET - LEAD - TAIL - voiceTotal;
-const scale = Math.min(1.6, Math.max(0.7, room / gapTotal));
+const scale = Math.min(1.6, Math.max(0.62, room / gapTotal));
 
 let cursor = LEAD;
 const outLines = {};

@@ -11,7 +11,7 @@ import sys
 import numpy as np
 import soundfile as sf
 import pyloudnorm as pyln
-from pedalboard import (Pedalboard, Compressor, HighpassFilter, LowpassFilter, PeakFilter, HighShelfFilter,
+from pedalboard import (Pedalboard, Compressor, HighpassFilter, LowpassFilter, PeakFilter, HighShelfFilter, LowShelfFilter,
                         Reverb, Limiter, Gain, Delay)
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -262,7 +262,8 @@ def main():
     meter = pyln.Meter(SR)
     ml = meter.integrated_loudness(music.T)
     music *= 10 ** ((-20.0 - ml) / 20)
-    music = Pedalboard([HighpassFilter(32)])(music, SR)
+    # Tame Lyria's heavy low end so the narration stays clear on small speakers.
+    music = Pedalboard([HighpassFilter(38), LowShelfFilter(140, -4.5, 0.7), PeakFilter(320, -1.5, 1.0)])(music, SR)
 
     # Envelope: fade in, duck under the voice, fade out under the end card.
     t = np.arange(n) / SR

@@ -364,7 +364,7 @@ function stepMusic() {
 const step = process.argv[2] || "all";
 try {
   if (step === "script" || step === "all") await stepScript();
-  if (step === "voice" || step === "all") await stepVoice();
+  if (step === "voice" || step === "all") await stepVoice(process.argv.slice(3).length ? process.argv.slice(3) : null);
   if (step === "fit" || step === "all") await stepFit();
   if (step === "music" || step === "all") stepMusic();
   if (step === "models") { const m = await models(); console.log(m.map((x) => x.id).join("\n")); }

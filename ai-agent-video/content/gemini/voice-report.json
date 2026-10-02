@@ -35,10 +35,10 @@
     "text": "Chatbot ធម្មតា ឆ្លើយសំណួរបានម្ដងមួយៗ។"
   },
   "L06": {
-    "model": "gemini-3.8-flash-tts",
-    "seconds": 3.85,
-    "match": 0.9,
-    "heard": "រីឯ AIA វិញ ធ្វើគ្រប់ជំហានរហូតដល់ចប់ការងារ",
+    "model": "gemini-3.8-flash-lite-tts",
+    "seconds": 4.71,
+    "match": 1,
+    "heard": "រីឯ AI Agent ធ្វើគ្រប់ជំហានរហូតដល់ចប់ការងារ",
     "text": "រីឯ AI Agent ធ្វើគ្រប់ជំហាន រហូតដល់ចប់ការងារ។"
   },
   "L07": {
