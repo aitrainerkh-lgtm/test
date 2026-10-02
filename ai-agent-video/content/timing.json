@@ -1,0 +1,118 @@
+{
+  "total": 68.6,
+  "endcard": 65.55,
+  "gapScale": 0.7,
+  "voiceTotal": 58.5,
+  "scenes": {
+    "hook": {
+      "start": 0,
+      "end": 8.571,
+      "dur": 8.571
+    },
+    "anatomy": {
+      "start": 8.021,
+      "end": 20.053,
+      "dur": 12.032
+    },
+    "compare": {
+      "start": 19.503,
+      "end": 29.106,
+      "dur": 9.603
+    },
+    "loop": {
+      "start": 28.556,
+      "end": 52.099,
+      "dur": 23.543
+    },
+    "example": {
+      "start": 51.549,
+      "end": 60.479,
+      "dur": 8.93
+    },
+    "close": {
+      "start": 59.929,
+      "end": 68.6,
+      "dur": 8.671
+    }
+  },
+  "lines": {
+    "L01": {
+      "start": 0.9,
+      "dur": 5.286,
+      "scene": "hook",
+      "measured": false
+    },
+    "L02": {
+      "start": 6.571,
+      "dur": 1.286,
+      "scene": "hook",
+      "measured": false
+    },
+    "L03": {
+      "start": 8.521,
+      "dur": 5.929,
+      "scene": "anatomy",
+      "measured": false
+    },
+    "L04": {
+      "start": 14.695,
+      "dur": 4.643,
+      "scene": "anatomy",
+      "measured": false
+    },
+    "L05": {
+      "start": 20.003,
+      "dur": 2.714,
+      "scene": "compare",
+      "measured": false
+    },
+    "L06": {
+      "start": 22.962,
+      "dur": 5.429,
+      "scene": "compare",
+      "measured": false
+    },
+    "L07": {
+      "start": 29.056,
+      "dur": 4.071,
+      "scene": "loop",
+      "measured": false
+    },
+    "L08": {
+      "start": 33.477,
+      "dur": 3.5,
+      "scene": "loop",
+      "measured": false
+    },
+    "L09": {
+      "start": 37.327,
+      "dur": 3.571,
+      "scene": "loop",
+      "measured": false
+    },
+    "L10": {
+      "start": 41.249,
+      "dur": 4.786,
+      "scene": "loop",
+      "measured": false
+    },
+    "L11": {
+      "start": 46.384,
+      "dur": 5,
+      "scene": "loop",
+      "measured": false
+    },
+    "L12": {
+      "start": 52.049,
+      "dur": 7.714,
+      "scene": "example",
+      "measured": false
+    },
+    "L13": {
+      "start": 60.429,
+      "dur": 4.571,
+      "scene": "close",
+      "measured": false
+    }
+  }
+}

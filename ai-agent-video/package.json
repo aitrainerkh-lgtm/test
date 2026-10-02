@@ -1,0 +1,14 @@
+{
+  "name": "ai-agent-video",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gemini": "node tools/gemini.mjs all",
+    "assemble": "node tools/timing.mjs && python3 tools/mix.py && node tools/build.mjs",
+    "dev": "npx --yes hyperframes@0.8.107 preview",
+    "check": "npx --yes hyperframes@0.8.107 check",
+    "render": "npx --yes hyperframes@0.8.107 render --quality high --fps 30 -o renders/ai-agent-khmer.mp4",
+    "produce": "npm run gemini && npm run assemble && npm run render",
+    "publish": "npx --yes hyperframes@0.8.107 publish"
+  }
+}

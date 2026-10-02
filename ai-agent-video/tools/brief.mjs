@@ -1,0 +1,67 @@
+// Creative brief handed to Gemini: what each narration line must say, how long
+// it may run, and what each on-screen label means.
+export const TOPIC = "What is an AI Agent and how does it work?";
+
+export const LINES = [
+  { id: "L01", scene: "hook", sec: 4.2, intent: "Hook. Imagine an AI that does not only answer your questions, but actually does the work for you." },
+  { id: "L02", scene: "hook", sec: 1.6, intent: "Short punchy reveal: That is an AI Agent." },
+  { id: "L03", scene: "anatomy", sec: 4.8, intent: "Definition: an AI Agent is an AI system that receives a goal, then thinks, plans and takes action by itself to reach that goal." },
+  { id: "L04", scene: "anatomy", sec: 4.2, intent: "It has three parts, said in this order: a brain (the AI Model), memory to remember, and tools to do the work." },
+  { id: "L05", scene: "compare", sec: 2.8, intent: "A normal Chatbot only answers one question at a time." },
+  { id: "L06", scene: "compare", sec: 4.0, intent: "An AI Agent takes your goal and works through every step until the job is finished." },
+  { id: "L07", scene: "loop", sec: 3.6, intent: "So how does it work? An AI Agent works in a loop of four steps." },
+  { id: "L08", scene: "loop", sec: 3.2, intent: "Step one, Perceive: it receives the goal and gathers information." },
+  { id: "L09", scene: "loop", sec: 3.2, intent: "Step two, Think and Plan: it breaks the goal into small steps." },
+  { id: "L10", scene: "loop", sec: 3.6, intent: "Step three, Act: it uses tools such as Web Search, Email or Calendar." },
+  { id: "L11", scene: "loop", sec: 4.0, intent: "Step four, Check: it checks the result; if the goal is not reached yet, it repeats the loop until it is." },
+  { id: "L12", scene: "example", sec: 6.0, intent: "Example: ask it to set up a meeting with a client. It checks your calendar, finds a free time, and sends the invitation Email, all by itself. Keep this order: calendar, free time, send invitation." },
+  { id: "L13", scene: "close", sec: 3.8, intent: "Closing: an AI Agent is like a digital staff member that works for you twenty-four hours a day, seven days a week." },
+];
+
+// key -> [English meaning, max characters, usage note]
+export const LABELS = {
+  hook_chat_tag: ["Answers questions", 14, "tag under a Chatbot window"],
+  hook_agent_tag: ["Gets work done", 12, "tag next to the words 'AI Agent'"],
+  hook_user_q: ["A typical business question typed into a chatbot, e.g. 'How much did we sell this month?'", 26, "chat bubble"],
+  title_sub: ["What is it? How does it work?", 32, "title line in Moul font under the big words 'AI Agent' (do not repeat 'AI Agent')"],
+  anat_goal: ["Goal", 8, "icon caption"],
+  anat_done: ["Achieved", 8, "icon caption"],
+  anat_brain: ["Brain", 10, "part of the agent; English sub-label 'AI Model' is shown separately"],
+  anat_memory: ["Memory", 10, "part of the agent"],
+  anat_tools: ["Tools", 10, "part of the agent"],
+  cmp_question: ["Question", 8, "icon caption"],
+  cmp_answer: ["Answer", 8, "icon caption"],
+  cmp_one_step: ["One answer at a time", 16, "tag under the word 'Chatbot'"],
+  cmp_goal: ["Goal", 8, "icon caption"],
+  cmp_result: ["Result", 8, "icon caption"],
+  cmp_many_steps: ["Every step, by itself", 24, "tag under the words 'AI Agent'"],
+  loop_title: ["How it works", 16, "section title in Moul font"],
+  loop_sub: ["A loop of 4 steps", 14, "subtitle; write the number as a Khmer numeral ៤"],
+  step1_name: ["Perceive (receive information)", 14, "step name"],
+  step1_desc: ["Receives the goal and gathers data", 30, "one-line step description"],
+  step2_name: ["Think and plan", 18, "step name"],
+  step2_desc: ["Breaks the goal into small steps", 30, "one-line step description"],
+  step3_name: ["Act", 14, "step name"],
+  step3_desc: ["Uses tools to do the work", 30, "one-line step description"],
+  step4_name: ["Check the result", 14, "step name"],
+  step4_desc: ["Repeats until the goal is reached", 30, "one-line step description"],
+  in_goal: ["Goal", 10, "input card"],
+  in_data: ["Data", 10, "input card"],
+  in_files: ["Documents", 10, "input card"],
+  plan_1: ["Search for information", 18, "plan step 1 of a sample task"],
+  plan_2: ["Analyze the data", 18, "plan step 2 of a sample task"],
+  plan_3: ["Write the report", 18, "plan step 3 of a sample task"],
+  check_q: ["Goal achieved yet?", 22, "question next to a progress gauge"],
+  check_repeat: ["Do it again", 14, "button-like tag with a refresh icon"],
+  ex_tag: ["Example", 10, "section tag"],
+  ex_prompt: ["Set up a meeting with the client next week", 40, "the user's instruction typed to the agent"],
+  ex_status: ["Working", 12, "status text next to 'AI Agent'; three animated dots follow it"],
+  ex_s1: ["Check the calendar", 18, "task row 1"],
+  ex_s2: ["Find a free time", 18, "task row 2"],
+  ex_s3: ["Send the invitation Email", 20, "task row 3; keep the word Email in English"],
+  ex_done: ["Done!", 10, "success badge"],
+  close_line1: ["Your digital staff", 24, "closing line in Moul font"],
+  close_line2: ["Works 24 hours, 7 days", 24, "closing subline; use Khmer numerals ២៤ and ៧"],
+};
+
+export const ENGLISH_TERMS = ["AI", "AI Agent", "AI Model", "Chatbot", "Email", "Web Search", "Calendar"];

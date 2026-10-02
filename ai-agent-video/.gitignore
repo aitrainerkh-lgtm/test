@@ -1,0 +1,9 @@
+node_modules/
+renders/*.mp4
+!renders/ai-agent-khmer.mp4
+snapshots/
+content/gemini/raw/
+assets/audio/mix.wav
+assets/audio/music_score.wav
+.hyperframes/
+__pycache__/
