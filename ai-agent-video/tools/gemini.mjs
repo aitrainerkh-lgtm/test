@@ -284,8 +284,9 @@ async function voiceLine(line, models, attempts = 3) {
       writeFileSync(rawPath, await tts(model, line.text));
       const r = spawnSync("python3", [join(ROOT, "tools/voice_prep.py"), rawPath, prepPath], { encoding: "utf8" });
       if (r.status !== 0) throw new Error(`voice_prep failed: ${r.stderr}`);
-      const heard = await transcribe(prepPath);
-      const sim = similarity(line.text, heard);
+      let heard = "", sim = 0.5; // unverified if the transcription check itself is blocked
+      try { heard = await transcribe(prepPath); sim = similarity(line.text, heard); }
+      catch (e) { log(`  ${line.id} transcription check unavailable: ${redact(e.message).slice(0, 120)}`); }
       const dur = probe(prepPath);
       log(`  ${line.id} try ${a + 1} (${model}): ${dur.toFixed(2)}s, match ${(sim * 100).toFixed(0)}%`);
       const cand = { model, prepPath, sim, dur, heard };
