@@ -82,7 +82,7 @@ const version = (id) => Number((/gemini-(\d+(?:\.\d+)?)/.exec(id) || [])[1] || 0
 async function textModel({ fast = false } = {}) {
   if (process.env.GEMINI_TEXT_MODEL && !fast) return process.env.GEMINI_TEXT_MODEL;
   const ms = (await models()).filter((m) => m.methods.includes("generateContent") && /^gemini-\d/.test(m.id) &&
-    !/(tts|image|audio|live|embedding|robotics|computer|exp-\d{4})/.test(m.id));
+    !/(tts|image|audio|live|embedding|robotics|computer|transcribe|customtools|exp-\d{4})/.test(m.id));
   const score = (id) => version(id) * 10 + (fast ? (/flash/.test(id) ? 4 : 0) : (/pro/.test(id) ? 5 : /flash/.test(id) ? 2 : 0)) -
     (/lite/.test(id) ? 3 : 0) - (/preview|exp/.test(id) ? 0.5 : 0);
   ms.sort((a, b) => score(b.id) - score(a.id));
