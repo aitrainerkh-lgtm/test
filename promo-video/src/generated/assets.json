@@ -3,8 +3,8 @@
   "hook": null,
   "qr": "generated/fallback-qr.svg",
   "qrIsFallback": true,
-  "voiceover": null,
-  "voiceoverDuration": null,
+  "voiceover": "voiceover.mp3",
+  "voiceoverDuration": 45.936,
   "music": null,
   "musicDuration": null,
   "fonts": {

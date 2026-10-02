@@ -19,7 +19,7 @@ npm install
 | `public/logo.png` | Logo in Title, Offer and Close scenes | Clean text logo "AI For Business" |
 | `public/hook.jpg` | Top photo in the Hook scene | Illustrated shop scene |
 | `public/qr.png` | QR code in the Close scene | QR code that opens the Telegram link in `config.ts` |
-| `public/voiceover.mp3` | Khmer voiceover | Silent, scenes use the timings in `config.ts` |
+| `public/voiceover.mp3` | Khmer voiceover (made by `npm run voice`) | Silent, scenes use the timings in `config.ts` |
 | `public/music.mp3` | Background music (about -20 dB under the voice) | No music |
 | `public/fonts/Khmer OS Muol Light.ttf` | Big Khmer headings | Moul (Google Fonts, already included) |
 | `public/fonts/Khmer OS Battambang.ttf` | Khmer body text and captions | Battambang (Google Fonts, already included) |
@@ -27,9 +27,28 @@ npm install
 
 File names for fonts are flexible: any `.ttf`/`.otf` in `public/fonts/` with "Muol" or "Battambang" in its name is used.
 
-## 3. Sync to the voiceover
+## 3. Khmer voiceover with Gemini
 
-After you add `public/voiceover.mp3`:
+The voiceover is made from the script in `src/config.ts` with Gemini text-to-speech.
+Each line is recorded separately, so scenes and karaoke captions match the voice exactly.
+
+```bash
+GEMINI_API_KEY=your-key npm run voice
+```
+
+On Windows PowerShell: `$env:GEMINI_API_KEY="your-key"; npm run voice`
+
+- Voice, speed and pause length: `voice` in `src/config.ts` (current voice: Kore, speed 1.2).
+- Only changed lines are recorded again. For a new take of one line: `npm run voice -- --redo=billing`
+- If a word sounds wrong, add a voice-only spelling in `voice.spoken` (captions are not affected),
+  or slow that line down in `voice.lineSpeed`.
+- The API key is read from the environment and is never saved in the project.
+
+To use your own recorded voice instead, replace `public/voiceover.mp3` and run the sync step below.
+
+## 4. Sync your own recorded voiceover
+
+After you add your own `public/voiceover.mp3`:
 
 ```bash
 npm run assets   # finds your files
@@ -46,7 +65,7 @@ npm run sync -- --noise=-30 --pause=0.2
 You can also type exact times (seconds) into `src/generated/voice-timing.json`.
 When synced, each scene starts just before its voice line, and the video length follows the voiceover.
 
-## 4. Preview and render
+## 5. Preview and render
 
 ```bash
 npm run studio   # live preview in the browser
@@ -59,7 +78,7 @@ Render command (same as `npm run render`):
 npx remotion render PromoVideo out/promo.mp4
 ```
 
-## 5. Change text, prices, dates
+## 6. Change text, prices, dates
 
 Everything you may want to edit is in **`src/config.ts`**:
 course name, Telegram handle, date, time, venue, price, old price, bonus, all Khmer lines,
@@ -79,6 +98,7 @@ promo-video/
 ├── public/              your files + fonts
 ├── scripts/
 │   ├── check-assets.mjs     finds your files (runs before studio/render)
+│   ├── generate-voiceover.mjs   Gemini Khmer voice → voiceover.mp3 + exact timing
 │   └── sync-voiceover.mjs   voiceover → scene timing
 └── src/
     ├── config.ts            ALL editable text and timing

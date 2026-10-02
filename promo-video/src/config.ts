@@ -64,6 +64,27 @@ export const config = {
     endTail: 1.5,
   },
 
+  /**
+   * Khmer voiceover made with Gemini text-to-speech (`npm run voice`).
+   * Voices to try: Kore (clear, firm), Aoede (light), Leda (young),
+   * Puck (upbeat, male), Charon (deep, male).
+   */
+  voice: {
+    model: 'gemini-3.8-flash-tts',
+    voiceName: 'Kore',
+    // 1.0 = natural pace. Higher = faster (e.g. 1.15).
+    speed: 1.2,
+    // Pause between lines, in seconds.
+    gap: 0.3,
+    // Speed for single lines (a hard word can sound clearer slower).
+    lineSpeed: {billing: 1.0},
+    // Wording used only for the voice when a word is pronounced badly.
+    // The karaoke captions still show the line from `voiceover` below.
+    spoken: {
+      moreTools: 'និងបង្កើត Tools, ផ្សេងៗទៀត តាមតម្រូវការអាជីវកម្មរបស់អ្នក។',
+    },
+  },
+
   // 1. HOOK ------------------------------------------------------
   hook: {
     headline: ['ចង់ប្រើ AI និងបង្កើត', '*Tools* ខ្លួនឯង?'],

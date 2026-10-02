@@ -5,6 +5,7 @@
   "description": "Vertical promo video for the AI For Business training course (Remotion)",
   "scripts": {
     "assets": "node scripts/check-assets.mjs",
+    "voice": "node scripts/generate-voiceover.mjs",
     "sync": "node scripts/sync-voiceover.mjs",
     "studio": "npm run assets && remotion studio",
     "render": "npm run assets && remotion render PromoVideo out/promo.mp4",
