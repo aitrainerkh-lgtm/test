@@ -196,19 +196,21 @@ export function renderHtml({ script, timing, css, audioSrc, cueMap, timelineJs }
   // Subtitles: each narration line split into chunks timed by character share.
   let subs = "";
   let subIdx = 0;
-  for (const l of script.lines) {
+  script.lines.forEach((l, li) => {
     const lt = T.lines[l.id];
+    const next = script.lines[li + 1];
+    const hardEnd = next ? T.lines[next.id].start - 0.12 : lt.start + lt.dur + 0.6;
     const parts = chunk(l.text);
     const totalChars = parts.reduce((s, p) => s + [...p].length, 0);
     let t = lt.start - 0.08;
     parts.forEach((p, i) => {
       const share = (lt.dur + 0.08) * ([...p].length / totalChars);
-      const d = i === parts.length - 1 ? lt.dur + 0.45 - (t - lt.start) : share;
+      const d = Math.min(i === parts.length - 1 ? lt.dur + 0.45 - (t - lt.start) : share, hardEnd - t);
       subs += `<div class="clip sub" id="sub-${subIdx}" data-start="${t.toFixed(3)}" data-duration="${d.toFixed(3)}" data-track-index="30"><span>${esc(p)}</span></div>\n`;
       t += share;
       subIdx++;
     });
-  }
+  });
 
   // Seeded particles.
   let seed = 7;
