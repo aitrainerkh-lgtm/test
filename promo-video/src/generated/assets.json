@@ -1,0 +1,20 @@
+{
+  "logo": null,
+  "hook": null,
+  "qr": "generated/fallback-qr.svg",
+  "qrIsFallback": true,
+  "voiceover": "voiceover.mp3",
+  "voiceoverDuration": 45.936,
+  "music": null,
+  "musicDuration": null,
+  "fonts": {
+    "khmerHeading": null,
+    "khmerBody": null
+  },
+  "icons": {
+    "chatgpt": null,
+    "claude": null,
+    "gemini": null,
+    "copilot": null
+  }
+}

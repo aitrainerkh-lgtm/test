@@ -1,0 +1,57 @@
+{
+  "source": "voiceover.mp3",
+  "generatedBy": "gemini:gemini-3.8-flash-tts:Kore",
+  "duration": 45.936,
+  "segments": [
+    {
+      "key": "hook",
+      "start": 0.3,
+      "end": 4.191
+    },
+    {
+      "key": "title",
+      "start": 4.491,
+      "end": 9.891
+    },
+    {
+      "key": "useAI",
+      "start": 10.191,
+      "end": 15.429
+    },
+    {
+      "key": "stock",
+      "start": 15.729,
+      "end": 20.412
+    },
+    {
+      "key": "billing",
+      "start": 20.712,
+      "end": 23.989
+    },
+    {
+      "key": "leave",
+      "start": 24.289,
+      "end": 27.23
+    },
+    {
+      "key": "agent",
+      "start": 27.53,
+      "end": 32.065
+    },
+    {
+      "key": "moreTools",
+      "start": 32.365,
+      "end": 35.443
+    },
+    {
+      "key": "offer",
+      "start": 35.743,
+      "end": 42.176
+    },
+    {
+      "key": "close",
+      "start": 42.476,
+      "end": 45.894
+    }
+  ]
+}

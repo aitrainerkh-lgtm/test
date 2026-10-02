@@ -1,0 +1,7 @@
+node_modules/
+.remotion/
+out/*
+!out/.gitkeep
+!out/promo.mp4
+public/voice-lines/*.wav
+!public/voice-lines/*.raw.wav
