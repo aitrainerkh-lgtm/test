@@ -1,0 +1,4 @@
+node_modules
+out/*
+!out/ai-for-business-promo.mp4
+.DS_Store
