@@ -1,0 +1,96 @@
+@font-face { font-family: "Moul"; src: url("assets/fonts/moul-khmer-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Moul"; src: url("assets/fonts/moul-latin-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-khmer-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-khmer-700-normal.woff2") format("woff2"); font-weight: 700; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-khmer-900-normal.woff2") format("woff2"); font-weight: 900; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-latin-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-latin-700-normal.woff2") format("woff2"); font-weight: 700; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-latin-900-normal.woff2") format("woff2"); font-weight: 900; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+
+:root {
+  --ink: #03060d;
+  --text: #eef3fa;
+  --muted: #93a1ba;
+  --dim: #5d6b85;
+  --green: #3ae6a0;
+  --green-2: #12b874;
+  --amber: #ffa53d;
+  --blue: #5c9dff;
+  --line: rgba(150, 180, 255, 0.16);
+  --kh-head: "Moul", "Khmer OS Muol Light", serif;
+  --kh-body: "Battambang", "Khmer OS Battambang", sans-serif;
+  --display: "Space Grotesk", "Battambang", sans-serif;
+  --mono: "JetBrains Mono", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ink); }
+body { color: var(--text); font-family: var(--kh-body); -webkit-font-smoothing: antialiased; }
+
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ink); }
+.clip { position: absolute; }
+.layer, .scene { position: absolute; inset: 0; }
+.cam, .rig { position: absolute; inset: 0; }
+.abs { position: absolute; }
+
+/* ---------- atmosphere ---------- */
+#bg-base { background: radial-gradient(1300px 900px at 50% 42%, #0c1832 0%, #070d1c 52%, #03060d 100%); }
+.aurora { position: absolute; border-radius: 50%; filter: blur(110px); }
+#au-a { width: 980px; height: 980px; left: -180px; top: -260px; background: rgba(58, 230, 160, 0.16); }
+#au-b { width: 860px; height: 860px; right: -220px; bottom: -300px; background: rgba(92, 157, 255, 0.16); }
+#au-c { width: 620px; height: 620px; left: 900px; top: 520px; background: rgba(255, 165, 61, 0.08); }
+#grid { position: absolute; inset: -60px; background-image: radial-gradient(rgba(150, 180, 240, 0.22) 1.3px, transparent 1.6px); background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(ellipse 62% 58% at 50% 46%, #000 35%, transparent 100%); mask-image: radial-gradient(ellipse 62% 58% at 50% 46%, #000 35%, transparent 100%); }
+.pt { position: absolute; border-radius: 50%; background: #bfe9ff; }
+#vignette { background: radial-gradient(ellipse 75% 70% at 50% 48%, transparent 55%, rgba(0, 0, 0, 0.62) 100%); }
+#grain { position: absolute; inset: -120px; opacity: 0.07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+#streak { position: absolute; top: -200px; left: -900px; width: 520px; height: 1480px; transform-origin: 50% 50%;
+  background: linear-gradient(90deg, transparent, rgba(160, 255, 215, 0.22), rgba(255, 255, 255, 0.5), rgba(160, 255, 215, 0.22), transparent); filter: blur(18px); opacity: 0; }
+
+/* ---------- shared components ---------- */
+.ic { width: 100%; height: 100%; display: block; }
+.glass { position: absolute; border-radius: 30px; background: linear-gradient(180deg, rgba(28, 44, 76, 0.78), rgba(11, 19, 37, 0.82));
+  border: 1px solid var(--line); box-shadow: 0 40px 90px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.09); }
+.pill { position: absolute; display: flex; align-items: center; gap: 12px; padding: 8px 26px 8px 18px; border-radius: 999px; white-space: nowrap;
+  font: 700 30px/1.75 var(--kh-body); color: var(--green); background: rgba(58, 230, 160, 0.1); border: 1px solid rgba(58, 230, 160, 0.38); }
+.pill .pi { width: 30px; height: 30px; }
+.pill.amber { color: var(--amber); background: rgba(255, 165, 61, 0.1); border-color: rgba(255, 165, 61, 0.38); }
+.pill.muted { color: var(--muted); background: rgba(150, 170, 210, 0.08); border-color: rgba(150, 170, 210, 0.25); }
+.en { font-family: var(--display); }
+
+.core { position: absolute; width: var(--s); height: var(--s); margin-left: calc(var(--s) / -2); margin-top: calc(var(--s) / -2); }
+.core-glow { position: absolute; inset: -90%; border-radius: 50%; background: radial-gradient(circle, rgba(58, 230, 160, 0.34) 0%, rgba(58, 230, 160, 0.1) 32%, transparent 62%); }
+.core-rings { position: absolute; inset: -12%; }
+.core-rings svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.core-orb { position: absolute; inset: 14%; border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #f2fff9 0%, #8ef7c9 16%, #22cf88 42%, #0a6b47 74%, #04301f 100%);
+  box-shadow: 0 0 70px rgba(58, 230, 160, 0.55), 0 0 160px rgba(58, 230, 160, 0.25), inset -14px -18px 34px rgba(0, 0, 0, 0.45), inset 8px 10px 22px rgba(255, 255, 255, 0.35); }
+.core-orb::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.28); }
+.core-core { position: absolute; inset: 40%; border-radius: 50%; background: radial-gradient(circle, #ffffff 0%, rgba(255, 255, 255, 0.4) 55%, transparent 72%); }
+
+.node { position: absolute; display: flex; align-items: center; gap: 22px; padding: 18px 34px 18px 18px; border-radius: 26px;
+  background: linear-gradient(180deg, rgba(30, 46, 80, 0.86), rgba(12, 20, 38, 0.9)); border: 1px solid var(--line); box-shadow: 0 26px 60px rgba(0, 0, 0, 0.45); }
+.node .nic { width: 86px; height: 86px; border-radius: 22px; padding: 20px; color: var(--green); background: rgba(58, 230, 160, 0.12); border: 1px solid rgba(58, 230, 160, 0.32); flex: none; }
+.node.amber .nic { color: var(--amber); background: rgba(255, 165, 61, 0.12); border-color: rgba(255, 165, 61, 0.32); }
+.node.blue .nic { color: var(--blue); background: rgba(92, 157, 255, 0.12); border-color: rgba(92, 157, 255, 0.32); }
+.node .kt { font: 700 42px/1.65 var(--kh-body); white-space: nowrap; }
+.node .et { font: 500 24px/1.2 var(--display); color: var(--muted); letter-spacing: 0.02em; }
+
+.badge { position: absolute; width: 56px; height: 56px; border-radius: 50%; padding: 12px; color: #04140d; background: var(--green); box-shadow: 0 0 30px rgba(58, 230, 160, 0.6); }
+
+/* ---------- subtitles ---------- */
+.sub { left: 0; right: 0; bottom: 46px; display: flex; justify-content: center; }
+.sub span { display: block; max-width: 1540px; padding: 6px 30px 8px; border-radius: 18px; text-align: center;
+  font: 700 38px/1.75 var(--kh-body); color: #fff; background: rgba(3, 7, 15, 0.58); border: 1px solid rgba(255, 255, 255, 0.06);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); }
+
+/* ---------- brand bug ---------- */
+#bug { position: absolute; right: 64px; top: 50px; display: flex; align-items: center; gap: 14px; font: 700 26px/1 var(--display); color: rgba(238, 243, 250, 0.82); letter-spacing: 0.01em; }
+.mark { flex: none; border-radius: 28%; display: grid; place-items: center; font-family: var(--display); font-weight: 700; color: #04140d;
+  background: linear-gradient(140deg, #8ef7c9 0%, #3ae6a0 45%, #12b874 100%); box-shadow: 0 0 24px rgba(58, 230, 160, 0.45); }
+#bug .mark { width: 42px; height: 42px; font-size: 18px; }
+#bug b { color: var(--green); font-weight: 700; }

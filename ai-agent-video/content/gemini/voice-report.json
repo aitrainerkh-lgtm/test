@@ -1,0 +1,93 @@
+{
+  "L01": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 4.19,
+    "match": 1,
+    "heard": "ស្រមៃមើល AI ដែលមិនត្រឹមឆ្លើយសំណួរ តែធ្វើការជំនួសអ្នក",
+    "text": "ស្រមៃមើល AI ដែលមិនត្រឹមឆ្លើយសំណួរ តែធ្វើការជំនួសអ្នក។"
+  },
+  "L02": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 1.69,
+    "match": 1,
+    "heard": "នោះគឺ AI Agent",
+    "text": "នោះគឺ AI Agent។"
+  },
+  "L03": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 5.09,
+    "match": 1,
+    "heard": "AI Agent ទទួលគោលដៅ គិត រៀបចំផែនការ និងអនុវត្តដោយខ្លួនឯង",
+    "text": "AI Agent ទទួលគោលដៅ គិត រៀបចំផែនការ និងអនុវត្តដោយខ្លួនឯង។"
+  },
+  "L04": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 5.85,
+    "match": 1,
+    "heard": "មានបីផ្នែក ខួរក្បាល AI model ការចងចាំ និងឧបករណ៍",
+    "text": "មានបីផ្នែក៖ ខួរក្បាល AI Model ការចងចាំ និងឧបករណ៍។"
+  },
+  "L05": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 2.88,
+    "match": 1,
+    "heard": "Chatbot ធម្មតា ឆ្លើយ សំណួរ បាន ម្ដង មួយ ៗ",
+    "text": "Chatbot ធម្មតា ឆ្លើយសំណួរបានម្ដងមួយៗ។"
+  },
+  "L06": {
+    "model": "gemini-3.8-flash-lite-tts",
+    "seconds": 4.71,
+    "match": 1,
+    "heard": "រីឯ AI Agent ធ្វើគ្រប់ជំហានរហូតដល់ចប់ការងារ",
+    "text": "រីឯ AI Agent ធ្វើគ្រប់ជំហាន រហូតដល់ចប់ការងារ។"
+  },
+  "L07": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 3.68,
+    "match": 0.925,
+    "heard": "តើ ដំណើរការ យ៉ាង ណា? AI agent ដើរ វិល ជុំ ៤ ជំហាន",
+    "text": "តើដំណើរការយ៉ាងណា? AI Agent ដើរវិលជុំបួនជំហាន។"
+  },
+  "L08": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 3.62,
+    "match": 1,
+    "heard": "ជំហាន មួយ ស្វែងយល់ ទទួល គោលដៅ និង ព័ត៌មាន",
+    "text": "ជំហានមួយ ស្វែងយល់៖ ទទួលគោលដៅ និងព័ត៌មាន។"
+  },
+  "L09": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 3.46,
+    "match": 0.941,
+    "heard": "ជំហានទីពីរ គិតរៀបចំបំបែកជាជំហានតូចៗ",
+    "text": "ជំហានពីរ គិតរៀបចំ៖ បំបែកជាជំហានតូចៗ។"
+  },
+  "L10": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 4.45,
+    "match": 0.951,
+    "heard": "ជំហាន ៣ អនុវត្ត ប្រើ Web Search, Email ឬ Calendar",
+    "text": "ជំហានបី អនុវត្ត៖ ប្រើ Web Search Email ឬ Calendar។"
+  },
+  "L11": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 4.26,
+    "match": 1,
+    "heard": "ជំហានបួន ផ្ទៀងផ្ទាត់ បើមិនទាន់សម្រេច វាធ្វើឡើងវិញ",
+    "text": "ជំហានបួន ផ្ទៀងផ្ទាត់៖ បើមិនទាន់សម្រេច វាធ្វើឡើងវិញ។"
+  },
+  "L12": {
+    "model": "gemini-3.8-flash-lite-tts",
+    "seconds": 6.69,
+    "match": 0.903,
+    "heard": "ឧទាហរណ៍ ឲ្យណាត់ភ្ញៀវ វា check calendar រកពេលទំនេរ រួចផ្ញើ email អញ្ជើញ",
+    "text": "ឧទាហរណ៍ ឱ្យណាត់ភ្ញៀវ វាឆែក Calendar រកពេលទំនេរ រួចផ្ញើ Email អញ្ជើញ។"
+  },
+  "L13": {
+    "model": "gemini-3.8-flash-tts",
+    "seconds": 3.99,
+    "match": 0.722,
+    "heard": "AI Agent ដូច បុគ្គលិក ឌីជីថល ធ្វើការ 24 ម៉ោង 7 ថ្ងៃ",
+    "text": "AI Agent ដូចបុគ្គលិកឌីជីថល ធ្វើការម្ភៃបួនម៉ោង ប្រាំពីរថ្ងៃ។"
+  }
+}

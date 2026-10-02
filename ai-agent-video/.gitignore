@@ -1,0 +1,10 @@
+node_modules/
+renders/*
+!renders/ai-agent-khmer.mp4
+snapshots/
+content/gemini/raw/
+assets/audio/mix.wav
+assets/audio/music_score.wav
+.hyperframes/
+__pycache__/
+!renders/ai-agent-khmer-share.mp4

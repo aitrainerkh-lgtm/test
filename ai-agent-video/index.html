@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>AI Agent ជាអ្វី</title>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/DrawSVGPlugin.min.js"></script>
+<style>
+@font-face { font-family: "Moul"; src: url("assets/fonts/moul-khmer-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Moul"; src: url("assets/fonts/moul-latin-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-khmer-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-khmer-700-normal.woff2") format("woff2"); font-weight: 700; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-khmer-900-normal.woff2") format("woff2"); font-weight: 900; unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-latin-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-latin-700-normal.woff2") format("woff2"); font-weight: 700; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Battambang"; src: url("assets/fonts/battambang-latin-900-normal.woff2") format("woff2"); font-weight: 900; unicode-range: U+0000-00FF; }
+@font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+
+:root {
+  --ink: #03060d;
+  --text: #eef3fa;
+  --muted: #93a1ba;
+  --dim: #5d6b85;
+  --green: #3ae6a0;
+  --green-2: #12b874;
+  --amber: #ffa53d;
+  --blue: #5c9dff;
+  --line: rgba(150, 180, 255, 0.16);
+  --kh-head: "Moul", "Khmer OS Muol Light", serif;
+  --kh-body: "Battambang", "Khmer OS Battambang", sans-serif;
+  --display: "Space Grotesk", "Battambang", sans-serif;
+  --mono: "JetBrains Mono", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ink); }
+body { color: var(--text); font-family: var(--kh-body); -webkit-font-smoothing: antialiased; }
+
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ink); }
+.clip { position: absolute; }
+.layer, .scene { position: absolute; inset: 0; }
+.cam, .rig { position: absolute; inset: 0; }
+.abs { position: absolute; }
+
+/* ---------- atmosphere ---------- */
+#bg-base { background: radial-gradient(1300px 900px at 50% 42%, #0c1832 0%, #070d1c 52%, #03060d 100%); }
+.aurora { position: absolute; border-radius: 50%; filter: blur(110px); }
+#au-a { width: 980px; height: 980px; left: -180px; top: -260px; background: rgba(58, 230, 160, 0.16); }
+#au-b { width: 860px; height: 860px; right: -220px; bottom: -300px; background: rgba(92, 157, 255, 0.16); }
+#au-c { width: 620px; height: 620px; left: 900px; top: 520px; background: rgba(255, 165, 61, 0.08); }
+#grid { position: absolute; inset: -60px; background-image: radial-gradient(rgba(150, 180, 240, 0.22) 1.3px, transparent 1.6px); background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(ellipse 62% 58% at 50% 46%, #000 35%, transparent 100%); mask-image: radial-gradient(ellipse 62% 58% at 50% 46%, #000 35%, transparent 100%); }
+.pt { position: absolute; border-radius: 50%; background: #bfe9ff; }
+#vignette { background: radial-gradient(ellipse 75% 70% at 50% 48%, transparent 55%, rgba(0, 0, 0, 0.62) 100%); }
+#grain { position: absolute; inset: -120px; opacity: 0.07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+#streak { position: absolute; top: -200px; left: -900px; width: 520px; height: 1480px; transform-origin: 50% 50%;
+  background: linear-gradient(90deg, transparent, rgba(160, 255, 215, 0.22), rgba(255, 255, 255, 0.5), rgba(160, 255, 215, 0.22), transparent); filter: blur(18px); opacity: 0; }
+
+/* ---------- shared components ---------- */
+.ic { width: 100%; height: 100%; display: block; }
+.glass { position: absolute; border-radius: 30px; background: linear-gradient(180deg, rgba(28, 44, 76, 0.78), rgba(11, 19, 37, 0.82));
+  border: 1px solid var(--line); box-shadow: 0 40px 90px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.09); }
+.pill { position: absolute; display: flex; align-items: center; gap: 12px; padding: 8px 26px 8px 18px; border-radius: 999px; white-space: nowrap;
+  font: 700 30px/1.75 var(--kh-body); color: var(--green); background: rgba(58, 230, 160, 0.1); border: 1px solid rgba(58, 230, 160, 0.38); }
+.pill .pi { width: 30px; height: 30px; }
+.pill.amber { color: var(--amber); background: rgba(255, 165, 61, 0.1); border-color: rgba(255, 165, 61, 0.38); }
+.pill.muted { color: var(--muted); background: rgba(150, 170, 210, 0.08); border-color: rgba(150, 170, 210, 0.25); }
+.en { font-family: var(--display); }
+
+.core { position: absolute; width: var(--s); height: var(--s); margin-left: calc(var(--s) / -2); margin-top: calc(var(--s) / -2); }
+.core-glow { position: absolute; inset: -90%; border-radius: 50%; background: radial-gradient(circle, rgba(58, 230, 160, 0.34) 0%, rgba(58, 230, 160, 0.1) 32%, transparent 62%); }
+.core-rings { position: absolute; inset: -12%; }
+.core-rings svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.core-orb { position: absolute; inset: 14%; border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #f2fff9 0%, #8ef7c9 16%, #22cf88 42%, #0a6b47 74%, #04301f 100%);
+  box-shadow: 0 0 70px rgba(58, 230, 160, 0.55), 0 0 160px rgba(58, 230, 160, 0.25), inset -14px -18px 34px rgba(0, 0, 0, 0.45), inset 8px 10px 22px rgba(255, 255, 255, 0.35); }
+.core-orb::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.28); }
+.core-core { position: absolute; inset: 40%; border-radius: 50%; background: radial-gradient(circle, #ffffff 0%, rgba(255, 255, 255, 0.4) 55%, transparent 72%); }
+
+.node { position: absolute; display: flex; align-items: center; gap: 22px; padding: 18px 34px 18px 18px; border-radius: 26px;
+  background: linear-gradient(180deg, rgba(30, 46, 80, 0.86), rgba(12, 20, 38, 0.9)); border: 1px solid var(--line); box-shadow: 0 26px 60px rgba(0, 0, 0, 0.45); }
+.node .nic { width: 86px; height: 86px; border-radius: 22px; padding: 20px; color: var(--green); background: rgba(58, 230, 160, 0.12); border: 1px solid rgba(58, 230, 160, 0.32); flex: none; }
+.node.amber .nic { color: var(--amber); background: rgba(255, 165, 61, 0.12); border-color: rgba(255, 165, 61, 0.32); }
+.node.blue .nic { color: var(--blue); background: rgba(92, 157, 255, 0.12); border-color: rgba(92, 157, 255, 0.32); }
+.node .kt { font: 700 42px/1.65 var(--kh-body); white-space: nowrap; }
+.node .et { font: 500 24px/1.2 var(--display); color: var(--muted); letter-spacing: 0.02em; }
+
+.badge { position: absolute; width: 56px; height: 56px; border-radius: 50%; padding: 12px; color: #04140d; background: var(--green); box-shadow: 0 0 30px rgba(58, 230, 160, 0.6); }
+
+/* ---------- subtitles ---------- */
+.sub { left: 0; right: 0; bottom: 46px; display: flex; justify-content: center; }
+.sub span { display: block; max-width: 1540px; padding: 6px 30px 8px; border-radius: 18px; text-align: center;
+  font: 700 38px/1.75 var(--kh-body); color: #fff; background: rgba(3, 7, 15, 0.58); border: 1px solid rgba(255, 255, 255, 0.06);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6); }
+
+/* ---------- brand bug ---------- */
+#bug { position: absolute; right: 64px; top: 50px; display: flex; align-items: center; gap: 14px; font: 700 26px/1 var(--display); color: rgba(238, 243, 250, 0.82); letter-spacing: 0.01em; }
+.mark { flex: none; border-radius: 28%; display: grid; place-items: center; font-family: var(--display); font-weight: 700; color: #04140d;
+  background: linear-gradient(140deg, #8ef7c9 0%, #3ae6a0 45%, #12b874 100%); box-shadow: 0 0 24px rgba(58, 230, 160, 0.45); }
+#bug .mark { width: 42px; height: 42px; font-size: 18px; }
+#bug b { color: var(--green); font-weight: 700; }
+
+
+/* s1 hook */
+#s1-chat { left: 170px; top: 270px; width: 760px; height: 470px; }
+#s1-chat .hd { position: absolute; left: 34px; top: 26px; display: flex; align-items: center; gap: 16px; font: 700 34px/1.2 var(--display); color: var(--text); }
+#s1-chat .hd .hi { width: 44px; height: 44px; color: var(--amber); }
+#s1-chat .rule { position: absolute; left: 0; right: 0; top: 100px; height: 1px; background: var(--line); }
+#s1-q { position: absolute; right: 34px; top: 136px; padding: 14px 28px; border-radius: 26px 26px 6px 26px; font: 700 34px/1.7 var(--kh-body); color: #1b1203; background: linear-gradient(180deg, #ffc27a, #ffa53d); white-space: nowrap; }
+#s1-a { position: absolute; left: 34px; top: 270px; width: 470px; padding: 26px 28px; border-radius: 26px 26px 26px 6px; background: rgba(150, 170, 210, 0.12); border: 1px solid var(--line); }
+#s1-a i { display: block; height: 16px; border-radius: 8px; margin: 10px 0; background: linear-gradient(90deg, rgba(200,215,240,.22), rgba(200,215,240,.5), rgba(200,215,240,.22)); background-size: 300% 100%; }
+#s1-chat-tag { left: 210px; top: 182px; }
+#s1-agent-tag { left: 1260px; top: 150px; }
+.s1-tool { position: absolute; width: 132px; height: 132px; margin: -66px 0 0 -66px; border-radius: 34px; padding: 34px; color: var(--text);
+  background: linear-gradient(180deg, rgba(30,46,80,.92), rgba(12,20,38,.95)); border: 1px solid var(--line); box-shadow: 0 24px 50px rgba(0,0,0,.45); }
+.s1-tool .badge { right: -16px; top: -16px; width: 50px; height: 50px; padding: 11px; }
+#s1-beams { position: absolute; inset: 0; overflow: visible; }
+.s1-pkt { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff; box-shadow: 0 0 14px 5px rgba(58,230,160,.85); opacity: 0; }
+#s1-title { position: absolute; left: 0; right: 0; top: 330px; text-align: center; }
+#s1-title .big { font: 700 236px/1 var(--display); letter-spacing: -0.03em; display: inline-flex; }
+#s1-title .big span { display: inline-block; background: linear-gradient(180deg, #ffffff 30%, #9ff8d2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#s1-title .big span.g { background: linear-gradient(180deg, #b9ffe0 10%, #3ae6a0 100%); -webkit-background-clip: text; background-clip: text; }
+#s1-title .km { margin-top: 34px; font: 400 60px/1.6 var(--kh-head); color: var(--text); }
+#s1-title .rl { position: absolute; top: 140px; width: 300px; height: 2px; }
+#s1-title .rl.l { left: 150px; background: linear-gradient(90deg, transparent, var(--green)); transform-origin: 100% 50%; }
+#s1-title .rl.r { right: 150px; background: linear-gradient(90deg, var(--green), transparent); transform-origin: 0% 50%; }
+
+/* s2 anatomy */
+#s2-label { left: 0; right: 0; top: 118px; display: flex; justify-content: center; }
+#s2-label .pill { position: relative; font-family: var(--display); font-size: 34px; line-height: 1.5; }
+#s2-lines { position: absolute; inset: 0; overflow: visible; }
+.s2-flow { position: absolute; top: 410px; display: flex; flex-direction: column; align-items: center; gap: 18px; width: 300px; margin-left: -150px; }
+.s2-flow .fi { width: 150px; height: 150px; border-radius: 40px; padding: 38px; background: linear-gradient(180deg, rgba(30,46,80,.92), rgba(12,20,38,.95)); border: 1px solid var(--line); box-shadow: 0 24px 50px rgba(0,0,0,.45); }
+.s2-flow .ft { font: 700 44px/1.6 var(--kh-body); white-space: nowrap; }
+#s2-goal .fi { color: var(--amber); } #s2-done .fi { color: #04140d; background: var(--green); border-color: transparent; box-shadow: 0 0 50px rgba(58,230,160,.5); }
+.s2-dot { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: #fff; box-shadow: 0 0 18px 6px rgba(255,190,110,.75); }
+#s2-dot2 { box-shadow: 0 0 18px 6px rgba(58,230,160,.85); }
+
+/* s3 compare */
+#s3-div { position: absolute; left: 959px; top: 170px; width: 2px; height: 700px; background: linear-gradient(180deg, transparent, rgba(150,180,255,.35), transparent); transform-origin: 50% 0; }
+.s3-head { position: absolute; top: 190px; display: flex; flex-direction: column; align-items: center; width: 860px; gap: 22px; }
+.s3-head .h { font: 700 92px/1 var(--display); letter-spacing: -0.02em; }
+#s3-lh { left: 50px; } #s3-rh { left: 1010px; }
+#s3-lh .h { color: #d3dbea; }
+#s3-rh .h { background: linear-gradient(180deg, #c6ffe6, #3ae6a0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.s3-head .pill { position: relative; }
+.s3-flow { position: absolute; top: 500px; height: 240px; }
+.s3-pan { position: absolute; top: 140px; width: 840px; height: 730px; border-radius: 36px; border: 1px solid rgba(150,180,255,.1); background: linear-gradient(180deg, rgba(20,32,58,.42), rgba(10,17,33,.2)); }
+#s3-lpan { left: 60px; } #s3-rpan { left: 1020px; border-color: rgba(58,230,160,.22); background: linear-gradient(180deg, rgba(20,60,48,.32), rgba(10,17,33,.2)); }
+#s3-lf { left: 150px; width: 660px; } #s3-rf { left: 1030px; width: 820px; }
+.s3-chip { position: absolute; top: 40px; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 200px; margin-left: -100px; }
+.s3-chip .ci { width: 140px; height: 140px; border-radius: 38px; padding: 35px; background: linear-gradient(180deg, rgba(30,46,80,.92), rgba(12,20,38,.95)); border: 1px solid var(--line); }
+.s3-chip .ct { font: 700 40px/1.6 var(--kh-body); white-space: nowrap; }
+.s3-arrow { position: absolute; top: 109px; height: 3px; border-radius: 2px; background: rgba(150,180,255,.4); transform-origin: 0 50%; }
+.s3-arrow::after { content: ""; position: absolute; right: -2px; top: -7px; border-left: 14px solid rgba(150,180,255,.6); border-top: 8.5px solid transparent; border-bottom: 8.5px solid transparent; }
+.s3-step { position: absolute; top: 76px; width: 68px; height: 68px; margin-left: -34px; border-radius: 50%; display: grid; place-items: center;
+  font: 700 30px/1 var(--kh-body); color: var(--muted); background: rgba(20,32,58,.95); border: 2px solid rgba(150,180,255,.3); }
+.s3-step .sc { position: absolute; inset: 0; border-radius: 50%; padding: 15px; color: #04140d; background: var(--green); box-shadow: 0 0 26px rgba(58,230,160,.6); }
+#s3-track { position: absolute; left: 160px; top: 109px; width: 500px; height: 3px; background: rgba(150,180,255,.25); }
+#s3-fill { position: absolute; left: 160px; top: 109px; width: 500px; height: 3px; background: var(--green); box-shadow: 0 0 14px rgba(58,230,160,.8); transform-origin: 0 50%; }
+
+/* s4 loop */
+#s4-title { left: 0; right: 0; top: 92px; text-align: center; }
+#s4-title .km { font: 400 70px/1.6 var(--kh-head); }
+#s4-title .sb { margin-top: 2px; font: 700 36px/1.6 var(--kh-body); color: var(--green); }
+#s4-ring { position: absolute; left: 640px; top: 290px; width: 640px; height: 640px; }
+#s4-ring svg.ring { position: absolute; inset: 0; overflow: visible; }
+.s4-node { position: absolute; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%; display: grid; place-items: center;
+  font: 700 40px/1 var(--kh-body); color: var(--text); background: radial-gradient(circle at 40% 35%, #233a66, #0f1b33); border: 2px solid rgba(150,180,255,.38); box-shadow: 0 16px 36px rgba(0,0,0,.5); }
+.s4-node .on { position: absolute; inset: -2px; border-radius: 50%; display: grid; place-items: center; color: #04140d; background: radial-gradient(circle at 40% 35%, #b5ffdf, #3ae6a0 55%, #12b874); box-shadow: 0 0 40px rgba(58,230,160,.75); }
+.s4-lab { position: absolute; font: 700 32px/1.6 var(--kh-body); white-space: nowrap; color: var(--text); }
+#s4-comet { position: absolute; left: 320px; top: 320px; width: 0; height: 0; }
+#s4-comet i { position: absolute; left: -13px; top: -253px; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 0 20px 8px rgba(58,230,160,.9), 0 0 60px 20px rgba(58,230,160,.35); }
+#s4-comet b { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+#s4-comet b i { box-shadow: 0 0 16px 6px rgba(58,230,160,.6); }
+#s4-comet b:nth-child(1) i { opacity: .18; transform: scale(.55); } #s4-comet b:nth-child(2) i { opacity: .32; transform: scale(.7); } #s4-comet b:nth-child(3) i { opacity: .55; transform: scale(.85); }
+.s4-chev { position: absolute; width: 0; height: 0; border-left: 16px solid rgba(150,180,255,.55); border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin: -10px 0 0 -8px; }
+#s4-mini { left: 320px; top: 320px; }
+.s4-panel { position: absolute; left: 1010px; top: 250px; width: 800px; height: 620px; }
+.s4-panel .num { position: absolute; left: 0; top: -10px; font: 700 150px/1 var(--display); color: transparent; -webkit-text-stroke: 2px rgba(58,230,160,.55); }
+.s4-panel .nm { position: absolute; left: 140px; top: 4px; font: 900 58px/1.6 var(--kh-body); white-space: nowrap; }
+.s4-panel .ds { position: absolute; left: 142px; top: 102px; font: 400 34px/1.6 var(--kh-body); color: var(--muted); white-space: nowrap; }
+.s4-panel .bar { position: absolute; left: 0; top: 196px; width: 780px; height: 2px; background: linear-gradient(90deg, var(--green), transparent); transform-origin: 0 50%; }
+.s4-in { position: absolute; left: 30px; width: 520px; height: 104px; display: flex; align-items: center; gap: 24px; padding: 0 30px 0 18px; border-radius: 24px;
+  background: linear-gradient(180deg, rgba(30,46,80,.86), rgba(12,20,38,.9)); border: 1px solid var(--line); }
+.s4-in .ii { width: 70px; height: 70px; padding: 16px; border-radius: 18px; flex: none; }
+.s4-in .it { font: 700 36px/1.6 var(--kh-body); white-space: nowrap; }
+.s4-in .ar { margin-left: auto; width: 34px; height: 34px; color: var(--dim); }
+.s4-plan { position: absolute; left: 30px; width: 640px; height: 100px; display: flex; align-items: center; gap: 26px; }
+.s4-plan .pn { width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font: 700 30px/1 var(--kh-body); color: #04140d; background: var(--green); flex: none; box-shadow: 0 0 24px rgba(58,230,160,.45); }
+.s4-plan .pt2 { font: 700 38px/1.6 var(--kh-body); white-space: nowrap; }
+.s4-plan .pl { position: absolute; left: 31px; top: 82px; width: 2px; height: 36px; background: rgba(58,230,160,.45); transform-origin: 50% 0; }
+.s4-tool { position: absolute; width: 360px; height: 150px; border-radius: 26px; display: flex; align-items: center; gap: 22px; padding: 0 26px;
+  background: linear-gradient(180deg, rgba(30,46,80,.86), rgba(12,20,38,.9)); border: 1px solid var(--line); }
+.s4-tool .ti { width: 82px; height: 82px; padding: 19px; border-radius: 22px; flex: none; color: var(--text); background: rgba(150,170,210,.1); border: 1px solid var(--line); }
+.s4-tool .tt { font: 700 34px/1.2 var(--display); white-space: nowrap; }
+.s4-tool .glow { position: absolute; inset: -2px; border-radius: 26px; border: 2px solid var(--green); box-shadow: 0 0 40px rgba(58,230,160,.45), inset 0 0 30px rgba(58,230,160,.15); }
+#s4-gauge { position: absolute; left: 30px; top: 250px; width: 300px; height: 300px; }
+#s4-gauge svg { width: 100%; height: 100%; overflow: visible; }
+#s4-gauge .pc { position: absolute; inset: 0; display: grid; place-items: center; font: 700 70px/1 var(--display); }
+#s4-gauge .ok { position: absolute; inset: 70px; border-radius: 50%; padding: 34px; color: #04140d; background: var(--green); box-shadow: 0 0 60px rgba(58,230,160,.7); }
+#s4-q { position: absolute; left: 380px; top: 290px; font: 700 40px/1.6 var(--kh-body); white-space: nowrap; }
+#s4-rep { left: 380px; top: 400px; }
+
+/* s5 example */
+#s5-tag { left: 150px; top: 112px; }
+#s5-card { left: 150px; top: 210px; width: 1000px; height: 660px; }
+#s5-prompt { position: absolute; left: 36px; top: 36px; right: 36px; display: flex; align-items: center; gap: 22px; }
+#s5-prompt .av { width: 72px; height: 72px; border-radius: 50%; padding: 17px; color: #1b1203; background: linear-gradient(180deg, #ffc27a, #ffa53d); flex: none; }
+#s5-prompt .bub { position: relative; padding: 12px 30px 14px; border-radius: 24px 24px 24px 6px; background: rgba(255,165,61,.1); border: 1px solid rgba(255,165,61,.35); }
+#s5-prompt .bt { font: 700 36px/1.7 var(--kh-body); white-space: nowrap; color: #ffe2bf; }
+#s5-caret { position: absolute; top: 18px; width: 3px; height: 52px; background: #ffc27a; }
+#s5-agent { position: absolute; left: 36px; top: 160px; display: flex; align-items: center; gap: 18px; }
+#s5-agent .mini { position: relative; width: 72px; height: 72px; }
+#s5-agent .nm { font: 700 32px/1 var(--display); color: var(--green); }
+#s5-agent .st { font: 400 32px/1.6 var(--kh-body); color: var(--muted); }
+#s5-agent .dots i { display: inline-block; width: 8px; height: 8px; margin-left: 6px; border-radius: 50%; background: var(--muted); }
+.s5-row { position: absolute; left: 36px; right: 36px; height: 104px; display: flex; align-items: center; gap: 24px; padding: 0 26px 0 18px; border-radius: 22px;
+  background: rgba(150,170,210,.06); border: 1px solid rgba(150,180,255,.1); }
+.s5-row .ri { width: 70px; height: 70px; padding: 16px; border-radius: 18px; flex: none; color: var(--blue); background: rgba(92,157,255,.12); }
+.s5-row .rt { font: 700 36px/1.6 var(--kh-body); white-space: nowrap; }
+.s5-row .rs { position: relative; margin-left: auto; width: 54px; height: 54px; flex: none; }
+.s5-row .spin { position: absolute; inset: 0; }
+.s5-row .ok { position: absolute; inset: 0; border-radius: 50%; padding: 12px; color: #04140d; background: var(--green); box-shadow: 0 0 22px rgba(58,230,160,.55); }
+#s5-prog { position: absolute; left: 36px; right: 36px; bottom: 34px; height: 10px; border-radius: 5px; background: rgba(150,180,255,.14); overflow: hidden; }
+#s5-prog i { position: absolute; inset: 0; border-radius: 5px; background: linear-gradient(90deg, var(--green-2), var(--green)); transform-origin: 0 50%; }
+#s5-cal { left: 1210px; top: 210px; width: 560px; height: 420px; }
+#s5-cal .ch { position: absolute; left: 30px; top: 26px; display: flex; align-items: center; gap: 14px; font: 700 30px/1.2 var(--display); }
+#s5-cal .ch .ci { width: 38px; height: 38px; color: var(--blue); }
+.s5-day { position: absolute; top: 96px; width: 88px; text-align: center; font: 500 22px/1 var(--mono); color: var(--dim); }
+.s5-slot { position: absolute; width: 88px; height: 70px; border-radius: 14px; background: rgba(150,170,210,.1); }
+.s5-slot.busy { background: repeating-linear-gradient(135deg, rgba(150,170,210,.16) 0 8px, rgba(150,170,210,.07) 8px 16px); }
+#s5-free { position: absolute; width: 88px; height: 70px; border-radius: 14px; padding: 17px; color: #04140d; background: var(--green); box-shadow: 0 0 34px rgba(58,230,160,.6); }
+#s5-mail { left: 1210px; top: 660px; width: 560px; height: 210px; display: flex; align-items: center; gap: 26px; padding: 0 36px; }
+#s5-mail .mi { position: relative; width: 104px; height: 104px; padding: 24px; border-radius: 28px; color: var(--amber); background: rgba(255,165,61,.12); border: 1px solid rgba(255,165,61,.32); flex: none; }
+#s5-mail .mt { font: 700 34px/1.2 var(--display); }
+#s5-plane { position: absolute; left: 1290px; top: 720px; width: 64px; height: 64px; color: #ffd29a; }
+#s5-done { left: 1210px; top: 660px; width: 560px; height: 210px; display: flex; align-items: center; justify-content: center; gap: 26px;
+  border-radius: 30px; background: linear-gradient(180deg, rgba(58,230,160,.22), rgba(18,184,116,.14)); border: 1px solid rgba(58,230,160,.55); box-shadow: 0 0 80px rgba(58,230,160,.25); }
+#s5-done .dk { width: 104px; height: 104px; border-radius: 50%; padding: 24px; color: #04140d; background: var(--green); box-shadow: 0 0 40px rgba(58,230,160,.7); flex: none; }
+#s5-done .dt { font: 900 56px/1.6 var(--kh-body); color: #eafff5; white-space: nowrap; }
+.s5-rw { position: absolute; left: 1294px; top: 765px; width: 0; height: 0; }
+.s5-ray { position: absolute; left: -2px; top: -126px; width: 4px; height: 40px; border-radius: 2px; background: var(--green); transform-origin: 50% 100%; }
+
+/* s6 close */
+#s6-waves { position: absolute; left: 960px; top: 400px; }
+#s6-waves i { position: absolute; left: -160px; top: -160px; width: 320px; height: 320px; border-radius: 50%; border: 2px solid rgba(58,230,160,.5); }
+#s6-l1 { left: 0; right: 0; top: 618px; text-align: center; font: 400 74px/1.6 var(--kh-head); }
+#s6-l2 { left: 0; right: 0; top: 760px; display: flex; justify-content: center; }
+#s6-l2 span { font: 700 44px/1.6 var(--kh-body); color: var(--muted); }
+#s6-brand { left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
+#s6-brand .row { display: flex; align-items: center; gap: 34px; }
+#s6-brand .mark { width: 150px; height: 150px; font-size: 64px; border-radius: 30%; }
+#s6-brand .wm { font: 700 120px/1 var(--display); letter-spacing: -0.02em; }
+#s6-brand .wm b { color: var(--green); font-weight: 700; }
+#s6-brand .ul { width: 760px; height: 3px; background: linear-gradient(90deg, transparent, var(--green), transparent); transform-origin: 50% 50%; }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="60.46" data-width="1920" data-height="1080">
+
+  <!-- atmosphere -->
+  <div class="clip layer" id="atmo" data-start="0" data-duration="60.46" data-track-index="0">
+    <div class="layer" id="bg-base"></div>
+    <div class="aurora" id="au-a"></div><div class="aurora" id="au-b"></div><div class="aurora" id="au-c"></div>
+    <div id="grid"></div>
+    <div class="layer" id="parts"><i class="pt" id="pt-0" style="left:1768px;top:312px;width:2.0px;height:2.0px;opacity:0.20"></i><i class="pt" id="pt-1" style="left:1444px;top:815px;width:3.3px;height:3.3px;opacity:0.34"></i><i class="pt" id="pt-2" style="left:465px;top:404px;width:5.3px;height:5.3px;opacity:0.40"></i><i class="pt" id="pt-3" style="left:898px;top:996px;width:4.7px;height:4.7px;opacity:0.44"></i><i class="pt" id="pt-4" style="left:1322px;top:695px;width:5.7px;height:5.7px;opacity:0.35"></i><i class="pt" id="pt-5" style="left:644px;top:904px;width:3.5px;height:3.5px;opacity:0.25"></i><i class="pt" id="pt-6" style="left:566px;top:1012px;width:3.7px;height:3.7px;opacity:0.34"></i><i class="pt" id="pt-7" style="left:525px;top:605px;width:2.2px;height:2.2px;opacity:0.32"></i><i class="pt" id="pt-8" style="left:105px;top:395px;width:5.6px;height:5.6px;opacity:0.26"></i><i class="pt" id="pt-9" style="left:318px;top:438px;width:4.1px;height:4.1px;opacity:0.23"></i><i class="pt" id="pt-10" style="left:1021px;top:663px;width:3.3px;height:3.3px;opacity:0.21"></i><i class="pt" id="pt-11" style="left:1219px;top:685px;width:5.5px;height:5.5px;opacity:0.33"></i><i class="pt" id="pt-12" style="left:762px;top:765px;width:5.8px;height:5.8px;opacity:0.22"></i><i class="pt" id="pt-13" style="left:752px;top:858px;width:3.3px;height:3.3px;opacity:0.47"></i><i class="pt" id="pt-14" style="left:781px;top:166px;width:2.3px;height:2.3px;opacity:0.15"></i><i class="pt" id="pt-15" style="left:277px;top:494px;width:4.5px;height:4.5px;opacity:0.36"></i><i class="pt" id="pt-16" style="left:1710px;top:956px;width:5.5px;height:5.5px;opacity:0.48"></i><i class="pt" id="pt-17" style="left:477px;top:82px;width:2.0px;height:2.0px;opacity:0.12"></i><i class="pt" id="pt-18" style="left:940px;top:743px;width:5.0px;height:5.0px;opacity:0.22"></i><i class="pt" id="pt-19" style="left:1717px;top:128px;width:3.5px;height:3.5px;opacity:0.32"></i><i class="pt" id="pt-20" style="left:1770px;top:23px;width:4.5px;height:4.5px;opacity:0.48"></i><i class="pt" id="pt-21" style="left:1304px;top:288px;width:4.3px;height:4.3px;opacity:0.21"></i><i class="pt" id="pt-22" style="left:1477px;top:757px;width:2.2px;height:2.2px;opacity:0.41"></i><i class="pt" id="pt-23" style="left:1765px;top:141px;width:2.4px;height:2.4px;opacity:0.40"></i><i class="pt" id="pt-24" style="left:1654px;top:1072px;width:5.5px;height:5.5px;opacity:0.50"></i><i class="pt" id="pt-25" style="left:1397px;top:953px;width:3.0px;height:3.0px;opacity:0.28"></i><i class="pt" id="pt-26" style="left:1073px;top:380px;width:5.5px;height:5.5px;opacity:0.37"></i><i class="pt" id="pt-27" style="left:812px;top:215px;width:4.9px;height:4.9px;opacity:0.24"></i><i class="pt" id="pt-28" style="left:1675px;top:992px;width:4.5px;height:4.5px;opacity:0.20"></i><i class="pt" id="pt-29" style="left:1070px;top:833px;width:4.0px;height:4.0px;opacity:0.50"></i><i class="pt" id="pt-30" style="left:319px;top:716px;width:3.8px;height:3.8px;opacity:0.33"></i><i class="pt" id="pt-31" style="left:696px;top:811px;width:5.0px;height:5.0px;opacity:0.13"></i><i class="pt" id="pt-32" style="left:1388px;top:314px;width:2.8px;height:2.8px;opacity:0.21"></i><i class="pt" id="pt-33" style="left:1484px;top:889px;width:2.3px;height:2.3px;opacity:0.49"></i><i class="pt" id="pt-34" style="left:48px;top:823px;width:5.8px;height:5.8px;opacity:0.36"></i><i class="pt" id="pt-35" style="left:261px;top:87px;width:2.1px;height:2.1px;opacity:0.16"></i><i class="pt" id="pt-36" style="left:1816px;top:207px;width:4.4px;height:4.4px;opacity:0.17"></i><i class="pt" id="pt-37" style="left:876px;top:1073px;width:3.0px;height:3.0px;opacity:0.29"></i><i class="pt" id="pt-38" style="left:800px;top:66px;width:3.6px;height:3.6px;opacity:0.21"></i><i class="pt" id="pt-39" style="left:1777px;top:549px;width:2.6px;height:2.6px;opacity:0.17"></i><i class="pt" id="pt-40" style="left:150px;top:295px;width:2.7px;height:2.7px;opacity:0.38"></i><i class="pt" id="pt-41" style="left:144px;top:446px;width:6.0px;height:6.0px;opacity:0.25"></i><i class="pt" id="pt-42" style="left:175px;top:253px;width:3.7px;height:3.7px;opacity:0.49"></i><i class="pt" id="pt-43" style="left:1641px;top:1039px;width:3.7px;height:3.7px;opacity:0.44"></i><i class="pt" id="pt-44" style="left:781px;top:537px;width:3.4px;height:3.4px;opacity:0.32"></i><i class="pt" id="pt-45" style="left:1215px;top:787px;width:4.7px;height:4.7px;opacity:0.47"></i></div>
+  </div>
+
+  <!-- S1 hook -->
+  <section class="clip scene" id="s1" data-start="0" data-duration="7.38" data-track-index="1"><div class="cam" id="s1-cam"><div class="rig" id="s1-rig">
+    <div class="pill amber" id="s1-chat-tag"><span class="pi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/></svg></span>ឆ្លើយសំណួរ</div>
+    <div class="glass" id="s1-chat">
+      <div class="hd"><span class="hi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/></svg></span>Chatbot</div>
+      <div class="rule"></div>
+      <div id="s1-q">ខែនេះលក់បានប៉ុន្មាន?</div>
+      <div id="s1-a"><i style="width:92%"></i><i style="width:78%"></i><i style="width:56%"></i></div>
+    </div>
+    <svg id="s1-beams" viewBox="0 0 1920 1080">
+      <line id="s1-beam-0" x1="1440" y1="540" x2="1244.7" y2="376.1" stroke="rgba(58,230,160,.7)" stroke-width="3" stroke-linecap="round"/><line id="s1-beam-1" x1="1440" y1="540" x2="1635.3" y2="376.1" stroke="rgba(58,230,160,.7)" stroke-width="3" stroke-linecap="round"/><line id="s1-beam-2" x1="1440" y1="540" x2="1635.3" y2="703.9" stroke="rgba(58,230,160,.7)" stroke-width="3" stroke-linecap="round"/><line id="s1-beam-3" x1="1440" y1="540" x2="1244.7" y2="703.9" stroke="rgba(58,230,160,.7)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <i class="s1-pkt" id="s1-pkt-0" style="left:1440px;top:540px"></i><i class="s1-pkt" id="s1-pkt-1" style="left:1440px;top:540px"></i><i class="s1-pkt" id="s1-pkt-2" style="left:1440px;top:540px"></i><i class="s1-pkt" id="s1-pkt-3" style="left:1440px;top:540px"></i>
+    <div class="core" id="s1-core" style="left:1440px;top:540px;--s:210px">
+    <div class="core-glow" id="s1-core-glow"></div>
+    <div class="core-rings"><svg viewBox="0 0 100 100">
+      <g id="s1-core-r1" style="transform-origin:50px 50px"><circle cx="50" cy="50" r="49" fill="none" stroke="rgba(58,230,160,.55)" stroke-width=".6" stroke-dasharray="1.2 3.2"/></g>
+      <g id="s1-core-r2" style="transform-origin:50px 50px"><path d="M50 3 A47 47 0 0 1 93.5 32" fill="none" stroke="rgba(142,247,201,.9)" stroke-width="1.1" stroke-linecap="round"/><path d="M50 97 A47 47 0 0 1 6.5 68" fill="none" stroke="rgba(142,247,201,.55)" stroke-width="1.1" stroke-linecap="round"/></g>
+    </svg></div>
+    <div class="core-orb" id="s1-core-orb"></div>
+    <div class="core-core"></div>
+  </div>
+    <div class="s1-tool" id="s1-tool-0" style="left:1244.7px;top:376.1px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><rect x="13.5" y="13" width="3.5" height="3.5" rx=".6" fill="currentColor" stroke="none"/></svg><div class="badge" id="s1-ok-0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div><div class="s1-tool" id="s1-tool-1" style="left:1635.3px;top:376.1px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg><div class="badge" id="s1-ok-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div><div class="s1-tool" id="s1-tool-2" style="left:1635.3px;top:703.9px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M4 9h16M4 14.5h16M10 9v11.5"/></svg><div class="badge" id="s1-ok-2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div><div class="s1-tool" id="s1-tool-3" style="left:1244.7px;top:703.9px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><div class="badge" id="s1-ok-3"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div>
+    <div class="pill" id="s1-agent-tag"><span class="pi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg></span><span class="en" style="font-weight:700">AI Agent</span>&nbsp;·&nbsp;ធ្វើការងារ</div>
+    <div id="s1-title">
+      <i class="rl l" id="s1-rl"></i><i class="rl r" id="s1-rr"></i>
+      <div class="big" id="s1-big"><span class="g" id="s1-ch-0">A</span><span class="g" id="s1-ch-1">I</span><span class="" id="s1-ch-2">&nbsp;</span><span class="" id="s1-ch-3">A</span><span class="" id="s1-ch-4">g</span><span class="" id="s1-ch-5">e</span><span class="" id="s1-ch-6">n</span><span class="" id="s1-ch-7">t</span></div>
+      <div class="km" id="s1-km">តើវាជាអ្វី? ដំណើរការដូចម្តេច?</div>
+    </div>
+  </div></div></section>
+
+  <!-- S2 anatomy -->
+  <section class="clip scene" id="s2" data-start="6.83" data-duration="11.575" data-track-index="2"><div class="cam" id="s2-cam"><div class="rig" id="s2-rig">
+    <div class="abs" id="s2-label"><div class="pill" id="s2-pill"><span class="pi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg></span>AI Agent</div></div>
+    <svg id="s2-lines" viewBox="0 0 1920 1080">
+      <line id="s2-in" x1="520" y1="500" x2="830" y2="500" stroke="rgba(255,165,61,.6)" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+      <line id="s2-out" x1="1090" y1="500" x2="1400" y2="500" stroke="rgba(58,230,160,.7)" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+      <path id="s2-c-brain" d="M860 430 C 760 360, 700 330, 590 330" fill="none" stroke="rgba(58,230,160,.55)" stroke-width="3"/>
+      <path id="s2-c-memory" d="M1060 430 C 1160 360, 1220 330, 1300 330" fill="none" stroke="rgba(92,157,255,.6)" stroke-width="3"/>
+      <path id="s2-c-tools" d="M960 630 C 960 680, 960 700, 960 752" fill="none" stroke="rgba(255,165,61,.6)" stroke-width="3"/>
+    </svg>
+    <div class="core" id="s2-core" style="left:960px;top:500px;--s:250px">
+    <div class="core-glow" id="s2-core-glow"></div>
+    <div class="core-rings"><svg viewBox="0 0 100 100">
+      <g id="s2-core-r1" style="transform-origin:50px 50px"><circle cx="50" cy="50" r="49" fill="none" stroke="rgba(58,230,160,.55)" stroke-width=".6" stroke-dasharray="1.2 3.2"/></g>
+      <g id="s2-core-r2" style="transform-origin:50px 50px"><path d="M50 3 A47 47 0 0 1 93.5 32" fill="none" stroke="rgba(142,247,201,.9)" stroke-width="1.1" stroke-linecap="round"/><path d="M50 97 A47 47 0 0 1 6.5 68" fill="none" stroke="rgba(142,247,201,.55)" stroke-width="1.1" stroke-linecap="round"/></g>
+    </svg></div>
+    <div class="core-orb" id="s2-core-orb"></div>
+    <div class="core-core"></div>
+  </div>
+    <div class="s2-flow" id="s2-goal" style="left:400px"><div class="fi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></div><div class="ft">គោលដៅ</div></div>
+    <div class="s2-flow" id="s2-done" style="left:1520px"><div class="fi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div><div class="ft">សម្រេច</div></div>
+    <i class="s2-dot" id="s2-dot1" style="left:560px;top:500px"></i>
+    <i class="s2-dot" id="s2-dot2" style="left:1100px;top:500px"></i>
+    <div class="node " id="s2-brain" style="left:250px;top:250px"><div class="nic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2.5v3.5M15 2.5v3.5M9 18v3.5M15 18v3.5M2.5 9h3.5M2.5 15h3.5M18 9h3.5M18 15h3.5"/></svg></div><div><div class="kt">ខួរក្បាល</div><div class="et">AI Model</div></div></div><div class="node blue" id="s2-memory" style="left:1290px;top:250px"><div class="nic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7.5" ry="3"/><path d="M4.5 5.5v6.5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V5.5"/><path d="M4.5 12v6.5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V12"/></svg></div><div><div class="kt">ការចងចាំ</div><div class="et">Memory</div></div></div><div class="node amber" id="s2-tools" style="left:770px;top:760px"><div class="nic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.6 6.4a4.2 4.2 0 0 0-5.5 5.5L3.5 17.5l3 3 5.6-5.6a4.2 4.2 0 0 0 5.5-5.5l-2.6 2.6-2.5-.5-.5-2.5z"/></svg></div><div><div class="kt">ឧបករណ៍</div><div class="et">Tools</div></div></div>
+  </div></div></section>
+
+  <!-- S3 compare -->
+  <section class="clip scene" id="s3" data-start="17.855" data-duration="8.449" data-track-index="3"><div class="cam" id="s3-cam"><div class="rig" id="s3-rig">
+    <div class="s3-pan" id="s3-lpan"></div><div class="s3-pan" id="s3-rpan"></div>
+    <i id="s3-div"></i>
+    <div class="s3-head" id="s3-lh"><div class="h">Chatbot</div><div class="pill muted" id="s3-lp"><span class="pi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/></svg></span>ឆ្លើយម្ដងមួយ</div></div>
+    <div class="s3-head" id="s3-rh"><div class="h">AI Agent</div><div class="pill" id="s3-rp"><span class="pi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg></span>ធ្វើគ្រប់ជំហានដោយឯកឯង</div></div>
+    <div class="s3-flow" id="s3-lf">
+      <div class="s3-chip" id="s3-q" style="left:130px"><div class="ci" style="color:var(--amber)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/></svg></div><div class="ct">សំណួរ</div></div>
+      <i class="s3-arrow" id="s3-la" style="left:225px;width:200px"></i>
+      <div class="s3-chip" id="s3-a" style="left:530px"><div class="ci" style="color:#d3dbea"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.8h8.5L19 7.3v13.9H6z"/><path d="M14.3 2.8v4.7H19M9 12h7M9 15.5h7M9 9h3"/></svg></div><div class="ct">ចម្លើយ</div></div>
+    </div>
+    <div class="s3-flow" id="s3-rf">
+      <i id="s3-track"></i><i id="s3-fill"></i>
+      <div class="s3-chip" id="s3-g" style="left:90px"><div class="ci" style="color:var(--amber)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></div><div class="ct">គោលដៅ</div></div>
+      <div class="s3-step" id="s3-st-0" style="left:280px">១<div class="sc" id="s3-sc-0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div><div class="s3-step" id="s3-st-1" style="left:410px">២<div class="sc" id="s3-sc-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div><div class="s3-step" id="s3-st-2" style="left:540px">៣<div class="sc" id="s3-sc-2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div>
+      <div class="s3-chip" id="s3-r" style="left:730px"><div class="ci" style="color:#04140d;background:var(--green);border-color:transparent;box-shadow:0 0 40px rgba(58,230,160,.5)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div><div class="ct">លទ្ធផល</div></div>
+    </div>
+  </div></div></section>
+
+  <!-- S4 loop -->
+  <section class="clip scene" id="s4" data-start="25.754" data-duration="20.587" data-track-index="4"><div class="cam" id="s4-cam"><div class="rig" id="s4-rig">
+    <div class="abs" id="s4-title"><div class="km" id="s4-tk">របៀបដំណើរការ</div><div class="sb" id="s4-ts">វដ្តបួនជំហាន</div></div>
+    <div id="s4-ring">
+      <svg class="ring" viewBox="0 0 640 640">
+        <circle id="s4-base" cx="320" cy="320" r="250" fill="none" stroke="rgba(150,180,255,.22)" stroke-width="3" transform="rotate(-90 320 320)"/>
+        <circle id="s4-prog" cx="320" cy="320" r="250" fill="none" stroke="#3ae6a0" stroke-width="5" stroke-linecap="round" transform="rotate(-90 320 320)" style="filter:drop-shadow(0 0 10px rgba(58,230,160,.8))"/>
+      </svg>
+      <i class="s4-chev" style="left:496.7766952966369px;top:143.22330470336314px;transform:rotate(45deg)"></i><i class="s4-chev" style="left:496.7766952966369px;top:496.77669529663683px;transform:rotate(135deg)"></i><i class="s4-chev" style="left:143.22330470336314px;top:496.7766952966369px;transform:rotate(225deg)"></i><i class="s4-chev" style="left:143.22330470336308px;top:143.22330470336314px;transform:rotate(315deg)"></i>
+      <div class="core" id="s4-mini" style="left:320px;top:320px;--s:170px">
+    <div class="core-glow" id="s4-mini-glow"></div>
+    <div class="core-rings"><svg viewBox="0 0 100 100">
+      <g id="s4-mini-r1" style="transform-origin:50px 50px"><circle cx="50" cy="50" r="49" fill="none" stroke="rgba(58,230,160,.55)" stroke-width=".6" stroke-dasharray="1.2 3.2"/></g>
+      <g id="s4-mini-r2" style="transform-origin:50px 50px"><path d="M50 3 A47 47 0 0 1 93.5 32" fill="none" stroke="rgba(142,247,201,.9)" stroke-width="1.1" stroke-linecap="round"/><path d="M50 97 A47 47 0 0 1 6.5 68" fill="none" stroke="rgba(142,247,201,.55)" stroke-width="1.1" stroke-linecap="round"/></g>
+    </svg></div>
+    <div class="core-orb" id="s4-mini-orb"></div>
+    <div class="core-core"></div>
+  </div>
+      <div id="s4-comet"><b style="transform:rotate(-15deg)"><i></i></b><b style="transform:rotate(-10deg)"><i></i></b><b style="transform:rotate(-5deg)"><i></i></b><i></i></div>
+      <div class="s4-node" id="s4-n-0" style="left:320px;top:70px">១<div class="on" id="s4-on-0">១</div></div><div class="s4-node" id="s4-n-1" style="left:570px;top:320px">២<div class="on" id="s4-on-1">២</div></div><div class="s4-node" id="s4-n-2" style="left:320px;top:570px">៣<div class="on" id="s4-on-2">៣</div></div><div class="s4-node" id="s4-n-3" style="left:70px;top:320.00000000000006px">៤<div class="on" id="s4-on-3">៤</div></div>
+      <div class="s4-lab" id="s4-lab-0" style="left:386px;top:42px">ស្វែងយល់</div><div class="s4-lab" id="s4-lab-1" style="left:636px;top:292px">គិត និងរៀបចំ</div><div class="s4-lab" id="s4-lab-2" style="right:386px;top:542px">អនុវត្ត</div><div class="s4-lab" id="s4-lab-3" style="right:636px;top:292.00000000000006px">ផ្ទៀងផ្ទាត់</div>
+    </div>
+    <div class="s4-panel" id="s4-p-0">
+      <div class="num">១</div><div class="nm" id="s4-nm-0">ស្វែងយល់</div><div class="ds" id="s4-ds-0">ទទួលគោលដៅ និងទិន្នន័យ</div><i class="bar" id="s4-bar-0"></i>
+      <div class="s4-in" id="s4-in-0" style="top:250px"><div class="ii" style="color:var(--amber);background:rgba(255,165,61,.12)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></div><div class="it">គោលដៅ</div><div class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.5L10.8 13.2"/><path d="M21.5 2.5l-6.8 19-3.9-8.3-8.3-3.9z"/></svg></div></div><div class="s4-in" id="s4-in-1" style="top:374px"><div class="ii" style="color:var(--blue);background:rgba(92,157,255,.12)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20.5h16"/><rect x="5.5" y="12" width="3" height="6" rx=".6"/><rect x="10.5" y="7.5" width="3" height="10.5" rx=".6"/><rect x="15.5" y="4" width="3" height="14" rx=".6"/></svg></div><div class="it">ទិន្នន័យ</div><div class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.5L10.8 13.2"/><path d="M21.5 2.5l-6.8 19-3.9-8.3-8.3-3.9z"/></svg></div></div><div class="s4-in" id="s4-in-2" style="top:498px"><div class="ii" style="color:#d3dbea;background:rgba(150,170,210,.12)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.8h8.5L19 7.3v13.9H6z"/><path d="M14.3 2.8v4.7H19M9 12h7M9 15.5h7M9 9h3"/></svg></div><div class="it">ឯកសារ</div><div class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.5L10.8 13.2"/><path d="M21.5 2.5l-6.8 19-3.9-8.3-8.3-3.9z"/></svg></div></div>
+      
+      
+      
+    </div><div class="s4-panel" id="s4-p-1">
+      <div class="num">២</div><div class="nm" id="s4-nm-1">គិត និងរៀបចំ</div><div class="ds" id="s4-ds-1">បំបែកគោលដៅជាជំហានតូចៗ</div><i class="bar" id="s4-bar-1"></i>
+      
+      <div class="s4-plan" id="s4-pl-0" style="top:250px"><div class="pn">១</div><div class="pt2">ស្វែងរកព័ត៌មាន</div><i class="pl" id="s4-pll-0"></i></div><div class="s4-plan" id="s4-pl-1" style="top:372px"><div class="pn">២</div><div class="pt2">វិភាគទិន្នន័យ</div><i class="pl" id="s4-pll-1"></i></div><div class="s4-plan" id="s4-pl-2" style="top:494px"><div class="pn">៣</div><div class="pt2">សរសេររបាយការណ៍</div></div>
+      
+      
+    </div><div class="s4-panel" id="s4-p-2">
+      <div class="num">៣</div><div class="nm" id="s4-nm-2">អនុវត្ត</div><div class="ds" id="s4-ds-2">ប្រើឧបករណ៍ដើម្បីធ្វើការ</div><i class="bar" id="s4-bar-2"></i>
+      
+      
+      <div class="s4-tool" id="s4-tl-0" style="left:30px;top:250px"><div class="ti"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></div><div class="tt">Web Search</div><div class="glow" id="s4-tg-0"></div></div><div class="s4-tool" id="s4-tl-1" style="left:420px;top:250px"><div class="ti"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg></div><div class="tt">Email</div><div class="glow" id="s4-tg-1"></div></div><div class="s4-tool" id="s4-tl-2" style="left:30px;top:430px"><div class="ti"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><rect x="13.5" y="13" width="3.5" height="3.5" rx=".6" fill="currentColor" stroke="none"/></svg></div><div class="tt">Calendar</div><div class="glow" id="s4-tg-2"></div></div><div class="s4-tool" id="s4-tl-3" style="left:420px;top:430px"><div class="ti"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M4 9h16M4 14.5h16M10 9v11.5"/></svg></div><div class="tt">Spreadsheet</div><div class="glow" id="s4-tg-3"></div></div>
+      
+    </div><div class="s4-panel" id="s4-p-3">
+      <div class="num">៤</div><div class="nm" id="s4-nm-3">ផ្ទៀងផ្ទាត់</div><div class="ds" id="s4-ds-3">ធ្វើឡើងវិញរហូតដល់សម្រេច</div><i class="bar" id="s4-bar-3"></i>
+      
+      
+      
+      <div id="s4-gauge"><svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="128" fill="none" stroke="rgba(150,180,255,.18)" stroke-width="14"/><circle id="s4-garc" cx="150" cy="150" r="128" fill="none" stroke="#3ae6a0" stroke-width="14" stroke-linecap="round" transform="rotate(-90 150 150)" style="filter:drop-shadow(0 0 12px rgba(58,230,160,.7))"/></svg><div class="pc" id="s4-pct">0%</div><div class="ok" id="s4-gok"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div>
+        <div id="s4-q">សម្រេចគោលដៅហើយឬនៅ?</div><div class="pill amber" id="s4-rep"><span class="pi" id="s4-repi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 0-14.3-4.6L4 9"/><path d="M4 4v5h5"/><path d="M4 12.5a8 8 0 0 0 14.3 4.6L20 15"/><path d="M20 20v-5h-5"/></svg></span>ធ្វើឡើងវិញ</div>
+    </div>
+  </div></div></section>
+
+  <!-- S5 example -->
+  <section class="clip scene" id="s5" data-start="45.791" data-duration="7.391" data-track-index="5"><div class="cam" id="s5-cam"><div class="rig" id="s5-rig">
+    <div class="pill amber" id="s5-tag"><span class="pi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l2.1 6.4 6.4 2.1-6.4 2.1L12 19.5l-2.1-6.4-6.4-2.1 6.4-2.1z"/></svg></span>ឧទាហរណ៍</div>
+    <div class="glass" id="s5-card">
+      <div id="s5-prompt"><div class="av"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c0-4 3.4-6.2 7.5-6.2s7.5 2.2 7.5 6.2"/></svg></div><div class="bub"><div class="bt" id="s5-pt">ណាត់ជួបភ្ញៀវនៅសប្ដាហ៍ក្រោយ</div></div></div>
+      <div id="s5-agent"><div class="mini"><div class="core" id="s5-core" style="left:36px;top:36px;--s:72px">
+    <div class="core-glow" id="s5-core-glow"></div>
+    <div class="core-rings"><svg viewBox="0 0 100 100">
+      <g id="s5-core-r1" style="transform-origin:50px 50px"><circle cx="50" cy="50" r="49" fill="none" stroke="rgba(58,230,160,.55)" stroke-width=".6" stroke-dasharray="1.2 3.2"/></g>
+      <g id="s5-core-r2" style="transform-origin:50px 50px"><path d="M50 3 A47 47 0 0 1 93.5 32" fill="none" stroke="rgba(142,247,201,.9)" stroke-width="1.1" stroke-linecap="round"/><path d="M50 97 A47 47 0 0 1 6.5 68" fill="none" stroke="rgba(142,247,201,.55)" stroke-width="1.1" stroke-linecap="round"/></g>
+    </svg></div>
+    <div class="core-orb" id="s5-core-orb"></div>
+    <div class="core-core"></div>
+  </div></div><span class="nm">AI Agent</span><span class="st">កំពុងធ្វើការ</span><span class="dots"><i id="s5-d0"></i><i id="s5-d1"></i><i id="s5-d2"></i></span></div>
+      <div class="s5-row" id="s5-r-0" style="top:262px"><div class="ri"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><rect x="13.5" y="13" width="3.5" height="3.5" rx=".6" fill="currentColor" stroke="none"/></svg></div><div class="rt">ឆែកមើល Calendar</div>
+        <div class="rs"><svg class="spin" id="s5-sp-0" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="rgba(150,180,255,.2)" stroke-width="5"/><path d="M27 6 A21 21 0 0 1 48 27" fill="none" stroke="#5c9dff" stroke-width="5" stroke-linecap="round"/></svg><div class="ok" id="s5-ok-0"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div></div><div class="s5-row" id="s5-r-1" style="top:380px"><div class="ri"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.2l3.4 2"/></svg></div><div class="rt">រកពេលទំនេរ</div>
+        <div class="rs"><svg class="spin" id="s5-sp-1" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="rgba(150,180,255,.2)" stroke-width="5"/><path d="M27 6 A21 21 0 0 1 48 27" fill="none" stroke="#5c9dff" stroke-width="5" stroke-linecap="round"/></svg><div class="ok" id="s5-ok-1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div></div><div class="s5-row" id="s5-r-2" style="top:498px"><div class="ri"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg></div><div class="rt">ផ្ញើ Email អញ្ជើញ</div>
+        <div class="rs"><svg class="spin" id="s5-sp-2" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="rgba(150,180,255,.2)" stroke-width="5"/><path d="M27 6 A21 21 0 0 1 48 27" fill="none" stroke="#5c9dff" stroke-width="5" stroke-linecap="round"/></svg><div class="ok" id="s5-ok-2"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div></div>
+      <div id="s5-prog"><i id="s5-pf"></i></div>
+    </div>
+    <div class="glass" id="s5-cal"><div class="ch"><span class="ci"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><rect x="13.5" y="13" width="3.5" height="3.5" rx=".6" fill="currentColor" stroke="none"/></svg></span>Calendar</div><div class="s5-day" style="left:30px">12</div><div class="s5-day" style="left:132px">13</div><div class="s5-day" style="left:234px">14</div><div class="s5-day" style="left:336px">15</div><div class="s5-day" style="left:438px">16</div><div class="s5-slot busy" id="s5-sl-0-0" style="left:30px;top:130px"></div><div class="s5-slot " id="s5-sl-0-1" style="left:30px;top:216px"></div><div class="s5-slot busy" id="s5-sl-0-2" style="left:30px;top:302px"></div><div class="s5-slot busy" id="s5-sl-1-1" style="left:132px;top:216px"></div><div class="s5-slot " id="s5-sl-1-2" style="left:132px;top:302px"></div><div class="s5-slot busy" id="s5-sl-2-0" style="left:234px;top:130px"></div><div class="s5-slot " id="s5-sl-2-1" style="left:234px;top:216px"></div><div class="s5-slot busy" id="s5-sl-2-2" style="left:234px;top:302px"></div><div class="s5-slot busy" id="s5-sl-3-0" style="left:336px;top:130px"></div><div class="s5-slot " id="s5-sl-3-1" style="left:336px;top:216px"></div><div class="s5-slot busy" id="s5-sl-3-2" style="left:336px;top:302px"></div><div class="s5-slot busy" id="s5-sl-4-0" style="left:438px;top:130px"></div><div class="s5-slot busy" id="s5-sl-4-1" style="left:438px;top:216px"></div><div class="s5-slot " id="s5-sl-4-2" style="left:438px;top:302px"></div><div id="s5-free" style="left:132px;top:130px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div></div>
+    <div class="glass" id="s5-mail"><div class="mi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg></div><div class="mt">Email</div></div>
+    <div id="s5-plane"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.5L10.8 13.2"/><path d="M21.5 2.5l-6.8 19-3.9-8.3-8.3-3.9z"/></svg></div>
+    <div class="s5-rw" style="transform:rotate(0deg)"><i class="s5-ray" id="s5-ray-0"></i></div><div class="s5-rw" style="transform:rotate(30deg)"><i class="s5-ray" id="s5-ray-1"></i></div><div class="s5-rw" style="transform:rotate(60deg)"><i class="s5-ray" id="s5-ray-2"></i></div><div class="s5-rw" style="transform:rotate(90deg)"><i class="s5-ray" id="s5-ray-3"></i></div><div class="s5-rw" style="transform:rotate(120deg)"><i class="s5-ray" id="s5-ray-4"></i></div><div class="s5-rw" style="transform:rotate(150deg)"><i class="s5-ray" id="s5-ray-5"></i></div><div class="s5-rw" style="transform:rotate(180deg)"><i class="s5-ray" id="s5-ray-6"></i></div><div class="s5-rw" style="transform:rotate(210deg)"><i class="s5-ray" id="s5-ray-7"></i></div><div class="s5-rw" style="transform:rotate(240deg)"><i class="s5-ray" id="s5-ray-8"></i></div><div class="s5-rw" style="transform:rotate(270deg)"><i class="s5-ray" id="s5-ray-9"></i></div><div class="s5-rw" style="transform:rotate(300deg)"><i class="s5-ray" id="s5-ray-10"></i></div><div class="s5-rw" style="transform:rotate(330deg)"><i class="s5-ray" id="s5-ray-11"></i></div>
+    <div class="abs" id="s5-done"><div class="dk"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.6 4.6L19.5 7"/></svg></div><div class="dt">រួចរាល់!</div></div>
+  </div></div></section>
+
+  <!-- S6 close -->
+  <section class="clip scene" id="s6" data-start="52.632" data-duration="7.828" data-track-index="6"><div class="cam" id="s6-cam"><div class="rig" id="s6-rig">
+    <div id="s6-grp">
+      <div id="s6-waves"><i id="s6-w0"></i><i id="s6-w1"></i><i id="s6-w2"></i></div>
+      <div class="core" id="s6-core" style="left:960px;top:400px;--s:300px">
+    <div class="core-glow" id="s6-core-glow"></div>
+    <div class="core-rings"><svg viewBox="0 0 100 100">
+      <g id="s6-core-r1" style="transform-origin:50px 50px"><circle cx="50" cy="50" r="49" fill="none" stroke="rgba(58,230,160,.55)" stroke-width=".6" stroke-dasharray="1.2 3.2"/></g>
+      <g id="s6-core-r2" style="transform-origin:50px 50px"><path d="M50 3 A47 47 0 0 1 93.5 32" fill="none" stroke="rgba(142,247,201,.9)" stroke-width="1.1" stroke-linecap="round"/><path d="M50 97 A47 47 0 0 1 6.5 68" fill="none" stroke="rgba(142,247,201,.55)" stroke-width="1.1" stroke-linecap="round"/></g>
+    </svg></div>
+    <div class="core-orb" id="s6-core-orb"></div>
+    <div class="core-core"></div>
+  </div>
+      <div class="abs" id="s6-l1">បុគ្គលិកឌីជីថលរបស់អ្នក</div>
+      <div class="abs" id="s6-l2"><span>ធ្វើការ ២៤ ម៉ោង ៧ ថ្ងៃ</span></div>
+    </div>
+    <div class="abs" id="s6-brand"><div class="row"><div class="mark" id="s6-mark">AI</div><div class="wm" id="s6-wm">AI <b>For</b> Business</div></div><i class="ul" id="s6-ul"></i></div>
+  </div></div></section>
+
+  <!-- overlays -->
+  <div class="clip layer" id="ovl" data-start="0" data-duration="60.46" data-track-index="20">
+    <div id="bug"><div class="mark">AI</div><span>AI <b>For</b> Business</span></div>
+    <div id="streak"></div>
+  </div>
+  <div class="clip sub" id="sub-0" data-start="0.820" data-duration="4.218" data-track-index="30"><span>ស្រមៃមើល AI ដែលមិនត្រឹមឆ្លើយសំណួរ តែធ្វើការជំនួសអ្នក។</span></div>
+<div class="clip sub" id="sub-1" data-start="5.078" data-duration="2.113" data-track-index="30"><span>នោះគឺ AI Agent។</span></div>
+<div class="clip sub" id="sub-2" data-start="7.250" data-duration="4.930" data-track-index="30"><span>AI Agent ទទួលគោលដៅ គិត រៀបចំផែនការ និងអនុវត្តដោយខ្លួនឯង។</span></div>
+<div class="clip sub" id="sub-3" data-start="12.220" data-duration="5.995" data-track-index="30"><span>មានបីផ្នែក៖ ខួរក្បាល AI Model ការចងចាំ និងឧបករណ៍។</span></div>
+<div class="clip sub" id="sub-4" data-start="18.275" data-duration="2.871" data-track-index="30"><span>Chatbot ធម្មតា ឆ្លើយសំណួរបានម្ដងមួយៗ។</span></div>
+<div class="clip sub" id="sub-5" data-start="21.186" data-duration="4.928" data-track-index="30"><span>រីឯ AI Agent ធ្វើគ្រប់ជំហាន រហូតដល់ចប់ការងារ។</span></div>
+<div class="clip sub" id="sub-6" data-start="26.174" data-duration="3.711" data-track-index="30"><span>តើដំណើរការយ៉ាងណា? AI Agent ដើរវិលជុំបួនជំហាន។</span></div>
+<div class="clip sub" id="sub-7" data-start="29.925" data-duration="3.656" data-track-index="30"><span>ជំហានមួយ ស្វែងយល់៖ ទទួលគោលដៅ និងព័ត៌មាន។</span></div>
+<div class="clip sub" id="sub-8" data-start="33.621" data-duration="3.508" data-track-index="30"><span>ជំហានពីរ គិតរៀបចំ៖ បំបែកជាជំហានតូចៗ។</span></div>
+<div class="clip sub" id="sub-9" data-start="37.169" data-duration="4.431" data-track-index="30"><span>ជំហានបី អនុវត្ត៖ ប្រើ Web Search Email ឬ Calendar។</span></div>
+<div class="clip sub" id="sub-10" data-start="41.640" data-duration="4.513" data-track-index="30"><span>ជំហានបួន ផ្ទៀងផ្ទាត់៖ បើមិនទាន់សម្រេច វាធ្វើឡើងវិញ។</span></div>
+<div class="clip sub" id="sub-11" data-start="46.211" data-duration="6.781" data-track-index="30"><span>ឧទាហរណ៍ ឱ្យណាត់ភ្ញៀវ វាឆែក Calendar រកពេលទំនេរ រួចផ្ញើ Email អញ្ជើញ។</span></div>
+<div class="clip sub" id="sub-12" data-start="53.052" data-duration="4.260" data-track-index="30"><span>AI Agent ដូចបុគ្គលិកឌីជីថល ធ្វើការម្ភៃបួនម៉ោង ប្រាំពីរថ្ងៃ។</span></div>
+
+  <div class="clip layer" id="fx" data-start="0" data-duration="60.46" data-track-index="40" style="pointer-events:none">
+    <div class="layer" id="vignette"></div>
+    <div id="grain"></div>
+    <div class="layer" id="fade" style="background:#000"></div>
+  </div>
+  <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="60.46" data-track-index="50" data-volume="1"></audio>
+</div>
+<script>
+window.TIMING = {"total":60.46,"endcard":57.412,"gapScale":0.62,"voiceTotal":51,"scenes":{"hook":{"start":0,"end":7.38,"dur":7.38},"anatomy":{"start":6.83,"end":18.405,"dur":11.575},"compare":{"start":17.855,"end":26.304,"dur":8.449},"loop":{"start":25.754,"end":46.341,"dur":20.587},"example":{"start":45.791,"end":53.182,"dur":7.391},"close":{"start":52.632,"end":60.46,"dur":7.828}},"lines":{"L01":{"start":0.9,"dur":3.917,"scene":"hook","measured":true},"L02":{"start":5.158,"dur":1.583,"scene":"hook","measured":true},"L03":{"start":7.33,"dur":4.754,"scene":"anatomy","measured":true},"L04":{"start":12.3,"dur":5.465,"scene":"anatomy","measured":true},"L05":{"start":18.355,"dur":2.694,"scene":"compare","measured":true},"L06":{"start":21.266,"dur":4.398,"scene":"compare","measured":true},"L07":{"start":26.254,"dur":3.441,"scene":"loop","measured":true},"L08":{"start":30.005,"dur":3.386,"scene":"loop","measured":true},"L09":{"start":33.701,"dur":3.238,"scene":"loop","measured":true},"L10":{"start":37.249,"dur":4.161,"scene":"loop","measured":true},"L11":{"start":41.72,"dur":3.983,"scene":"loop","measured":true},"L12":{"start":46.291,"dur":6.251,"scene":"example","measured":true},"L13":{"start":53.132,"dur":3.73,"scene":"close","measured":true}}};
+window.PTS = [{"dx":2.6,"dy":176.7},{"dx":10.9,"dy":169.5},{"dx":-35.7,"dy":171.7},{"dx":1,"dy":79.7},{"dx":32.7,"dy":205.9},{"dx":-16.2,"dy":84.4},{"dx":30.2,"dy":176.7},{"dx":-24.6,"dy":127.4},{"dx":33.9,"dy":166.3},{"dx":-6.1,"dy":118.3},{"dx":-3.4,"dy":205},{"dx":15.1,"dy":140.8},{"dx":-12,"dy":153.9},{"dx":25.5,"dy":77.8},{"dx":-22.4,"dy":219.4},{"dx":33.7,"dy":82},{"dx":-18,"dy":181.8},{"dx":-21.5,"dy":158.7},{"dx":-21.2,"dy":201.1},{"dx":33,"dy":60.5},{"dx":37.5,"dy":90.1},{"dx":5.2,"dy":93.4},{"dx":-37.4,"dy":139.7},{"dx":-37,"dy":202.9},{"dx":-6.4,"dy":182.4},{"dx":-7.6,"dy":97.6},{"dx":-13.2,"dy":177.6},{"dx":39.5,"dy":217.7},{"dx":-29.2,"dy":163.2},{"dx":-25,"dy":137.1},{"dx":0.5,"dy":149.8},{"dx":3.3,"dy":107.8},{"dx":-5.7,"dy":165.5},{"dx":14.5,"dy":205.6},{"dx":31.9,"dy":175.8},{"dx":-39.2,"dy":73.6},{"dx":14,"dy":92.4},{"dx":21.9,"dy":167.8},{"dx":37.9,"dy":189.2},{"dx":8.2,"dy":93.6},{"dx":-1.5,"dy":149},{"dx":-39.5,"dy":60.7},{"dx":21.1,"dy":184.4},{"dx":5.8,"dy":165.9},{"dx":17.7,"dy":150.8},{"dx":39.1,"dy":195.2}];
+window.CUES = {"s1_chat":0.3,"s1_q":0.8,"s1_a":1.3,"s1_agent":2.66265,"s1_title":5.058000000000001,"s2_in":6.83,"s2_goal":7.8054,"s2_dot1":8.66112,"s2_dot2":10.08732,"s2_done":10.6578,"s2_nodes":[12.518600000000001,14.486,16.1255],"s3_in":17.855,"s3_left":18.205000000000002,"s3_q":18.67828,"s3_a":19.702,"s3_right":21.116,"s3_goal":21.705799999999996,"s3_f0":22.32152,"s3_f1":25.04828,"s4_in":25.754,"s4_ring":26.66692,"s4_nodes":27.35512,"s4_shift":29.555,"s4_step":[29.904999999999998,33.601,37.149,41.62],"s4_items":[[31.020799999999998,31.698,32.3752],[34.6724,35.32,35.9676],[38.4973,39.3295,40.1617]],"s4_tools":[38.4973,39.12145,39.7456,40.36975],"s4_gauge":42.43694,"s4_laps0":43.11405,"s4_laps1":44.82674,"s4_ok":45.145379999999996,"s5_in":45.791,"s5_type0":46.47853,"s5_type1":48.1663,"s5_rows":48.54136,"s5_ok":[49.72905,50.604189999999996,51.54183999999999],"s5_free":50.41666,"s5_plane":51.54183999999999,"s5_done":52.104429999999994,"s6_in":52.632,"s6_l1":53.355799999999995,"s6_l2":54.6986,"end":57.412,"total":60.46};
+</script>
+<script>
+(function () {
+  const T = window.TIMING;
+  const C = window.CUES;
+  const S = T.scenes;
+  const at = (id, f = 0) => T.lines[id].start + f * T.lines[id].dur;
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+  gsap.registerPlugin(DrawSVGPlugin);
+
+  function build() {
+    // Measure layout before any tween writes transforms.
+    const rootR = $("#root").getBoundingClientRect();
+    const dk = $("#s5-done .dk").getBoundingClientRect();
+    $$(".s5-rw").forEach((w) => { w.style.left = dk.left - rootR.left + dk.width / 2 + "px"; w.style.top = dk.top - rootR.top + dk.height / 2 + "px"; });
+    const tw = $("#s5-pt").offsetWidth;
+    const tl = gsap.timeline({ paused: true });
+
+    // ---------- atmosphere ----------
+    tl.fromTo("#au-a", { x: 0, y: 0 }, { x: 300, y: 160, duration: T.total, ease: "sine.inOut" }, 0);
+    tl.fromTo("#au-b", { x: 0, y: 0 }, { x: -260, y: -140, duration: T.total, ease: "sine.inOut" }, 0);
+    tl.fromTo("#au-c", { x: 0, y: 0, scale: 1 }, { x: -620, y: -320, scale: 1.35, duration: T.total, ease: "sine.inOut" }, 0);
+    tl.fromTo("#grid", { y: 0 }, { y: -92, duration: T.total, ease: "none" }, 0);
+    window.PTS.forEach((p, i) => {
+      tl.fromTo(`#pt-${i}`, { x: 0, y: 0 }, { x: p.dx, y: -p.dy, duration: T.total, ease: "none" }, 0);
+    });
+    // Film grain re-seeded 12x per second (seeded, deterministic).
+    let seed = 11;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (let t = 0; t < T.total; t += 1 / 12) tl.set("#grain", { x: Math.round(rnd() * 200 - 100), y: Math.round(rnd() * 200 - 100) }, t);
+    // Fade from and to black.
+    tl.fromTo("#fade", { opacity: 1 }, { opacity: 0, duration: 0.9, ease: "power1.out" }, 0.05);
+    tl.to("#fade", { opacity: 1, duration: 0.85, ease: "power1.in" }, T.total - 0.9);
+    // Brand bug: visible through the body of the film.
+    tl.set("#bug", { opacity: 0 }, 0);
+    tl.to("#bug", { opacity: 1, duration: 0.8, ease: "power1.out" }, S.anatomy.start + 0.8);
+    tl.to("#bug", { opacity: 0, duration: 0.4, ease: "power1.in" }, C.end - 0.2);
+    // Light streak used on the big cuts.
+    tl.set("#streak", { rotation: 16, opacity: 0.85 }, 0);
+    const streak = (t) => tl.fromTo("#streak", { x: 0 }, { x: 3200, duration: 0.85, ease: "power2.inOut" }, t);
+
+    // ---------- scene transitions (cam layer) ----------
+    const camIn = (id, t, from) => tl.fromTo(`#${id}-cam`, { opacity: 0, filter: "blur(14px)", ...from }, { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.8, ease: "power3.out" }, t);
+    const camOut = (id, t, to) => tl.to(`#${id}-cam`, { opacity: 0, filter: "blur(14px)", duration: 0.55, ease: "power2.in", ...to }, t);
+
+    tl.fromTo("#s1-cam", { opacity: 1 }, { opacity: 1, duration: 0.01 }, 0);
+    camOut("s1", S.anatomy.start, { scale: 1.18 });
+    camIn("s2", S.anatomy.start, { scale: 0.9 });
+    camOut("s2", S.compare.start, { x: -220 });
+    camIn("s3", S.compare.start, { x: 220 });
+    camOut("s3", S.loop.start, { scale: 0.88 });
+    camIn("s4", S.loop.start, { scale: 1.12 });
+    camOut("s4", S.example.start, { y: -140 });
+    camIn("s5", S.example.start, { y: 140 });
+    camOut("s5", S.close.start, { scale: 1.2 });
+    camIn("s6", S.close.start, { scale: 0.86 });
+    streak(C.s1_title - 0.05);
+    streak(S.loop.start - 0.2);
+    streak(S.close.start - 0.2);
+
+    // Ambient camera drift, a different move per scene.
+    tl.fromTo("#s1-rig", { scale: 1 }, { scale: 1.045, duration: S.hook.dur, ease: "none" }, 0);
+    tl.fromTo("#s2-rig", { scale: 1.03, rotation: 0.6 }, { scale: 1, rotation: -0.4, duration: S.anatomy.dur, ease: "none" }, S.anatomy.start);
+    tl.fromTo("#s3-rig", { x: 24 }, { x: -24, duration: S.compare.dur, ease: "none" }, S.compare.start);
+    tl.fromTo("#s4-rig", { scale: 1 }, { scale: 1.03, duration: S.loop.dur, ease: "none" }, S.loop.start);
+    tl.fromTo("#s5-rig", { x: -10, y: 10 }, { x: 10, y: -12, duration: S.example.dur, ease: "none" }, S.example.start);
+    tl.fromTo("#s6-rig", { scale: 1 }, { scale: 1.06, duration: S.close.dur, ease: "none" }, S.close.start);
+
+    // Core rings spin wherever a core is on screen.
+    const spin = (id, t0, d) => {
+      tl.fromTo(`#${id}-r1`, { rotation: 0 }, { rotation: d * 22, duration: d, ease: "none" }, t0);
+      tl.fromTo(`#${id}-r2`, { rotation: 0 }, { rotation: -d * 48, duration: d, ease: "none" }, t0);
+    };
+    spin("s1-core", 0, S.hook.dur);
+    spin("s2-core", S.anatomy.start, S.anatomy.dur);
+    spin("s4-mini", S.loop.start, S.loop.dur);
+    spin("s5-core", S.example.start, S.example.dur);
+    spin("s6-core", S.close.start, S.close.dur);
+
+    // ---------- S1 hook ----------
+    tl.fromTo("#s1-chat", { opacity: 0, y: 46, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "expo.out" }, C.s1_chat);
+    tl.fromTo("#s1-chat-tag", { opacity: 0, x: -34 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, C.s1_chat + 0.25);
+    tl.fromTo("#s1-q", { opacity: 0, scale: 0.6, transformOrigin: "100% 100%" }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, C.s1_q);
+    tl.fromTo("#s1-a", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, C.s1_a);
+    tl.fromTo("#s1-a i", { backgroundPosition: "100% 0" }, { backgroundPosition: "-200% 0", duration: 1.1, repeat: 3, ease: "none" }, C.s1_a + 0.1);
+    const A = C.s1_agent;
+    tl.to("#s1-chat", { opacity: 0.32, scale: 0.95, duration: 0.8, ease: "power2.inOut" }, A);
+    tl.to("#s1-chat-tag", { opacity: 0.32, duration: 0.8, ease: "power2.inOut" }, A);
+    tl.fromTo("#s1-core", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 1.0, ease: "expo.out" }, A);
+    tl.fromTo("#s1-core-glow", { scale: 0.85 }, { scale: 1.12, duration: 0.6, yoyo: true, repeat: 3, ease: "sine.inOut" }, A + 0.9);
+    for (let i = 0; i < 4; i++) {
+      tl.fromTo(`#s1-beam-${i}`, { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.45, ease: "power2.out" }, A + 0.22 + i * 0.12);
+      tl.fromTo(`#s1-tool-${i}`, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, A + 0.4 + i * 0.12);
+      tl.fromTo(`#s1-ok-${i}`, { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(3)" }, A + 0.95 + i * 0.14);
+    }
+    // Data packets stream from the core out to each tool.
+    const toolPos = $$(".s1-tool").map((el) => ({ x: parseFloat(el.style.left) - 1440, y: parseFloat(el.style.top) - 540 }));
+    toolPos.forEach((p, i) => {
+      tl.fromTo(`#s1-pkt-${i}`, { x: 0, y: 0, opacity: 1 }, { x: p.x, y: p.y, duration: 0.5, ease: "power1.in", repeat: 3, repeatDelay: 0.22 }, A + 0.75 + i * 0.13);
+    });
+    tl.to($$(".s1-pkt"), { opacity: 0, duration: 0.2 }, C.s1_title - 0.4);
+    tl.fromTo("#s1-agent-tag", { opacity: 0, y: -24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, A + 0.3);
+    // Title beat.
+    const B = C.s1_title;
+    tl.to(["#s1-chat", "#s1-chat-tag"], { opacity: 0, x: -140, duration: 0.5, ease: "power2.in" }, B - 0.35);
+    tl.to("#s1-agent-tag", { opacity: 0, y: -30, duration: 0.4, ease: "power2.in" }, B - 0.35);
+    tl.to("#s1-beams", { opacity: 0, duration: 0.3, ease: "power1.in" }, B - 0.3);
+    tl.to($$(".s1-tool"), { opacity: 0, scale: 0.5, duration: 0.4, ease: "power2.in", stagger: 0.04 }, B - 0.35);
+    tl.to("#s1-core", { x: 960 - 1440, y: 470 - 540, scale: 3.4, opacity: 0.28, duration: 1.1, ease: "power3.inOut" }, B - 0.3);
+    $$("#s1-big span").forEach((el, i) => {
+      tl.fromTo(el, { opacity: 0, y: 110, filter: "blur(16px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.85, ease: "expo.out" }, B + 0.12 + i * 0.045);
+    });
+    tl.fromTo("#s1-rl", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.out" }, B + 0.5);
+    tl.fromTo("#s1-rr", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.out" }, B + 0.5);
+    tl.fromTo("#s1-km", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, B + 0.6);
+
+    // ---------- S2 anatomy ----------
+    tl.fromTo("#s2-core", { opacity: 0.3, scale: 1.7 }, { opacity: 1, scale: 1, duration: 1.1, ease: "expo.out" }, C.s2_in + 0.05);
+    tl.fromTo("#s2-pill", { opacity: 0, y: -22 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, C.s2_in + 0.45);
+    tl.fromTo("#s2-goal", { opacity: 0, x: -70 }, { opacity: 1, x: 0, duration: 0.75, ease: "expo.out" }, C.s2_goal);
+    tl.fromTo("#s2-in", { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.5, ease: "power2.out" }, C.s2_dot1 - 0.15);
+    tl.fromTo("#s2-dot1", { x: 0, opacity: 0 }, { x: 270, opacity: 1, duration: 0.7, ease: "power2.in" }, C.s2_dot1);
+    tl.to("#s2-dot1", { opacity: 0, duration: 0.15 }, C.s2_dot1 + 0.7);
+    tl.fromTo("#s2-core-orb", { scale: 1 }, { scale: 1.1, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out" }, C.s2_dot1 + 0.68);
+    tl.fromTo("#s2-out", { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.5, ease: "power2.out" }, C.s2_dot2 - 0.1);
+    tl.fromTo("#s2-dot2", { x: 0, opacity: 0 }, { x: 300, opacity: 1, duration: 0.6, ease: "power2.out" }, C.s2_dot2);
+    tl.to("#s2-dot2", { opacity: 0, duration: 0.15 }, C.s2_dot2 + 0.6);
+    tl.fromTo("#s2-done", { opacity: 0, scale: 0.55 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2.2)" }, C.s2_done);
+    const N0 = C.s2_nodes[0];
+    tl.to("#s2-goal", { opacity: 0, x: -60, duration: 0.4, ease: "power2.in" }, N0 - 0.3);
+    tl.to("#s2-done", { opacity: 0, x: 60, duration: 0.4, ease: "power2.in" }, N0 - 0.3);
+    tl.to(["#s2-in", "#s2-out"], { opacity: 0, duration: 0.3 }, N0 - 0.3);
+    const nodeFrom = [{ x: -50 }, { x: 50 }, { y: 50 }];
+    ["brain", "memory", "tools"].forEach((n, i) => {
+      const t = C.s2_nodes[i];
+      tl.fromTo(`#s2-c-${n}`, { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.5, ease: "power2.inOut" }, t);
+      tl.fromTo(`#s2-${n}`, { opacity: 0, scale: 0.88, ...nodeFrom[i] }, { opacity: 1, scale: 1, x: 0, y: 0, duration: 0.7, ease: "back.out(1.5)" }, t + 0.35);
+    });
+
+    // ---------- S3 compare ----------
+    tl.fromTo("#s3-lpan", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.9, ease: "power3.out" }, C.s3_in + 0.1);
+    tl.fromTo("#s3-rpan", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.9, ease: "power3.out" }, C.s3_right - 0.2);
+    tl.to("#s3-lpan", { opacity: 0.45, duration: 0.6, ease: "power2.inOut" }, C.s3_right);
+    tl.fromTo("#s3-div", { scaleY: 0 }, { scaleY: 1, duration: 1.0, ease: "power3.inOut" }, C.s3_in + 0.2);
+    tl.fromTo("#s3-lh", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, C.s3_left);
+    tl.fromTo("#s3-q", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2)" }, C.s3_q);
+    tl.fromTo("#s3-la", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.inOut" }, (C.s3_q + C.s3_a) / 2 - 0.1);
+    tl.fromTo("#s3-a", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2)" }, C.s3_a);
+    tl.to(["#s3-lh", "#s3-lf"], { opacity: 0.3, duration: 0.6, ease: "power2.inOut" }, C.s3_right);
+    tl.fromTo("#s3-rh", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, C.s3_right);
+    tl.fromTo("#s3-g", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2)" }, C.s3_goal);
+    tl.fromTo("#s3-track", { scaleX: 0, transformOrigin: "0 50%" }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, C.s3_goal + 0.1);
+    for (let i = 0; i < 3; i++) tl.fromTo(`#s3-st-${i}`, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.5)" }, C.s3_goal + 0.15 + i * 0.07);
+    tl.fromTo("#s3-fill", { scaleX: 0 }, { scaleX: 1, duration: C.s3_f1 - C.s3_f0, ease: "power1.inOut" }, C.s3_f0);
+    [0.25, 0.5, 0.75].forEach((f, i) => {
+      tl.fromTo(`#s3-sc-${i}`, { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(3)" }, C.s3_f0 + f * (C.s3_f1 - C.s3_f0));
+    });
+    tl.set($$(".s3-step .sc"), { scale: 0 }, 0);
+    tl.fromTo("#s3-r", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2.4)" }, C.s3_f1);
+
+    // ---------- S4 loop ----------
+    tl.fromTo("#s4-tk", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, C.s4_in + 0.25);
+    tl.fromTo("#s4-ts", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, C.s4_in + 0.6);
+    tl.fromTo("#s4-base", { drawSVG: "0%" }, { drawSVG: "100%", duration: 1.3, ease: "power2.inOut" }, C.s4_ring);
+    tl.set("#s4-prog", { drawSVG: "0% 0%" }, 0);
+    tl.fromTo($$(".s4-chev"), { opacity: 0 }, { opacity: 1, duration: 0.5, stagger: 0.08 }, C.s4_ring + 0.9);
+    tl.fromTo("#s4-mini", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.9, ease: "expo.out" }, C.s4_ring + 0.2);
+    const labFrom = [{ x: -20 }, { x: -20 }, { x: 20 }, { x: 20 }];
+    for (let i = 0; i < 4; i++) {
+      tl.fromTo(`#s4-n-${i}`, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.4)" }, C.s4_nodes + i * 0.15);
+      tl.fromTo(`#s4-lab-${i}`, { opacity: 0, ...labFrom[i] }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, C.s4_nodes + 0.12 + i * 0.15);
+      tl.set(`#s4-on-${i}`, { opacity: 0 }, 0);
+    }
+    tl.set("#s4-comet", { opacity: 0 }, 0);
+    // Shift ring left; detail panel takes the right side.
+    const X = C.s4_shift;
+    tl.to("#s4-title", { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, X);
+    tl.to($$(".s4-lab"), { opacity: 0, duration: 0.35, ease: "power1.in" }, X);
+    tl.to("#s4-ring", { x: -430, y: 20, scale: 0.86, duration: 1.0, ease: "power3.inOut" }, X);
+    tl.to("#s4-comet", { opacity: 1, duration: 0.3 }, X + 0.5);
+    const steps = C.s4_step;
+    for (let i = 0; i < 4; i++) {
+      const t = steps[i];
+      const p = `#s4-p-${i}`;
+      if (i > 0) {
+        tl.to(`#s4-p-${i - 1}`, { opacity: 0, x: -50, duration: 0.35, ease: "power2.in" }, t - 0.3);
+        tl.to(`#s4-n-${i - 1}`, { scale: 1, duration: 0.4, ease: "power2.out" }, t - 0.1);
+        tl.fromTo("#s4-comet", { rotation: (i - 1) * 90 }, { rotation: i * 90, duration: 0.7, ease: "power2.inOut" }, t - 0.3);
+        tl.to("#s4-prog", { drawSVG: `0% ${i * 25}%`, duration: 0.7, ease: "power2.inOut" }, t - 0.3);
+      }
+      tl.to(`#s4-on-${i}`, { opacity: 1, duration: 0.3 }, t + 0.25);
+      tl.to(`#s4-n-${i}`, { scale: 1.22, duration: 0.5, ease: "back.out(2.5)" }, t + 0.2);
+      tl.fromTo(p, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.7, ease: "expo.out" }, t);
+      tl.fromTo(`#s4-bar-${i}`, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, t + 0.2);
+    }
+    // Step 1: inputs stream in.
+    C.s4_items[0].forEach((t, k) => tl.fromTo(`#s4-in-${k}`, { opacity: 0, x: 140 }, { opacity: 1, x: 0, duration: 0.65, ease: "expo.out" }, t - 0.25));
+    // Step 2: plan builds top-down.
+    C.s4_items[1].forEach((t, k) => {
+      tl.fromTo(`#s4-pl-${k}`, { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, t - 0.25);
+      if (k < 2) tl.fromTo(`#s4-pll-${k}`, { scaleY: 0 }, { scaleY: 1, duration: 0.35, ease: "power1.out" }, t + 0.15);
+    });
+    // Step 3: tools light up in turn.
+    for (let k = 0; k < 4; k++) {
+      tl.fromTo(`#s4-tl-${k}`, { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, steps[2] + 0.3 + k * 0.08);
+      tl.fromTo(`#s4-tg-${k}`, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, C.s4_tools[k] + 0.4);
+      tl.to(`#s4-tg-${k}`, { opacity: 0.3, duration: 0.6, ease: "power1.out" }, C.s4_tools[k] + 0.7);
+    }
+    // Step 4: check, loop again, complete.
+    const pct = { v: 0 };
+    const pctEl = $("#s4-pct");
+    tl.set("#s4-garc", { drawSVG: "0% 0%" }, 0);
+    tl.set("#s4-gok", { scale: 0 }, 0);
+    tl.to("#s4-garc", { drawSVG: "0% 72%", duration: 1.0, ease: "power2.out" }, C.s4_gauge);
+    tl.fromTo(pct, { v: 0 }, { v: 72, duration: 1.0, ease: "power2.out", onUpdate: () => (pctEl.textContent = Math.round(pct.v) + "%") }, C.s4_gauge);
+    tl.fromTo("#s4-q", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, C.s4_gauge + 0.3);
+    tl.fromTo("#s4-rep", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, C.s4_laps0);
+    tl.fromTo("#s4-repi", { rotation: 0 }, { rotation: 720, duration: C.s4_laps1 - C.s4_laps0, ease: "power1.inOut" }, C.s4_laps0);
+    tl.fromTo("#s4-comet", { rotation: 270 }, { rotation: 270 + 720, duration: C.s4_laps1 - C.s4_laps0, ease: "power1.inOut" }, C.s4_laps0);
+    tl.to("#s4-prog", { drawSVG: "0% 100%", duration: 0.6, ease: "power2.inOut" }, C.s4_laps0);
+    tl.to("#s4-garc", { drawSVG: "0% 100%", duration: 0.7, ease: "power2.inOut" }, C.s4_laps1 - 0.2);
+    tl.to(pct, { v: 100, duration: 0.7, ease: "power2.inOut", onUpdate: () => (pctEl.textContent = Math.round(pct.v) + "%") }, C.s4_laps1 - 0.2);
+    tl.to("#s4-pct", { opacity: 0, duration: 0.2 }, C.s4_ok - 0.1);
+    tl.to("#s4-gok", { scale: 1, duration: 0.5, ease: "back.out(2.6)" }, C.s4_ok);
+    tl.fromTo("#s4-mini-glow", { scale: 1 }, { scale: 1.3, duration: 0.3, yoyo: true, repeat: 1, ease: "power2.out" }, C.s4_ok);
+
+    // ---------- S5 example ----------
+    const E0 = C.s5_in;
+    tl.fromTo("#s5-tag", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, E0 + 0.35);
+    tl.fromTo("#s5-card", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.95, ease: "expo.out" }, E0 + 0.2);
+    tl.fromTo("#s5-cal", { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.9, ease: "expo.out" }, E0 + 0.45);
+    tl.fromTo("#s5-mail", { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.9, ease: "expo.out" }, E0 + 0.6);
+    // Typing: a stepped wipe keeps Khmer clusters intact while it reveals.
+    const typeDur = C.s5_type1 - C.s5_type0;
+    const ptEl = $("#s5-pt");
+    const caret = document.createElement("i");
+    caret.id = "s5-caret";
+    caret.style.left = "28px";
+    ptEl.parentNode.appendChild(caret);
+    tl.fromTo("#s5-pt", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: typeDur, ease: "steps(26)" }, C.s5_type0);
+    tl.fromTo("#s5-caret", { x: 0 }, { x: tw + 4, duration: typeDur, ease: "steps(26)" }, C.s5_type0);
+    tl.fromTo("#s5-caret", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "steps(1)", repeat: Math.max(0, Math.floor((S.example.dur - 1) / 0.3) - 1), yoyo: true }, E0 + 0.5);
+    tl.fromTo("#s5-agent", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, C.s5_rows - 0.1);
+    [0, 1, 2].forEach((k) => {
+      tl.fromTo(`#s5-d${k}`, { y: 0 }, { y: -9, duration: 0.3, yoyo: true, repeat: 9, ease: "sine.inOut" }, C.s5_rows + k * 0.1);
+      const ok = C.s5_ok[k];
+      const start = C.s5_rows + 0.15 + k * 0.12;
+      tl.fromTo(`#s5-r-${k}`, { opacity: 0, x: -34 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, start);
+      tl.fromTo(`#s5-sp-${k}`, { rotation: 0 }, { rotation: 360 * Math.max(1, Math.round((ok - start) / 0.8)), duration: ok - start, ease: "none" }, start);
+      tl.to(`#s5-sp-${k}`, { opacity: 0, duration: 0.15 }, ok);
+      tl.set(`#s5-ok-${k}`, { scale: 0 }, 0);
+      tl.to(`#s5-ok-${k}`, { scale: 1, duration: 0.4, ease: "back.out(3)" }, ok);
+    });
+    tl.fromTo("#s5-pf", { scaleX: 0 }, { scaleX: 1, duration: C.s5_done - C.s5_rows, ease: "power1.inOut" }, C.s5_rows);
+    tl.fromTo("#s5-free", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.6)" }, C.s5_free);
+    tl.fromTo("#s5-plane", { x: 0, y: 0, opacity: 0, rotation: 0 }, { x: 460, y: -230, opacity: 1, rotation: 8, duration: 0.85, ease: "power2.in" }, C.s5_plane);
+    tl.to("#s5-plane", { opacity: 0, duration: 0.2 }, C.s5_plane + 0.7);
+    tl.to("#s5-mail", { opacity: 0, scale: 0.94, duration: 0.3, ease: "power2.in" }, C.s5_done - 0.25);
+    tl.fromTo("#s5-done", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, C.s5_done);
+    tl.fromTo($$(".s5-ray"), { opacity: 0, y: 30, scaleY: 0.2 }, { opacity: 1, y: -10, scaleY: 1, duration: 0.35, ease: "power2.out" }, C.s5_done + 0.1);
+    tl.to($$(".s5-ray"), { opacity: 0, y: -40, scaleY: 0.3, duration: 0.4, ease: "power2.in" }, C.s5_done + 0.45);
+
+    // ---------- S6 close ----------
+    const F = C.s6_in;
+    tl.fromTo("#s6-core", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 1.1, ease: "expo.out" }, F + 0.1);
+    [0, 1, 2].forEach((k) => {
+      tl.fromTo(`#s6-w${k}`, { scale: 0.7, opacity: 0.85 }, { scale: 2.8, opacity: 0, duration: 2.4, ease: "power1.out", repeat: 1 }, F + 0.4 + k * 0.8);
+    });
+    tl.fromTo("#s6-l1", { opacity: 0, y: 34, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "power3.out" }, C.s6_l1);
+    tl.fromTo("#s6-l2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, C.s6_l2);
+    const G = C.end;
+    tl.to("#s6-grp", { opacity: 0, scale: 0.95, filter: "blur(10px)", duration: 0.6, ease: "power2.in" }, G - 0.1);
+    tl.set("#s6-brand", { opacity: 0 }, 0);
+    tl.set("#s6-brand", { opacity: 1 }, G + 0.2);
+    tl.fromTo("#s6-mark", { opacity: 0, scale: 0, rotation: -120 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.9, ease: "back.out(1.7)" }, G + 0.3);
+    tl.fromTo("#s6-wm", { opacity: 0, x: -40, clipPath: "inset(0 100% 0 0)" }, { opacity: 1, x: 0, clipPath: "inset(0 0% 0 0)", duration: 0.9, ease: "expo.out" }, G + 0.5);
+    tl.fromTo("#s6-ul", { scaleX: 0, opacity: 1 }, { scaleX: 1, opacity: 1, duration: 1.0, ease: "power3.out" }, G + 0.75);
+
+    // Subtitles: gentle rise on each chunk.
+    $$(".sub span").forEach((el) => {
+      const host = el.parentNode;
+      const s = parseFloat(host.dataset.start);
+      tl.fromTo(el, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.28, ease: "power2.out" }, s);
+    });
+
+    window.__timelines["main"] = tl;
+    if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+  }
+
+  document.fonts.ready.then(build);
+})();
+
+</script>
+</body>
+</html>
