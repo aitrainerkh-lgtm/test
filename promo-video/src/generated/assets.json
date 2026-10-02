@@ -1,0 +1,19 @@
+{
+  "files": {
+    "logo": false,
+    "hook": false,
+    "qr": false,
+    "voiceover": false,
+    "music": false,
+    "icons": {
+      "chatgpt": false,
+      "claude": false,
+      "gemini": false,
+      "copilot": false
+    }
+  },
+  "voiceover": {
+    "duration": null,
+    "segments": null
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "ai-for-business-promo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI For Business - vertical promo video (Remotion)",
+  "scripts": {
+    "prepare-assets": "node scripts/prepare.mjs",
+    "dev": "node scripts/prepare.mjs && remotion studio",
+    "render": "node scripts/prepare.mjs && remotion render Promo out/ai-for-business-promo.mp4",
+    "still": "node scripts/prepare.mjs && remotion still Promo out/still.png",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.532",
+    "lucide-react": "^1.50.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "^4.0.532"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
+}
