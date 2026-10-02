@@ -1,0 +1,103 @@
+1
+00:00:00,701 --> 00:00:02,556
+You ask a chatbot a question,
+
+2
+00:00:02,576 --> 00:00:03,886
+and it gives you an answer.
+
+3
+00:00:04,491 --> 00:00:06,787
+But what if AI could do more than answer?
+
+4
+00:00:07,210 --> 00:00:09,349
+What if it could actually get the work done?
+
+5
+00:00:10,128 --> 00:00:11,716
+That's an AI agent.
+
+6
+00:00:12,135 --> 00:00:14,615
+An AI system that understands your goal,
+
+7
+00:00:14,635 --> 00:00:17,208
+makes a plan, and takes action on its own.
+
+8
+00:00:17,912 --> 00:00:19,187
+Here's how it works.
+
+9
+00:00:19,237 --> 00:00:20,749
+It runs on a simple loop.
+
+10
+00:00:21,504 --> 00:00:22,859
+First, perceive.
+
+11
+00:00:22,884 --> 00:00:26,114
+It reads your request, and gathers information from your files,
+
+12
+00:00:26,134 --> 00:00:27,400
+emails, and apps.
+
+13
+00:00:27,998 --> 00:00:29,273
+Next, reason.
+
+14
+00:00:29,298 --> 00:00:31,803
+A large language model, the agent's brain,
+
+15
+00:00:31,823 --> 00:00:33,554
+breaks the goal into clear steps.
+
+16
+00:00:34,168 --> 00:00:35,173
+Then, act.
+
+17
+00:00:35,193 --> 00:00:37,098
+It uses tools to search the web,
+
+18
+00:00:37,118 --> 00:00:39,301
+update systems, and send messages.
+
+19
+00:00:39,926 --> 00:00:41,276
+Finally, learn.
+
+20
+00:00:41,301 --> 00:00:43,641
+It checks the result, remembers what worked,
+
+21
+00:00:43,661 --> 00:00:45,504
+and repeats until the job is done.
+
+22
+00:00:46,302 --> 00:00:48,829
+Ask an agent for your weekly sales report.
+
+23
+00:00:49,228 --> 00:00:51,433
+It collects the data, builds the charts,
+
+24
+00:00:51,453 --> 00:00:53,616
+writes a summary, and emails your team.
+
+25
+00:00:54,414 --> 00:00:55,696
+A chatbot talks.
+
+26
+00:00:56,210 --> 00:00:57,837
+An AI agent works.

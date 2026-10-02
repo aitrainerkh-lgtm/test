@@ -1,0 +1,1171 @@
+[
+ {
+  "id": "01-hook-a",
+  "text": "You ask a chatbot a question, and it gives you an answer.",
+  "duration": 3.376,
+  "words": [
+   {
+    "text": "You",
+    "start": 0.101,
+    "end": 0.226,
+    "t": 0.701,
+    "te": 0.826
+   },
+   {
+    "text": "ask",
+    "start": 0.276,
+    "end": 0.476,
+    "t": 0.876,
+    "te": 1.076
+   },
+   {
+    "text": "a",
+    "start": 0.501,
+    "end": 0.526,
+    "t": 1.101,
+    "te": 1.126
+   },
+   {
+    "text": "chatbot",
+    "start": 0.576,
+    "end": 1.026,
+    "t": 1.176,
+    "te": 1.626
+   },
+   {
+    "text": "a",
+    "start": 1.051,
+    "end": 1.076,
+    "t": 1.651,
+    "te": 1.676
+   },
+   {
+    "text": "question,",
+    "start": 1.126,
+    "end": 1.851,
+    "t": 1.726,
+    "te": 2.451
+   },
+   {
+    "text": "and",
+    "start": 1.976,
+    "end": 2.051,
+    "t": 2.576,
+    "te": 2.651
+   },
+   {
+    "text": "it",
+    "start": 2.076,
+    "end": 2.126,
+    "t": 2.676,
+    "te": 2.726
+   },
+   {
+    "text": "gives",
+    "start": 2.176,
+    "end": 2.351,
+    "t": 2.776,
+    "te": 2.951
+   },
+   {
+    "text": "you",
+    "start": 2.401,
+    "end": 2.476,
+    "t": 3.001,
+    "te": 3.076
+   },
+   {
+    "text": "an",
+    "start": 2.501,
+    "end": 2.551,
+    "t": 3.101,
+    "te": 3.151
+   },
+   {
+    "text": "answer.",
+    "start": 2.601,
+    "end": 3.136,
+    "t": 3.201,
+    "te": 3.736
+   }
+  ],
+  "start": 0.6,
+  "end": 3.976
+ },
+ {
+  "id": "02-hook-b",
+  "text": "But what if AI could do more than answer?",
+  "duration": 2.431,
+  "words": [
+   {
+    "text": "But",
+    "start": 0.115,
+    "end": 0.215,
+    "t": 4.491,
+    "te": 4.591
+   },
+   {
+    "text": "what",
+    "start": 0.265,
+    "end": 0.39,
+    "t": 4.641,
+    "te": 4.766
+   },
+   {
+    "text": "if",
+    "start": 0.44,
+    "end": 0.615,
+    "t": 4.816,
+    "te": 4.991
+   },
+   {
+    "text": "AI",
+    "start": 0.69,
+    "end": 1.04,
+    "t": 5.066,
+    "te": 5.416
+   },
+   {
+    "text": "could",
+    "start": 1.09,
+    "end": 1.165,
+    "t": 5.466,
+    "te": 5.541
+   },
+   {
+    "text": "do",
+    "start": 1.215,
+    "end": 1.315,
+    "t": 5.591,
+    "te": 5.691
+   },
+   {
+    "text": "more",
+    "start": 1.365,
+    "end": 1.515,
+    "t": 5.741,
+    "te": 5.891
+   },
+   {
+    "text": "than",
+    "start": 1.54,
+    "end": 1.615,
+    "t": 5.916,
+    "te": 5.991
+   },
+   {
+    "text": "answer?",
+    "start": 1.665,
+    "end": 2.261,
+    "t": 6.041,
+    "te": 6.637
+   }
+  ],
+  "start": 4.376,
+  "end": 6.807
+ },
+ {
+  "id": "03-hook-c",
+  "text": "What if it could actually get the work done?",
+  "duration": 2.302,
+  "words": [
+   {
+    "text": "What",
+    "start": 0.123,
+    "end": 0.273,
+    "t": 7.21,
+    "te": 7.36
+   },
+   {
+    "text": "if",
+    "start": 0.323,
+    "end": 0.423,
+    "t": 7.41,
+    "te": 7.51
+   },
+   {
+    "text": "it",
+    "start": 0.473,
+    "end": 0.523,
+    "t": 7.56,
+    "te": 7.61
+   },
+   {
+    "text": "could",
+    "start": 0.573,
+    "end": 0.673,
+    "t": 7.66,
+    "te": 7.76
+   },
+   {
+    "text": "actually",
+    "start": 0.748,
+    "end": 1.148,
+    "t": 7.835,
+    "te": 8.235
+   },
+   {
+    "text": "get",
+    "start": 1.198,
+    "end": 1.323,
+    "t": 8.285,
+    "te": 8.41
+   },
+   {
+    "text": "the",
+    "start": 1.348,
+    "end": 1.398,
+    "t": 8.435,
+    "te": 8.485
+   },
+   {
+    "text": "work",
+    "start": 1.448,
+    "end": 1.673,
+    "t": 8.535,
+    "te": 8.76
+   },
+   {
+    "text": "done?",
+    "start": 1.723,
+    "end": 2.112,
+    "t": 8.81,
+    "te": 9.199
+   }
+  ],
+  "start": 7.087,
+  "end": 9.389
+ },
+ {
+  "id": "04-define-a",
+  "text": "That's an AI agent.",
+  "duration": 1.757,
+  "words": [
+   {
+    "text": "That's",
+    "start": 0.119,
+    "end": 0.344,
+    "t": 10.128,
+    "te": 10.353
+   },
+   {
+    "text": "an",
+    "start": 0.369,
+    "end": 0.444,
+    "t": 10.378,
+    "te": 10.453
+   },
+   {
+    "text": "AI",
+    "start": 0.519,
+    "end": 0.919,
+    "t": 10.528,
+    "te": 10.928
+   },
+   {
+    "text": "agent.",
+    "start": 0.969,
+    "end": 1.557,
+    "t": 10.978,
+    "te": 11.566
+   }
+  ],
+  "start": 10.009,
+  "end": 11.766
+ },
+ {
+  "id": "05-define-b",
+  "text": "An AI system that understands your goal, makes a plan, and takes action on its own.",
+  "duration": 5.252,
+  "words": [
+   {
+    "text": "An",
+    "start": 0.069,
+    "end": 0.169,
+    "t": 12.135,
+    "te": 12.235
+   },
+   {
+    "text": "AI",
+    "start": 0.244,
+    "end": 0.669,
+    "t": 12.31,
+    "te": 12.735
+   },
+   {
+    "text": "system",
+    "start": 0.719,
+    "end": 1.044,
+    "t": 12.785,
+    "te": 13.11
+   },
+   {
+    "text": "that",
+    "start": 1.094,
+    "end": 1.194,
+    "t": 13.16,
+    "te": 13.26
+   },
+   {
+    "text": "understands",
+    "start": 1.244,
+    "end": 1.769,
+    "t": 13.31,
+    "te": 13.835
+   },
+   {
+    "text": "your",
+    "start": 1.794,
+    "end": 1.869,
+    "t": 13.86,
+    "te": 13.935
+   },
+   {
+    "text": "goal,",
+    "start": 1.919,
+    "end": 2.444,
+    "t": 13.985,
+    "te": 14.51
+   },
+   {
+    "text": "makes",
+    "start": 2.569,
+    "end": 2.769,
+    "t": 14.635,
+    "te": 14.835
+   },
+   {
+    "text": "a",
+    "start": 2.794,
+    "end": 2.819,
+    "t": 14.86,
+    "te": 14.885
+   },
+   {
+    "text": "plan,",
+    "start": 2.869,
+    "end": 3.494,
+    "t": 14.935,
+    "te": 15.56
+   },
+   {
+    "text": "and",
+    "start": 3.619,
+    "end": 3.694,
+    "t": 15.685,
+    "te": 15.76
+   },
+   {
+    "text": "takes",
+    "start": 3.744,
+    "end": 3.994,
+    "t": 15.81,
+    "te": 16.06
+   },
+   {
+    "text": "action",
+    "start": 4.069,
+    "end": 4.394,
+    "t": 16.135,
+    "te": 16.46
+   },
+   {
+    "text": "on",
+    "start": 4.419,
+    "end": 4.494,
+    "t": 16.485,
+    "te": 16.56
+   },
+   {
+    "text": "its",
+    "start": 4.519,
+    "end": 4.619,
+    "t": 16.585,
+    "te": 16.685
+   },
+   {
+    "text": "own.",
+    "start": 4.669,
+    "end": 4.992,
+    "t": 16.735,
+    "te": 17.058
+   }
+  ],
+  "start": 12.066,
+  "end": 17.318
+ },
+ {
+  "id": "06-loop",
+  "text": "Here's how it works. It runs on a simple loop.",
+  "duration": 3.021,
+  "words": [
+   {
+    "text": "Here's",
+    "start": 0.094,
+    "end": 0.369,
+    "t": 17.912,
+    "te": 18.187
+   },
+   {
+    "text": "how",
+    "start": 0.419,
+    "end": 0.569,
+    "t": 18.237,
+    "te": 18.387
+   },
+   {
+    "text": "it",
+    "start": 0.594,
+    "end": 0.644,
+    "t": 18.412,
+    "te": 18.462
+   },
+   {
+    "text": "works.",
+    "start": 0.694,
+    "end": 1.219,
+    "t": 18.512,
+    "te": 19.037
+   },
+   {
+    "text": "It",
+    "start": 1.419,
+    "end": 1.519,
+    "t": 19.237,
+    "te": 19.337
+   },
+   {
+    "text": "runs",
+    "start": 1.594,
+    "end": 1.869,
+    "t": 19.412,
+    "te": 19.687
+   },
+   {
+    "text": "on",
+    "start": 1.894,
+    "end": 1.969,
+    "t": 19.712,
+    "te": 19.787
+   },
+   {
+    "text": "a",
+    "start": 1.994,
+    "end": 2.044,
+    "t": 19.812,
+    "te": 19.862
+   },
+   {
+    "text": "simple",
+    "start": 2.119,
+    "end": 2.419,
+    "t": 19.937,
+    "te": 20.237
+   },
+   {
+    "text": "loop.",
+    "start": 2.469,
+    "end": 2.781,
+    "t": 20.287,
+    "te": 20.599
+   }
+  ],
+  "start": 17.818,
+  "end": 20.839
+ },
+ {
+  "id": "07-perceive",
+  "text": "First, perceive. It reads your request, and gathers information from your files, emails, and apps.",
+  "duration": 6.111,
+  "words": [
+   {
+    "text": "First,",
+    "start": 0.115,
+    "end": 0.365,
+    "t": 21.504,
+    "te": 21.754
+   },
+   {
+    "text": "perceive.",
+    "start": 0.52,
+    "end": 1.32,
+    "t": 21.909,
+    "te": 22.709
+   },
+   {
+    "text": "It",
+    "start": 1.495,
+    "end": 1.57,
+    "t": 22.884,
+    "te": 22.959
+   },
+   {
+    "text": "reads",
+    "start": 1.62,
+    "end": 1.87,
+    "t": 23.009,
+    "te": 23.259
+   },
+   {
+    "text": "your",
+    "start": 1.895,
+    "end": 1.97,
+    "t": 23.284,
+    "te": 23.359
+   },
+   {
+    "text": "request,",
+    "start": 1.995,
+    "end": 2.595,
+    "t": 23.384,
+    "te": 23.984
+   },
+   {
+    "text": "and",
+    "start": 2.695,
+    "end": 2.77,
+    "t": 24.084,
+    "te": 24.159
+   },
+   {
+    "text": "gathers",
+    "start": 2.82,
+    "end": 3.17,
+    "t": 24.209,
+    "te": 24.559
+   },
+   {
+    "text": "information",
+    "start": 3.195,
+    "end": 3.72,
+    "t": 24.584,
+    "te": 25.109
+   },
+   {
+    "text": "from",
+    "start": 3.77,
+    "end": 3.87,
+    "t": 25.159,
+    "te": 25.259
+   },
+   {
+    "text": "your",
+    "start": 3.895,
+    "end": 3.995,
+    "t": 25.284,
+    "te": 25.384
+   },
+   {
+    "text": "files,",
+    "start": 4.07,
+    "end": 4.62,
+    "t": 25.459,
+    "te": 26.009
+   },
+   {
+    "text": "emails,",
+    "start": 4.745,
+    "end": 5.245,
+    "t": 26.134,
+    "te": 26.634
+   },
+   {
+    "text": "and",
+    "start": 5.32,
+    "end": 5.395,
+    "t": 26.709,
+    "te": 26.784
+   },
+   {
+    "text": "apps.",
+    "start": 5.47,
+    "end": 5.861,
+    "t": 26.859,
+    "te": 27.25
+   }
+  ],
+  "start": 21.389,
+  "end": 27.5
+ },
+ {
+  "id": "08-reason",
+  "text": "Next, reason. A large language model, the agent's brain, breaks the goal into clear steps.",
+  "duration": 5.774,
+  "words": [
+   {
+    "text": "Next,",
+    "start": 0.098,
+    "end": 0.448,
+    "t": 27.998,
+    "te": 28.348
+   },
+   {
+    "text": "reason.",
+    "start": 0.523,
+    "end": 1.223,
+    "t": 28.423,
+    "te": 29.123
+   },
+   {
+    "text": "A",
+    "start": 1.398,
+    "end": 1.448,
+    "t": 29.298,
+    "te": 29.348
+   },
+   {
+    "text": "large",
+    "start": 1.523,
+    "end": 1.898,
+    "t": 29.423,
+    "te": 29.798
+   },
+   {
+    "text": "language",
+    "start": 1.948,
+    "end": 2.298,
+    "t": 29.848,
+    "te": 30.198
+   },
+   {
+    "text": "model,",
+    "start": 2.348,
+    "end": 2.623,
+    "t": 30.248,
+    "te": 30.523
+   },
+   {
+    "text": "the",
+    "start": 2.673,
+    "end": 2.773,
+    "t": 30.573,
+    "te": 30.673
+   },
+   {
+    "text": "agent's",
+    "start": 2.823,
+    "end": 3.223,
+    "t": 30.723,
+    "te": 31.123
+   },
+   {
+    "text": "brain,",
+    "start": 3.273,
+    "end": 3.798,
+    "t": 31.173,
+    "te": 31.698
+   },
+   {
+    "text": "breaks",
+    "start": 3.923,
+    "end": 4.198,
+    "t": 31.823,
+    "te": 32.098
+   },
+   {
+    "text": "the",
+    "start": 4.248,
+    "end": 4.298,
+    "t": 32.148,
+    "te": 32.198
+   },
+   {
+    "text": "goal",
+    "start": 4.348,
+    "end": 4.548,
+    "t": 32.248,
+    "te": 32.448
+   },
+   {
+    "text": "into",
+    "start": 4.573,
+    "end": 4.723,
+    "t": 32.473,
+    "te": 32.623
+   },
+   {
+    "text": "clear",
+    "start": 4.773,
+    "end": 4.998,
+    "t": 32.673,
+    "te": 32.898
+   },
+   {
+    "text": "steps.",
+    "start": 5.048,
+    "end": 5.504,
+    "t": 32.948,
+    "te": 33.404
+   }
+  ],
+  "start": 27.9,
+  "end": 33.674
+ },
+ {
+  "id": "09-act",
+  "text": "Then, act. It uses tools to search the web, update systems, and send messages.",
+  "duration": 5.337,
+  "words": [
+   {
+    "text": "Then,",
+    "start": 0.094,
+    "end": 0.344,
+    "t": 34.168,
+    "te": 34.418
+   },
+   {
+    "text": "act.",
+    "start": 0.419,
+    "end": 0.969,
+    "t": 34.493,
+    "te": 35.043
+   },
+   {
+    "text": "It",
+    "start": 1.119,
+    "end": 1.194,
+    "t": 35.193,
+    "te": 35.268
+   },
+   {
+    "text": "uses",
+    "start": 1.244,
+    "end": 1.519,
+    "t": 35.318,
+    "te": 35.593
+   },
+   {
+    "text": "tools",
+    "start": 1.569,
+    "end": 1.919,
+    "t": 35.643,
+    "te": 35.993
+   },
+   {
+    "text": "to",
+    "start": 1.969,
+    "end": 2.044,
+    "t": 36.043,
+    "te": 36.118
+   },
+   {
+    "text": "search",
+    "start": 2.094,
+    "end": 2.344,
+    "t": 36.168,
+    "te": 36.418
+   },
+   {
+    "text": "the",
+    "start": 2.394,
+    "end": 2.469,
+    "t": 36.468,
+    "te": 36.543
+   },
+   {
+    "text": "web,",
+    "start": 2.544,
+    "end": 2.919,
+    "t": 36.618,
+    "te": 36.993
+   },
+   {
+    "text": "update",
+    "start": 3.044,
+    "end": 3.369,
+    "t": 37.118,
+    "te": 37.443
+   },
+   {
+    "text": "systems,",
+    "start": 3.419,
+    "end": 3.919,
+    "t": 37.493,
+    "te": 37.993
+   },
+   {
+    "text": "and",
+    "start": 4.019,
+    "end": 4.094,
+    "t": 38.093,
+    "te": 38.168
+   },
+   {
+    "text": "send",
+    "start": 4.169,
+    "end": 4.394,
+    "t": 38.243,
+    "te": 38.468
+   },
+   {
+    "text": "messages.",
+    "start": 4.444,
+    "end": 5.077,
+    "t": 38.518,
+    "te": 39.151
+   }
+  ],
+  "start": 34.074,
+  "end": 39.411
+ },
+ {
+  "id": "10-learn",
+  "text": "Finally, learn. It checks the result, remembers what worked, and repeats until the job is done.",
+  "duration": 5.793,
+  "words": [
+   {
+    "text": "Finally,",
+    "start": 0.115,
+    "end": 0.59,
+    "t": 39.926,
+    "te": 40.401
+   },
+   {
+    "text": "learn.",
+    "start": 0.665,
+    "end": 1.315,
+    "t": 40.476,
+    "te": 41.126
+   },
+   {
+    "text": "It",
+    "start": 1.49,
+    "end": 1.565,
+    "t": 41.301,
+    "te": 41.376
+   },
+   {
+    "text": "checks",
+    "start": 1.615,
+    "end": 1.89,
+    "t": 41.426,
+    "te": 41.701
+   },
+   {
+    "text": "the",
+    "start": 1.94,
+    "end": 1.99,
+    "t": 41.751,
+    "te": 41.801
+   },
+   {
+    "text": "result,",
+    "start": 2.04,
+    "end": 2.615,
+    "t": 41.851,
+    "te": 42.426
+   },
+   {
+    "text": "remembers",
+    "start": 2.74,
+    "end": 3.14,
+    "t": 42.551,
+    "te": 42.951
+   },
+   {
+    "text": "what",
+    "start": 3.19,
+    "end": 3.315,
+    "t": 43.001,
+    "te": 43.126
+   },
+   {
+    "text": "worked,",
+    "start": 3.365,
+    "end": 3.715,
+    "t": 43.176,
+    "te": 43.526
+   },
+   {
+    "text": "and",
+    "start": 3.85,
+    "end": 3.925,
+    "t": 43.661,
+    "te": 43.736
+   },
+   {
+    "text": "repeats",
+    "start": 3.975,
+    "end": 4.425,
+    "t": 43.786,
+    "te": 44.236
+   },
+   {
+    "text": "until",
+    "start": 4.45,
+    "end": 4.625,
+    "t": 44.261,
+    "te": 44.436
+   },
+   {
+    "text": "the",
+    "start": 4.65,
+    "end": 4.7,
+    "t": 44.461,
+    "te": 44.511
+   },
+   {
+    "text": "job",
+    "start": 4.75,
+    "end": 5.05,
+    "t": 44.561,
+    "te": 44.861
+   },
+   {
+    "text": "is",
+    "start": 5.075,
+    "end": 5.175,
+    "t": 44.886,
+    "te": 44.986
+   },
+   {
+    "text": "done.",
+    "start": 5.225,
+    "end": 5.543,
+    "t": 45.036,
+    "te": 45.354
+   }
+  ],
+  "start": 39.811,
+  "end": 45.604
+ },
+ {
+  "id": "11-example-a",
+  "text": "Ask an agent for your weekly sales report.",
+  "duration": 2.705,
+  "words": [
+   {
+    "text": "Ask",
+    "start": 0.098,
+    "end": 0.348,
+    "t": 46.302,
+    "te": 46.552
+   },
+   {
+    "text": "an",
+    "start": 0.373,
+    "end": 0.423,
+    "t": 46.577,
+    "te": 46.627
+   },
+   {
+    "text": "agent",
+    "start": 0.473,
+    "end": 0.948,
+    "t": 46.677,
+    "te": 47.152
+   },
+   {
+    "text": "for",
+    "start": 0.998,
+    "end": 1.098,
+    "t": 47.202,
+    "te": 47.302
+   },
+   {
+    "text": "your",
+    "start": 1.123,
+    "end": 1.198,
+    "t": 47.327,
+    "te": 47.402
+   },
+   {
+    "text": "weekly",
+    "start": 1.248,
+    "end": 1.548,
+    "t": 47.452,
+    "te": 47.752
+   },
+   {
+    "text": "sales",
+    "start": 1.598,
+    "end": 1.898,
+    "t": 47.802,
+    "te": 48.102
+   },
+   {
+    "text": "report.",
+    "start": 1.948,
+    "end": 2.475,
+    "t": 48.152,
+    "te": 48.679
+   }
+  ],
+  "start": 46.204,
+  "end": 48.909
+ },
+ {
+  "id": "12-example-b",
+  "text": "It collects the data, builds the charts, writes a summary, and emails your team.",
+  "duration": 4.557,
+  "words": [
+   {
+    "text": "It",
+    "start": 0.069,
+    "end": 0.144,
+    "t": 49.228,
+    "te": 49.303
+   },
+   {
+    "text": "collects",
+    "start": 0.194,
+    "end": 0.569,
+    "t": 49.353,
+    "te": 49.728
+   },
+   {
+    "text": "the",
+    "start": 0.619,
+    "end": 0.669,
+    "t": 49.778,
+    "te": 49.828
+   },
+   {
+    "text": "data,",
+    "start": 0.719,
+    "end": 1.119,
+    "t": 49.878,
+    "te": 50.278
+   },
+   {
+    "text": "builds",
+    "start": 1.244,
+    "end": 1.519,
+    "t": 50.403,
+    "te": 50.678
+   },
+   {
+    "text": "the",
+    "start": 1.544,
+    "end": 1.594,
+    "t": 50.703,
+    "te": 50.753
+   },
+   {
+    "text": "charts,",
+    "start": 1.644,
+    "end": 2.194,
+    "t": 50.803,
+    "te": 51.353
+   },
+   {
+    "text": "writes",
+    "start": 2.294,
+    "end": 2.519,
+    "t": 51.453,
+    "te": 51.678
+   },
+   {
+    "text": "a",
+    "start": 2.544,
+    "end": 2.569,
+    "t": 51.703,
+    "te": 51.728
+   },
+   {
+    "text": "summary,",
+    "start": 2.644,
+    "end": 3.119,
+    "t": 51.803,
+    "te": 52.278
+   },
+   {
+    "text": "and",
+    "start": 3.259,
+    "end": 3.359,
+    "t": 52.418,
+    "te": 52.518
+   },
+   {
+    "text": "emails",
+    "start": 3.434,
+    "end": 3.784,
+    "t": 52.593,
+    "te": 52.943
+   },
+   {
+    "text": "your",
+    "start": 3.809,
+    "end": 3.884,
+    "t": 52.968,
+    "te": 53.043
+   },
+   {
+    "text": "team.",
+    "start": 3.934,
+    "end": 4.307,
+    "t": 53.093,
+    "te": 53.466
+   }
+  ],
+  "start": 49.159,
+  "end": 53.716
+ },
+ {
+  "id": "13-close-a",
+  "text": "A chatbot talks.",
+  "duration": 1.5,
+  "words": [
+   {
+    "text": "A",
+    "start": 0.148,
+    "end": 0.198,
+    "t": 54.414,
+    "te": 54.464
+   },
+   {
+    "text": "chatbot",
+    "start": 0.248,
+    "end": 0.723,
+    "t": 54.514,
+    "te": 54.989
+   },
+   {
+    "text": "talks.",
+    "start": 0.773,
+    "end": 1.28,
+    "t": 55.039,
+    "te": 55.546
+   }
+  ],
+  "start": 54.266,
+  "end": 55.766
+ },
+ {
+  "id": "14-close-b",
+  "text": "An AI agent works.",
+  "duration": 1.861,
+  "words": [
+   {
+    "text": "An",
+    "start": 0.144,
+    "end": 0.244,
+    "t": 56.21,
+    "te": 56.31
+   },
+   {
+    "text": "AI",
+    "start": 0.344,
+    "end": 0.769,
+    "t": 56.41,
+    "te": 56.835
+   },
+   {
+    "text": "agent",
+    "start": 0.819,
+    "end": 1.119,
+    "t": 56.885,
+    "te": 57.185
+   },
+   {
+    "text": "works.",
+    "start": 1.169,
+    "end": 1.621,
+    "t": 57.235,
+    "te": 57.687
+   }
+  ],
+  "start": 56.066,
+  "end": 57.927
+ }
+]
