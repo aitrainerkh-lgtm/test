@@ -1,11 +1,12 @@
 {
-  "voice_style": "Read the following text aloud in Khmer. Use a warm, confident, professional corporate presenter voice at a clear, steady and slightly brisk pace. Keep English terms (Net Profit, Gross Profit, Gross Margin, Net Margin, Operating Cash Flow, Margin, Online, CamStore 365) in natural English.",
+  "voice_style": "Voice: warm, confident, professional corporate presenter; clear, steady, slightly brisk pace. Keep English terms (Net Profit, Gross Profit, Gross Margin, Net Margin, Operating Cash Flow, Margin, Online, CamStore) in natural English.",
+  "pronunciation": "ប្រាំ (five) is always 'bram' with a voiced B, also inside compound numbers: ម្ភៃប្រាំ, ប្រាំមួយ, ប្រាំពីរ, ប្រាំបី, ប្រាំបួន, ប្រាំរយ, ប្រាំពាន់.",
   "segments": [
     {
       "id": "s01",
       "label_km": "របាយការណ៍ FY2025",
       "caption_km": "សូមស្វាគមន៍មកកាន់ របាយការណ៍ហិរញ្ញវត្ថុ ឆ្នាំ FY2025 របស់ CamStore 365។",
-      "speech_km": "សូមស្វាគមន៍មកកាន់ របាយការណ៍ហិរញ្ញវត្ថុ ឆ្នាំពីរពាន់ម្ភៃប្រាំ របស់ CamStore 365។"
+      "speech_km": "សូមស្វាគមន៍មកកាន់ របាយការណ៍ហិរញ្ញវត្ថុ ឆ្នាំពីរពាន់ម្ភៃប្រាំ របស់ CamStore បីរយហុកសិបប្រាំ។"
     },
     {
       "id": "s02",
