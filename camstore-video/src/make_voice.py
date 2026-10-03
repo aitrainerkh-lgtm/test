@@ -5,7 +5,8 @@ Usage:
     python3 src/make_voice.py [--only s01 s02] [--voice Kore] [--model gemini-3.8-flash-tts] [--no-verify]
 
 Each take is transcribed back with a Gemini text model and checked: the spoken numbers must
-match the script and every ប្រាំ (five) must be heard as "bram". A take that fails is retried.
+match the script, otherwise the take is retried. The prompt asks for ប្រាំ (five) to be spoken
+"bram"; confirm that by listening, since the model's own b/p judgement is not reliable.
 Writes voice/<segment id>.wav (24 kHz mono). build.py picks these up automatically.
 """
 import argparse
@@ -101,8 +102,10 @@ def check(key, wav_path, text):
     j = json.loads(request(CHECK_MODEL, key, body)["text"])
     heard_nums, want_nums = numbers(j["transcript"]), numbers(text)
     brams = sum(1 for f in j["fives"] if f.lower().startswith("b"))
-    ok = heard_nums == want_nums and brams >= n
-    return ok, f"bram {brams}/{n}, numbers {'match' if heard_nums == want_nums else 'DIFFER'} | heard: {j['transcript']}"
+    # The model's b/p judgement is not stable between runs, so only the numbers gate a take;
+    # the bram count is reported for information and the final check is a human listen.
+    ok = heard_nums == want_nums
+    return ok, f"bram {brams}/{n} (info), numbers {'match' if ok else 'DIFFER'} | heard: {j['transcript']}"
 
 
 def main():
