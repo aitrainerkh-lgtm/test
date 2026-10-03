@@ -1,0 +1,25 @@
+{
+  "name": "business-plan-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Why business owners need a business plan - Khmer motion graphics explainer (AI For Business)",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render BusinessPlanVideo out/business-plan-khmer.mp4"
+  },
+  "dependencies": {
+    "@fontsource/battambang": "^5.3.0",
+    "@fontsource/moul": "^5.3.0",
+    "@fontsource/poppins": "^5.3.0",
+    "@remotion/cli": "^4.0.532",
+    "@remotion/media-utils": "^4.0.532",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.532"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "typescript": "^5.9.3"
+  }
+}
