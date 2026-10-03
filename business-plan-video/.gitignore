@@ -1,0 +1,4 @@
+node_modules/
+raw/tight/
+raw/*.pcm
+public/audio/music.wav
