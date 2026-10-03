@@ -1,0 +1,4 @@
+output/soundtrack.wav
+output/still_*.png
+output/*_share.mp4
+__pycache__/
