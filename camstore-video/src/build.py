@@ -590,10 +590,33 @@ def load_voice(path, tempo):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-af",
                           f"{filt}silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
                           "silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
-                          "highpass=f=70,acompressor=threshold=-18dB:ratio=3:attack=5:release=120",
+                          "highpass=f=70,deesser=i=0.6:m=0.5:f=0.5,acompressor=threshold=-18dB:ratio=3:attack=5:release=120",
                           "-ac", "1", "-ar", str(audio.SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
     x = np.frombuffer(raw, np.float32).astype(np.float64)
+    x = drop_trailing_fragment(x)
+    fi, fo = int(0.012 * audio.SR), int(0.045 * audio.SR)
+    x[:fi] *= np.linspace(0, 1, fi)
+    x[-fo:] *= np.linspace(1, 0, fo) ** 2
     return x / (np.abs(x).max() + 1e-9) * 0.8
+
+
+def drop_trailing_fragment(x, gap=0.2, max_frag=0.4):
+    """Cut a short TTS glitch after the sentence: a burst that follows a pause and is cut off at the end."""
+    hop = int(0.01 * audio.SR)
+    env = np.array([np.sqrt(np.mean(x[i:i + hop] ** 2)) for i in range(0, len(x) - hop + 1, hop)])
+    active = 20 * np.log10(env + 1e-9) > -40
+    if len(active) < 5 or not active[-3:].any():
+        return x  # the clip already ends in silence or a natural fade
+    last_on = len(active) - 1
+    start = last_on
+    while start > 0 and active[start - 1]:
+        start -= 1
+    quiet = start
+    while quiet > 0 and not active[quiet - 1]:
+        quiet -= 1
+    if (last_on - start + 1) * 0.01 <= max_frag and (start - quiet) * 0.01 >= gap:
+        return x[: (quiet + 5) * hop]  # keep 50 ms after the last real word
+    return x
 
 
 def srt_time(s):
@@ -672,7 +695,7 @@ def main():
     if args.audio_only:
         src, tmp = out_dir / name, out_dir / f".{name}"
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-i", str(wav_path), "-map", "0:v", "-map", "1:a",
-                        "-c:v", "copy", "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "192k",
+                        "-c:v", "copy", "-af", "loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000,alimiter=limit=0.8:attack=2:release=60:level=false", "-c:a", "aac", "-b:a", "192k",
                         "-ar", "48000", "-shortest", "-movflags", "+faststart", str(tmp)], check=True)
         tmp.replace(src)
         print("remuxed", src)
@@ -683,7 +706,7 @@ def main():
     cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
            "-i", "-", "-i", str(wav_path), "-map", "0:v", "-map", "1:a",
            "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
-           "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
+           "-af", "loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000,alimiter=limit=0.8:attack=2:release=60:level=false", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
            "-shortest", "-movflags", "+faststart", str(out_dir / name)]
     enc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     with Pool(args.workers, initializer=init_worker, initargs=(segs, wins)) as pool:

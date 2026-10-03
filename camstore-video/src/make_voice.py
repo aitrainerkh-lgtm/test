@@ -70,8 +70,33 @@ def synth(key, model, voice, data, text):
             "generationConfig": {"responseModalities": ["AUDIO"],
                                  "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
     part = request(model, key, body)["inlineData"]
-    rate = next((int(p.split("=")[1]) for p in part.get("mimeType", "").split(";") if p.strip().startswith("rate=")), 24000)
-    return base64.b64decode(part["data"]), rate
+    return pcm_from(base64.b64decode(part["data"]), part.get("mimeType", ""))
+
+
+def pcm_from(data, mime=""):
+    """Return (pcm16 mono bytes, sample rate) from Gemini audio.
+
+    Older TTS models return raw PCM (audio/L16;rate=24000). Newer ones return a complete WAV file
+    whose trailing chunks hold a C2PA content-credentials manifest; only the 'data' chunk is audio.
+    """
+    if data[:4] != b"RIFF":
+        rate = next((int(p.split("=")[1]) for p in mime.split(";") if p.strip().startswith("rate=")), 24000)
+        return data, rate
+    pos, rate, pcm = 12, 24000, None
+    while pos + 8 <= len(data):
+        cid, size = data[pos:pos + 4], int.from_bytes(data[pos + 4:pos + 8], "little")
+        body = data[pos + 8:pos + 8 + size]
+        if cid == b"fmt ":
+            channels, rate, bits = (int.from_bytes(body[2:4], "little"), int.from_bytes(body[4:8], "little"),
+                                    int.from_bytes(body[14:16], "little"))
+            if channels != 1 or bits != 16:
+                sys.exit(f"Unexpected audio format: {channels} ch, {bits} bit")
+        elif cid == b"data":
+            pcm = body
+        pos += 8 + size + (size & 1)
+    if pcm is None:
+        sys.exit("No audio data chunk in Gemini WAV response")
+    return pcm, rate
 
 
 def numbers(text):
