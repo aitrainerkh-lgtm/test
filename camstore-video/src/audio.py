@@ -127,81 +127,104 @@ def music(total, groove_start, end_chord_at):
 
 
 # ---------------------------------------------------------------- sound effects
-def sweep_noise(dur, f0, f1, f2, q=1.4):
-    """Noise through a band-pass whose centre moves f0 -> f1 -> f2 (overlap-add STFT filter)."""
+# Soft, musical set tuned to the music's key (C major): marimba notes, airy swishes,
+# a reversed-bell swell and a light chime. No harsh noise bursts or booms.
+PENTA = [72, 74, 76, 79, 81, 84, 86, 88]  # C5 D5 E5 G5 A5 C6 D6 E6
+
+
+def lowpass(x, fc, order=2):
+    return sosfilt(butter(order, fc, "low", fs=SR, output="sos"), x)
+
+
+def marimba(note, dur=1.3):
+    """Modal marimba bar: partials near 1 : 3.9 : 9.2 with faster decay for higher modes."""
+    t = t_axis(dur)
+    f = midi(note)
+    s = np.zeros_like(t)
+    for ratio, amp, dec in ((1.0, 1.0, 3.2), (3.93, 0.32, 11.0), (9.2, 0.09, 26.0)):
+        if f * ratio < SR / 2.2:
+            s += amp * np.sin(2 * np.pi * f * ratio * t) * np.exp(-t * dec)
+    a = int(0.004 * SR)
+    s[:a] *= np.linspace(0, 1, a)
+    return s / np.abs(s).max()
+
+
+def swish(dur=0.6, f0=500, f1=1900, f2=800, pan_from=-0.7, pan_to=0.7):
+    """Airy stereo swish: soft band-passed noise that travels across the stereo field."""
     n = int(dur * SR)
-    x = rng.standard_normal(n + 2048)
+    x = lowpass(rng.standard_normal(n + 2048), 4200, 4)
     win, hop = 1024, 256
     out = np.zeros(n + 2048)
     freqs = np.fft.rfftfreq(win, 1 / SR)
     w = np.hanning(win)
-    for s in range(0, n, hop):
-        p = s / n
-        fc = f0 + (f1 - f0) * (p / 0.5) if p < 0.5 else f1 + (f2 - f1) * ((p - 0.5) / 0.5)
-        resp = np.exp(-0.5 * (np.log(np.maximum(freqs, 1) / fc) * q * 2) ** 2)
-        seg = np.fft.irfft(np.fft.rfft(x[s:s + win] * w) * resp)
-        out[s:s + win] += seg * w
+    for st in range(0, n, hop):
+        p = st / n
+        fc = f0 + (f1 - f0) * (p / 0.55) if p < 0.55 else f1 + (f2 - f1) * ((p - 0.55) / 0.45)
+        resp = np.exp(-0.5 * (np.log(np.maximum(freqs, 1) / fc) * 1.6) ** 2)
+        out[st:st + win] += np.fft.irfft(np.fft.rfft(x[st:st + win] * w) * resp) * w
     out = out[:n]
-    return out / (np.abs(out).max() + 1e-9)
+    t = np.arange(n) / n
+    env = np.where(t < 0.55, (t / 0.55) ** 2, np.exp(-(t - 0.55) * 7))
+    mono = out / (np.abs(out).max() + 1e-9) * env
+    pan = pan_from + (pan_to - pan_from) * t
+    left, right = np.cos((pan + 1) * np.pi / 4), np.sin((pan + 1) * np.pi / 4)
+    return np.stack([mono * left, mono * right], 1) * 1.414
 
 
-def whoosh(dur=0.75):
-    s = sweep_noise(dur, 350, 2600, 700)
-    t = t_axis(dur)
-    e = np.sin(np.pi * np.clip(t / dur, 0, 1)) ** 1.6
-    return s * e
-
-
-def tick():
-    t = t_axis(0.12)
-    f = 1500 * np.exp(-t * 18) + 650
-    s = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 38)
+def felt_thump():
+    """Very soft low 'landing' under a transition."""
+    t = t_axis(0.35)
+    f = 70 + 40 * np.exp(-t * 25)
+    s = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 14)
+    a = int(0.006 * SR)
+    s[:a] *= np.linspace(0, 1, a)
     return s
 
 
-def sparkle():
-    out = np.zeros(int(1.6 * SR))
-    for i, n in enumerate([84, 88, 91, 96, 100]):
-        t = t_axis(1.2)
-        s = (np.sin(2 * np.pi * midi(n) * t) + 0.3 * np.sin(2 * np.pi * midi(n) * 2.01 * t)) * np.exp(-t * 4.5)
-        a = int(i * 0.055 * SR)
-        out[a:a + len(s)] += s * (0.9 - i * 0.1)
-    return out / np.abs(out).max()
+def chime(notes=(84, 88, 91, 96), gap=0.07):
+    out = np.zeros(int((len(notes) * gap + 1.6) * SR))
+    for i, n in enumerate(notes):
+        t = t_axis(1.5)
+        s = (np.sin(2 * np.pi * midi(n) * t) + 0.18 * np.sin(2 * np.pi * midi(n) * 2.0 * t) * np.exp(-t * 6)) * np.exp(-t * 3.0)
+        a = int(i * gap * SR)
+        out[a:a + len(s)] += s * (1 - i * 0.12)
+    return lowpass(out / np.abs(out).max(), 7000)
 
 
-def riser(dur=1.1):
+def reverse_swell(dur=1.4):
+    """Bell chord with reverb, played backwards: a smooth swell that lands on its end."""
     t = t_axis(dur)
-    s = sweep_noise(dur, 200, 900, 4000, q=0.9) * (t / dur) ** 2
-    f = 180 + 520 * (t / dur) ** 2
-    s += 0.5 * np.sin(2 * np.pi * np.cumsum(f) / SR) * (t / dur) ** 2
-    return s / np.abs(s).max()
+    s = np.zeros_like(t)
+    for n in (60, 64, 67, 71, 74):
+        s += np.sin(2 * np.pi * midi(n) * t) * np.exp(-t * 2.5)
+    st = reverb(np.stack([s, s], 1), 1.8, 0.6)[::-1]
+    fade = int(0.03 * SR)
+    st[-fade:] *= np.linspace(1, 0, fade)[:, None]
+    return st / np.abs(st).max()
 
 
-def impact():
-    t = t_axis(1.4)
-    f = 38 + 50 * np.exp(-t * 12)
-    boom = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 3.2)
-    noise = sosfilt(butter(2, 900, "low", fs=SR, output="sos"), rng.standard_normal(len(t))) * np.exp(-t * 14)
-    s = boom + 0.6 * noise / np.abs(noise).max()
-    return s / np.abs(s).max()
-
-
-def bell_chord():
-    out = np.zeros(int(2.5 * SR))
-    for n in [72, 76, 79, 84]:
-        t = t_axis(2.5)
-        out += (np.sin(2 * np.pi * midi(n) * t) + 0.4 * np.sin(2 * np.pi * midi(n) * 3.0 * t) * np.exp(-t * 3)) * np.exp(-t * 1.6)
+def warm_chord():
+    out = np.zeros(int(3.0 * SR))
+    for i, n in enumerate((60, 67, 72, 76, 79)):
+        m = marimba(n, 3.0)
+        a = int(i * 0.045 * SR)
+        out[a:] += m[: len(out) - a] * (1 - i * 0.1)
     return out / np.abs(out).max()
 
 
 def sfx_track(total, events):
+    """events: (kind, time, pan, arg[, gain multiplier]) — arg is a MIDI note for 'marimba'."""
     buf = np.zeros((int(total * SR), 2))
-    made = {"whoosh": whoosh(), "tick": tick(), "sparkle": sparkle(), "riser": riser(),
-            "impact": impact(), "bell": bell_chord()}
-    gains = {"whoosh": 0.30, "tick": 0.10, "sparkle": 0.16, "riser": 0.22, "impact": 0.40, "bell": 0.20}
-    for kind, at, pan in events:
-        add(buf, made[kind], at, gains[kind], pan)
-    return reverb(buf, 1.6, 0.18)
+    fixed = {"swish": swish(), "swish_rl": swish(0.6, 500, 1900, 800, 0.7, -0.7), "swish_up": swish(0.6, 400, 2300, 1400, 0.0, 0.0), "thump": felt_thump(),
+             "chime": chime(), "swell": reverse_swell(), "chord": warm_chord()}
+    gains = {"swish": 0.13, "swish_rl": 0.13, "swish_up": 0.11, "thump": 0.10, "chime": 0.10, "swell": 0.14, "chord": 0.16,
+             "marimba": 0.075}
+    for kind, at, pan, arg, *mult in events:
+        sig = marimba(arg) if kind == "marimba" else fixed[kind]
+        if kind == "swell":
+            at -= len(sig) / SR  # the swell ends on the given time
+        add(buf, sig, max(at, 0.0), gains[kind] * (mult[0] if mult else 1.0), pan)
+    return reverb(buf, 1.8, 0.22)
 
 
 # ---------------------------------------------------------------- final mix

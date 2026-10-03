@@ -607,6 +607,7 @@ def main():
     ap.add_argument("--frames", type=int, default=None, help="render only the first N frames (testing)")
     ap.add_argument("--stills", nargs="*", type=float, help="write PNG stills at these times and exit")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--audio-only", action="store_true", help="rebuild the soundtrack and remux it into the existing video")
     args = ap.parse_args()
 
     segs = json.loads((ROOT / "narration_km.json").read_text(encoding="utf-8"))["segments"]
@@ -627,14 +628,20 @@ def main():
         return
 
     # ---- audio
-    events = [("riser", 0.0, 0.0), ("impact", 0.95, 0.0), ("sparkle", 1.1, 0.2), ("whoosh", 2.5, 0.0)]
+    # intro: one marimba note per rising bar, a reversed-bell swell into the title, then the card lands
+    events = [("marimba", 0.25, -0.4, 72, 1.8), ("marimba", 0.40, 0.0, 76, 1.8), ("marimba", 0.55, 0.4, 79, 1.8),
+              ("swell", 0.80, 0.0, None, 1.5), ("chime", 0.80, 0.2, None, 1.5),
+              ("swish_up", 2.30, 0.0, None), ("thump", 3.05, 0.0, None)]
     for k in range(9):
-        events.append(("whoosh", wins[k][1] - 0.4, -0.6 if TRANSITIONS[k] == "push" else 0.0))
+        b = wins[k][1]
+        kind = {"push": "swish_rl", "up": "swish_up"}.get(TRANSITIONS[k], "swish")
+        events += [(kind, b - 0.42, 0.0, None), ("thump", b + 0.28, 0.0, None)]
     for k in range(10):
         s, e = wins[k]
-        for ta, _, _ in highlight_spans(k + 1, e - s):
-            events.append(("tick", s + ta + 0.05, 0.0))
-    events += [("whoosh", wins[-1][1] - 0.3, 0.0), ("sparkle", wins[-1][1] + 0.05, 0.0), ("bell", wins[-1][1] + 0.1, 0.0)]
+        for j, (ta, _, _) in enumerate(highlight_spans(k + 1, e - s)):
+            events.append(("marimba", s + ta + 0.05, -0.3 + 0.2 * (j % 4), audio.PENTA[3 + j % 5]))
+    end = wins[-1][1]
+    events += [("swish", end - 0.45, 0.0, None), ("swell", end + 0.15, 0.0, None), ("chord", end + 0.15, 0.0, None)]
     voice_clips = []
     if use_voice:
         for k, seg in enumerate(segs):
@@ -661,9 +668,18 @@ def main():
         lines += [str(k + 1), f"{srt_time(s)} --> {srt_time(e)}", seg["caption_km"], ""]
     (out_dir / "captions_km.srt").write_text("\n".join(lines), encoding="utf-8")
 
+    name = "CamStore365_FY2025" + ("" if use_voice else "_no_voice") + ".mp4"
+    if args.audio_only:
+        src, tmp = out_dir / name, out_dir / f".{name}"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-i", str(wav_path), "-map", "0:v", "-map", "1:a",
+                        "-c:v", "copy", "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "192k",
+                        "-ar", "48000", "-shortest", "-movflags", "+faststart", str(tmp)], check=True)
+        tmp.replace(src)
+        print("remuxed", src)
+        return
+
     # ---- video
     n = args.frames or int(TOTAL * FPS)
-    name = "CamStore365_FY2025" + ("" if use_voice else "_no_voice") + ".mp4"
     cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
            "-i", "-", "-i", str(wav_path), "-map", "0:v", "-map", "1:a",
            "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
