@@ -282,7 +282,7 @@ export const Chrome: React.FC<{total: number}> = ({total}) => {
       <div style={{position: 'absolute', top: 36, right: 48, display: 'flex', alignItems: 'center', gap: 12, opacity: 0.9}}>
         <Logo size={44} />
         <div style={{fontFamily: F.en, fontWeight: 700, fontSize: 24, color: C.white}}>
-          AI For <span style={{color: C.orange}}>Business</span>
+          Business <span style={{color: C.orange}}>Plan</span>
         </div>
       </div>
     </AbsoluteFill>
@@ -306,7 +306,7 @@ export const Logo: React.FC<{size?: number}> = ({size = 60}) => (
       boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
     }}
   >
-    AI
+    BP
   </div>
 );
 

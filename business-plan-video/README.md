@@ -20,7 +20,7 @@ The narration is in Khmer and voiced with Gemini TTS (voice "Kore"). Music and s
 | 9 | Without vs with a plan | Side-by-side comparison |
 | 10 | Use AI | ChatGPT, Claude, Gemini, Copilot for research, financial tables, drafts |
 | 11 | Pro tip | Review the plan at least once a year |
-| 12 | Outro | AI For Business end card |
+| 12 | Outro | Business Plan end card |
 
 ## Edit and re-render
 

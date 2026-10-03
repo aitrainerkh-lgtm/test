@@ -475,7 +475,7 @@ export const Outro: React.FC<SceneProps> = ({lines, duration}) => {
             <Logo size={150} />
           </div>
           <div style={{fontFamily: F.en, fontWeight: 800, fontSize: 84, color: C.white, marginTop: 34}}>
-            AI For <span style={{color: C.orange}}>Business</span>
+            Business <span style={{color: C.orange}}>Plan</span>
           </div>
           <div style={{fontFamily: F.kh, fontWeight: 700, fontSize: 38, lineHeight: 1.7, color: C.soft, marginTop: 4}}>ចាប់ផ្តើមរៀបចំផែនការរបស់អ្នកថ្ងៃនេះ</div>
         </div>
