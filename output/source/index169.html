@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="km"><head><meta charset="utf-8">
+<title>Career Roadmap Video</title>
+<link rel="stylesheet" href="fonts/fonts_local.css">
+<style>
+:root{--navy:#1E2A3E;--navy2:#2C3D58;--sky:#7FD3F7;--muted:#5B6678;
+--c1:#F2B705;--c2:#F57C1F;--c3:#43A836;--c4:#12A3DD;--c5:#E0337A}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#EEF1F5}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;
+  background:radial-gradient(1500px 900px at 50% 35%,#F7F9FB 0%,#E6EBF1 70%,#DCE2EA 100%);
+  font-family:Battambang,sans-serif;color:var(--navy)}
+.grid{position:absolute;inset:0;background-image:
+  linear-gradient(rgba(30,42,62,.045) 2px,transparent 2px),
+  linear-gradient(90deg,rgba(30,42,62,.045) 2px,transparent 2px);background-size:60px 60px}
+.a{position:absolute}
+.scene{position:absolute;inset:0;opacity:0}
+.moul{font-family:Moul,serif;font-weight:400;line-height:1.6}
+.pp{font-family:Poppins,sans-serif}
+.center{left:0;right:0;text-align:center}
+svg{overflow:visible}
+.ln{fill:none;stroke:var(--navy);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* brand */
+#brand{top:30px;right:40px;display:flex;align-items:center;gap:12px;background:#fff;border-radius:40px;
+  padding:10px 24px 10px 14px;box-shadow:0 6px 18px rgba(30,42,62,.12);font:700 26px Poppins;color:var(--navy);z-index:5}
+#brand i{width:30px;height:30px;border-radius:50%;background:conic-gradient(#E8731A 0 50%,#3CB54A 50% 100%);display:block}
+
+/* subtitles */
+#sub{left:220px;right:220px;top:945px;min-height:104px;display:flex;align-items:center;justify-content:center;
+  background:rgba(30,42,62,.94);border-radius:30px;padding:12px 40px;color:#fff;text-align:center;
+  font:700 36px/1.7 Battambang;box-shadow:0 12px 30px rgba(30,42,62,.25);z-index:6;opacity:0}
+#sub b{color:var(--sky);font-weight:700}
+
+/* template card */
+.card{position:absolute;background:#fff;border-radius:26px;box-shadow:0 10px 26px rgba(30,42,62,.13);
+  display:flex;align-items:center;overflow:hidden;border-top:16px solid var(--c)}
+.stepcol{width:178px;flex:none;padding-left:34px}
+.steplbl{font:800 34px/1 Poppins;color:var(--navy);letter-spacing:1px}
+.stepnum{font:900 104px/1.05 Poppins;background:linear-gradient(180deg,var(--cl),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.divider{width:3px;align-self:stretch;margin:34px 0;background:#C9D3DF;flex:none}
+.mid{flex:1;padding:0 18px 0 30px}
+.yr{display:inline-block;font:800 26px/1 Poppins;color:#fff;background:var(--c);padding:8px 16px;border-radius:30px;margin-bottom:10px}
+.role{font:800 36px/1.2 Poppins;color:var(--navy)}
+.kh{font:700 30px/1.7 Battambang;color:var(--muted);margin-top:6px}
+.ico{width:150px;height:150px;flex:none;margin-right:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 40% 40%,var(--ct),transparent 72%)}
+.ico svg{width:104px;height:104px}
+
+/* sidebar */
+.sidebar{left:30px;width:168px;border-radius:28px;background:linear-gradient(180deg,#2E3F5B,#1B263A);box-shadow:0 12px 30px rgba(30,42,62,.3)}
+.sidebar .vt{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center}
+.sidebar .vt div{writing-mode:vertical-rl;transform:rotate(180deg);font-family:Moul;font-size:60px;color:#fff;white-space:nowrap;line-height:1.5}
+.sidebar .vt span{color:var(--sky)}
+.sidebar .tick{position:absolute;left:74px;width:3px;height:90px;background:rgba(255,255,255,.5)}
+
+/* step detail */
+.info{left:540px;top:200px;width:440px}
+.pill{display:inline-block;font:800 30px/1 Poppins;color:#fff;padding:12px 24px;border-radius:40px}
+.bigyr{font:900 150px/1 Poppins;margin-top:14px;background:linear-gradient(180deg,var(--cl),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brole{font:800 42px/1.15 Poppins;color:var(--navy);margin-top:8px}
+.theme{font-family:Moul;font-size:40px;line-height:1.6;margin-top:18px}
+.dcard{left:1000px;width:880px;top:200px;height:690px;align-items:stretch}
+.dcard .stepcol{padding-top:70px}
+.dcard .body{flex:1;padding:34px 40px 30px 34px;display:flex;flex-direction:column}
+.dcard .htl{font:700 32px/1.6 Battambang;color:var(--muted);margin-bottom:4px}
+.bul{display:flex;align-items:flex-start;gap:20px;font:700 39px/1.6 Battambang;color:var(--navy);margin:20px 0}
+.bul .ck{width:54px;height:54px;border-radius:50%;background:var(--c);flex:none;margin-top:8px;display:flex;align-items:center;justify-content:center}
+.kpi{margin-top:auto;display:flex;align-items:center;gap:18px;border-radius:22px;padding:14px 22px;background:var(--ct);border:3px dashed var(--c)}
+.kpi .kl{font:800 24px/1 Poppins;color:#fff;background:var(--c);padding:8px 14px;border-radius:12px;flex:none}
+.kpi .kt{font:700 33px/1.6 Battambang;color:var(--navy)}
+
+/* timeline */
+#tl{left:150px;top:40px;width:1100px;height:120px}
+#tl .base,#tl .fill{position:absolute;left:0;top:28px;height:10px;border-radius:6px;background:#C9D3DF;width:100%}
+#tl .fill{background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c4),var(--c5));width:0}
+#tl .node{position:absolute;top:8px;width:50px;height:50px;margin-left:-25px;border-radius:50%;background:#fff;border:6px solid #C9D3DF}
+#tl .node .in{position:absolute;inset:-6px;border-radius:50%;opacity:0}
+#tl .lab{position:absolute;top:72px;width:120px;margin-left:-60px;text-align:center;font:800 28px Poppins;color:var(--muted)}
+.card:not(.dcard) .stepcol{width:150px;padding-left:30px}
+.card:not(.dcard) .steplbl{font-size:24px}
+.card:not(.dcard) .stepnum{font-size:66px}
+.card:not(.dcard) .divider{margin:22px 0}
+.card:not(.dcard) .role{font-size:36px}
+.card:not(.dcard) .kh{font-size:29px;margin-top:2px}
+.card:not(.dcard) .ico{width:112px;height:112px}
+.card:not(.dcard) .ico svg{width:76px;height:76px}
+</style></head>
+<body><div id="stage"><div class="grid"></div>
+<div id="brand" class="a"><i></i>AI For Business</div>
+
+<!-- INTRO -->
+<div id="sc-intro" class="scene">
+  <div id="qmark" class="a pp center" style="top:40px;font:900 480px/1 Poppins;color:rgba(245,124,31,.13)">?</div>
+  <div id="qtext" class="a center" style="top:290px;padding:0 90px;font:800 70px/1.75 Battambang">តើអ្នកឃើញខ្លួនឯងនៅឯណា<br>ក្នុងរយៈពេល <span style="color:var(--c2)">៥ ឆ្នាំ</span>ខាងមុខ?</div>
+  <div id="ititle" class="a" style="top:150px;left:110px;width:900px">
+    <div id="it1" class="moul" style="font-size:86px">ផែនការឡើងតំណែង</div>
+    <div id="it2" class="moul" style="font-size:86px;color:var(--c2)">រយៈពេល ៥ ឆ្នាំ</div>
+  </div>
+  <div id="isub" class="a" style="top:520px;left:110px"><span style="display:inline-flex;align-items:center;gap:18px;background:#fff;border-radius:50px;padding:14px 36px 14px 20px;box-shadow:0 8px 22px rgba(30,42,62,.14);font:700 42px/1.6 Battambang"><span id="ihat"></span>ឧទាហរណ៍៖ ក្រុមហ៊ុនសំណង់</span></div>
+  <div id="iyears" class="a" style="top:660px;left:110px"><span class="pp" style="display:inline-block;font:900 64px/1 Poppins;color:#fff;background:var(--navy);padding:20px 44px;border-radius:60px">2027 <span style="color:var(--c1)">→</span> 2031</span></div>
+  <svg id="skyline" class="a" style="left:880px;top:270px;overflow:hidden" width="1000" height="611" viewBox="0 0 1080 660"></svg>
+</div>
+
+<!-- RULE -->
+<div id="sc-rule" class="scene">
+  <div id="rIcon" class="a center" style="top:60px"></div>
+  <div id="rLabel" class="a center moul" style="top:200px;font-size:64px">ច្បាប់សំខាន់</div>
+  <div id="rCard" class="a" style="left:230px;width:1460px;top:350px;background:#fff;border-radius:30px;border-top:16px solid var(--c1);box-shadow:0 12px 30px rgba(30,42,62,.13);padding:34px 50px;text-align:center;font:800 56px/1.75 Battambang">
+    មនុស្សបានឡើងតំណែង ព្រោះគេបានធ្វើការងារនៅ<br><span style="position:relative;display:inline-block"><span id="rHL" style="position:absolute;left:-10px;right:-10px;bottom:10px;height:34px;background:rgba(242,183,5,.45);border-radius:8px"></span><span style="position:relative;color:var(--c2)">កម្រិតបន្ទាប់</span></span> រួចហើយ
+  </div>
+  <div id="rYes" class="a" style="left:330px;top:735px;display:flex;align-items:center;gap:26px;font:800 46px/1.6 Battambang"><span class="ckc" style="background:var(--c3)"></span>ធ្វើការនៅកម្រិតបន្ទាប់</div>
+  <div id="rNo" class="a" style="left:1150px;top:735px;display:flex;align-items:center;gap:26px;font:800 46px/1.6 Battambang;color:#8A93A3"><span class="ckc" style="background:#E5484D"></span><span style="text-decoration:line-through;text-decoration-thickness:4px">រង់ចាំយូរ</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<div id="sc-overview" class="scene">
+  <div id="ovSide" class="a sidebar" style="top:110px;height:785px;width:150px"><div class="tick" style="top:40px"></div><div class="vt"><div style="font-size:44px">ផែនការឡើងតំណែង <span>៥ ឆ្នាំ</span></div></div><div class="tick" style="bottom:40px"></div></div>
+  <div id="ovCards"></div>
+</div>
+
+<!-- STEPS -->
+<div id="sc-steps" class="scene">
+  <div id="tl" class="a"><div class="base"></div><div class="fill" id="tlFill"></div></div>
+  <svg id="bld" class="a" style="left:50px;top:265px" width="460" height="623" viewBox="0 0 480 650"></svg>
+  <div id="stepInfos"></div>
+  <div id="stepCards"></div>
+</div>
+
+<!-- SUMMARY -->
+<div id="sc-summary" class="scene">
+  <div id="smSide" class="a sidebar" style="top:110px;height:785px;width:150px"><div class="tick" style="top:30px;height:80px"></div><div class="vt"><div style="font-size:44px">ផែនការឡើងតំណែង <span>៥ ឆ្នាំ</span></div></div><div class="tick" style="bottom:30px;height:80px"></div></div>
+  <div id="smCards"></div>
+  <div id="aiPanel" class="a" style="left:1210px;width:670px;top:110px;height:785px;display:flex;flex-direction:column;justify-content:center;border-radius:30px;background:linear-gradient(135deg,#2E3F5B,#1B263A);color:#fff;padding:56px 46px;box-shadow:0 12px 30px rgba(30,42,62,.3)">
+    <div style="font:800 46px/1.6 Battambang">ប្រើ <span class="pp" style="color:var(--sky);font-weight:900">AI</span> ដើម្បីពន្លឿនគ្រប់ជំហាន</div>
+    <div id="chips" style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px"></div>
+    <div id="review" style="display:flex;align-items:center;gap:20px;margin-top:70px;font:700 40px/1.6 Battambang"><span id="calIco"></span>ពិនិត្យផែនការ រៀងរាល់ <span style="color:var(--c1)">៦ ខែម្តង</span></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div id="sc-cta" class="scene">
+  <div id="ctaT" class="a center moul" style="top:70px;font-size:80px">ចាប់ផ្តើមថ្ងៃនេះ</div>
+  <div id="ctaCard" class="a" style="left:410px;width:1100px;top:270px;background:#fff;border-radius:30px;border-top:16px solid var(--c3);box-shadow:0 12px 30px rgba(30,42,62,.13);padding:40px 50px">
+    <div id="cr1" style="display:flex;align-items:center;gap:30px;font:800 46px/1.7 Battambang;padding:18px 0;border-bottom:3px solid #EEF1F5"><span class="box"><svg viewBox="0 0 64 64"><path id="ck1" d="M14 33 L27 46 L51 19" class="tk"/></svg></span><span>សរសេរតំណែងដែលអ្នកចង់បាន</span></div>
+    <div id="cr2" style="display:flex;align-items:center;gap:30px;font:800 46px/1.7 Battambang;padding:18px 0"><span class="box"><svg viewBox="0 0 64 64"><path id="ck2" d="M14 33 L27 46 L51 19" class="tk"/></svg></span><span>គោលដៅ <span style="color:var(--c2)">៣</span> សម្រាប់ឆ្នាំ <span class="pp" style="font-weight:900;color:var(--c2)">2027</span></span></div>
+  </div>
+  <div id="ctaEnd" class="a center" style="top:640px;font:800 54px/1.7 Battambang">៥ ឆ្នាំទៀត <span style="color:var(--c2)">អ្នកនឹងអរគុណខ្លួនឯង</span></div>
+  <div id="endBrand" class="a center" style="top:780px"><span style="display:inline-flex;align-items:center;gap:22px;background:var(--navy);color:#fff;border-radius:70px;padding:22px 50px 22px 26px;font:900 60px/1 Poppins;box-shadow:0 14px 34px rgba(30,42,62,.3)"><i style="width:62px;height:62px;border-radius:50%;background:conic-gradient(#E8731A 0 50%,#3CB54A 50% 100%);display:block"></i>AI For Business</span></div>
+</div>
+
+<div id="sub" class="a"><span id="subT"></span></div>
+</div>
+
+<style>
+.ckc{width:76px;height:76px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center}
+.box{width:78px;height:78px;border:5px solid var(--navy);border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center}
+.box svg{width:62px;height:62px}
+.tk{fill:none;stroke:var(--c3);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60}
+</style>
+
+<script>
+const TIM = window.TIM;
+const $=s=>document.querySelector(s);
+const C=['#F2B705','#F57C1F','#43A836','#12A3DD','#E0337A'];
+const CL=['#FFD54A','#FFA45C','#7BD36A','#62CCF2','#F57AAA'];
+const CT=['#FFF6D6','#FFE9D9','#E3F5DE','#DDF2FB','#FCE1EC'];
+
+/* ---------- icons ---------- */
+const ICON={
+ helmet:`<svg viewBox="0 0 64 64"><path class="ln" d="M10 42 C10 26 20 16 32 16 C44 16 54 26 54 42"/><path class="ln" d="M6 42 H58 V48 H6 Z"/><path class="ln" d="M26 17 V30 M38 17 V30"/><path class="ln" d="M28 12 H36 V17"/></svg>`,
+ gear:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="17" style="fill:none;stroke:var(--navy);stroke-width:9;stroke-dasharray:6.7 6.6"/><circle class="ln" cx="32" cy="32" r="12.5"/><circle class="ln" cx="32" cy="32" r="5"/></svg>`,
+ team:`<svg viewBox="0 0 64 64"><circle class="ln" cx="32" cy="20" r="7"/><path class="ln" d="M20 44 C20 34 26 30 32 30 C38 30 44 34 44 44 Z"/><circle class="ln" cx="14" cy="26" r="5.5"/><path class="ln" d="M4 46 C4 38 9 35 14 35 C17 35 19 36 20 37"/><circle class="ln" cx="50" cy="26" r="5.5"/><path class="ln" d="M60 46 C60 38 55 35 50 35 C47 35 45 36 44 37"/><path class="ln" d="M6 52 H58"/></svg>`,
+ chart:`<svg viewBox="0 0 64 64"><path class="ln" d="M10 54 H56"/><rect class="ln" x="12" y="38" width="8" height="16" rx="1.5"/><rect class="ln" x="28" y="30" width="8" height="24" rx="1.5"/><rect class="ln" x="44" y="20" width="8" height="34" rx="1.5"/><path class="ln" d="M10 30 L24 20 L34 24 L52 8"/><path class="ln" d="M44 8 H52 V16"/></svg>`,
+ trophy:`<svg viewBox="0 0 64 64"><path class="ln" d="M20 10 H44 V26 C44 34 38 40 32 40 C26 40 20 34 20 26 Z"/><path class="ln" d="M20 14 H11 C11 24 15 28 21 29"/><path class="ln" d="M44 14 H53 C53 24 49 28 43 29"/><path class="ln" d="M32 40 V48"/><path class="ln" d="M22 54 H42 L40 48 H24 Z"/><path class="ln" d="M32 18 L34 22 L38 22.5 L35 25.5 L36 30 L32 28 L28 30 L29 25.5 L26 22.5 L30 22 Z" style="stroke-width:2.6"/></svg>`,
+ stairs:`<svg viewBox="0 0 64 64"><path class="ln" d="M6 56 H18 V44 H30 V32 H42 V20 H56"/><path class="ln" d="M36 10 H56 V30" style="stroke:#F57C1F"/><path class="ln" d="M56 10 L40 26" style="stroke:#F57C1F"/></svg>`,
+ cal:`<svg viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="44" rx="6" style="fill:none;stroke:#fff;stroke-width:4"/><path d="M8 24 H56 M20 6 V16 M44 6 V16" style="fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round"/><path d="M22 40 L29 47 L43 33" style="fill:none;stroke:#F2B705;stroke-width:5;stroke-linecap:round;stroke-linejoin:round"/></svg>`,
+ target:`<svg viewBox="0 0 64 64"><circle class="ln" cx="30" cy="34" r="22"/><circle class="ln" cx="30" cy="34" r="13"/><circle cx="30" cy="34" r="4" style="fill:var(--navy)"/><path class="ln" d="M30 34 L54 10 M46 10 H54 V18"/></svg>`,
+ check:`<svg viewBox="0 0 64 64" style="width:32px;height:32px"><path d="M14 33 L27 46 L51 19" style="fill:none;stroke:#fff;stroke-width:9;stroke-linecap:round;stroke-linejoin:round"/></svg>`,
+ cross:`<svg viewBox="0 0 64 64" style="width:40px;height:40px"><path d="M18 18 L46 46 M46 18 L18 46" style="fill:none;stroke:#fff;stroke-width:9;stroke-linecap:round"/></svg>`
+};
+
+const STEPS=[
+ {n:'01',yr:2027,role:'Site Engineer',theme:'ពង្រឹងមូលដ្ឋានគ្រឹះ',ico:'helmet',
+  b:['អានប្លង់ និង BOQ ឱ្យច្បាស់','គោរពសុវត្ថិភាពការងារ (Safety)','របាយការណ៍ប្រចាំថ្ងៃ ទាន់ពេល'],kpi:'គ្មានគ្រោះថ្នាក់ការងារ • Daily Report ទាន់ពេល ១០០%'},
+ {n:'02',yr:2028,role:'Senior Site Engineer',theme:'ក្លាយជាអ្នកជំនាញ',ico:'gear',
+  b:['ដោះស្រាយបញ្ហាបច្ចេកទេសនៅការដ្ឋាន','បង្វឹក Junior Engineer','ប្រើ AI កាត់បន្ថយការខ្ជះខ្ជាយសម្ភារៈ'],kpi:'កាត់បន្ថយការខ្ជះខ្ជាយសម្ភារៈ ៥%'},
+ {n:'03',yr:2029,role:'Site Manager',theme:'រៀនដឹកនាំ',ico:'team',
+  b:['គ្រប់គ្រងក្រុមការងារ និង Subcontractor','រៀបចំកាលវិភាគការងារ (Schedule)','បញ្ចប់ការដ្ឋានទាន់ពេលកំណត់'],kpi:'ការដ្ឋានបញ្ចប់ទាន់ពេល ១០០%'},
+ {n:'04',yr:2030,role:'Assistant Project Manager',theme:'ចាប់ផ្តើមគ្រប់គ្រង',ico:'chart',
+  b:['រៀបចំ Budget និង Cost Control','ប្រជុំជាមួយអតិថិជន','ជួយការងារ Project Manager'],kpi:'គម្រោងមិនលើស Budget'},
+ {n:'05',yr:2031,role:'Project Manager',theme:'ដឹកនាំគម្រោងទាំងមូល',ico:'trophy',
+  b:['ទទួលខុសត្រូវគម្រោងទាំងមូល','រៀបចំអ្នកស្នងតំណែង (Successor)','សរសេរផែនការ ៥ ឆ្នាំបន្ទាប់'],kpi:'គម្រោងជោគជ័យ៖ ទាន់ពេល • ត្រូវគុណភាព • ក្នុង Budget'}
+];
+
+function vars(i){return `--c:${C[i]};--cl:${CL[i]};--ct:${CT[i]}`}
+function tcard(i,top,left,w,h,cls=''){
+  const s=STEPS[i];
+  return `<div class="card ${cls}" id="${cls}${i}" style="${vars(i)};top:${top}px;left:${left}px;width:${w}px;height:${h}px">
+   <div class="stepcol"><div class="steplbl">STEP</div><div class="stepnum">${s.n}</div></div><div class="divider"></div>
+   <div class="mid"><div style="display:flex;align-items:center;gap:18px"><span class="yr" style="margin:0">${s.yr}</span><span class="role">${s.role}</span></div><div class="kh">${s.theme}</div></div>
+   <div class="ico">${ICON[s.ico]}</div></div>`;
+}
+/* build DOM */
+$('#ovCards').innerHTML=STEPS.map((s,i)=>tcard(i,110+i*(145+15),215,1665,145,'ov')).join('');
+$('#smCards').innerHTML=STEPS.map((s,i)=>tcard(i,110+i*(145+15),215,965,145,'sm')).join('');
+document.querySelectorAll('#smCards .card').forEach((c,i)=>{c.querySelector('.kh').style.display='none';
+  c.insertAdjacentHTML('beforeend',`<div class="stamp" id="stamp${i}" style="position:absolute;right:14px;top:10px;width:44px;height:44px;border-radius:50%;background:#43A836;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,.2)">${ICON.check}</div>`)});
+$('#ihat').innerHTML=ICON.helmet.replace('<svg','<svg style="width:62px;height:62px"');
+$('#rIcon').innerHTML=`<span style="display:inline-flex;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#FFF1C2,transparent 72%);align-items:center;justify-content:center">${ICON.stairs.replace('<svg','<svg style="width:110px;height:110px"')}</span>`;
+document.querySelector('#rYes .ckc').innerHTML=ICON.check.replace('32px','44px').replace('32px','44px');
+document.querySelector('#rNo .ckc').innerHTML=ICON.cross;
+$('#calIco').innerHTML=ICON.cal.replace('<svg','<svg style="width:66px;height:66px"');
+$('#chips').innerHTML=['ChatGPT','Claude','Gemini','Copilot'].map((n,i)=>`<span class="chip" id="chip${i}" style="font:800 36px/1 Poppins;background:${['#10A37F','#D97757','#4285F4','#0F6CBD'][i]};padding:28px 20px;border-radius:20px;text-align:center">${n}</span>`).join('');
+$('#stepInfos').innerHTML=STEPS.map((s,i)=>`<div class="a info" id="inf${i}" style="${vars(i)}">
+  <span class="pill" style="background:${C[i]}">STEP ${s.n}</span>
+  <div class="bigyr">${s.yr}</div><div class="brole">${s.role}</div><div class="theme" style="color:${C[i]}">${s.theme}</div></div>`).join('');
+$('#stepCards').innerHTML=STEPS.map((s,i)=>`<div class="card dcard" id="dc${i}" style="${vars(i)}">
+  <div class="stepcol"><div class="steplbl">STEP</div><div class="stepnum">${s.n}</div><div class="ico" style="width:120px;height:120px;margin:22px 0 0 -14px">${ICON[s.ico].replace('<svg','<svg style="width:84px;height:84px"')}</div></div><div class="divider"></div>
+  <div class="body"><div class="htl">សកម្មភាពសំខាន់</div>
+   ${s.b.map((b,j)=>`<div class="bul" id="b${i}_${j}"><span class="ck">${ICON.check}</span><span>${b}</span></div>`).join('')}
+   <div class="kpi" id="k${i}"><span class="kl">KPI</span>${ICON.target.replace('<svg','<svg style="width:50px;height:50px;flex:none"')}<span class="kt">${s.kpi}</span></div>
+  </div></div>`).join('');
+/* timeline */
+const TLX=[0,275,550,825,1100];
+$('#tl').insertAdjacentHTML('beforeend',STEPS.map((s,i)=>`<div class="node" id="nd${i}" style="left:${TLX[i]}px"><div class="in" id="ndi${i}" style="background:${C[i]}"></div></div><div class="lab" id="lb${i}" style="left:${TLX[i]}px">${s.yr}</div>`).join(''));
+
+/* skyline (intro) */
+(function(){
+  let s='';const cols=['#C9D3DF','#B7C3D1','#D5DDE6'];
+  const B=[[30,250,130],[150,380,110],[250,300,150],[400,440,120],[520,330,140],[660,470,110],[770,280,130],[900,390,150]];
+  B.forEach(([x,h,w],i)=>{s+=`<g class="sk" id="sk${i}"><rect x="${x}" y="${600-h}" width="${w}" height="${h}" rx="6" fill="${cols[i%3]}"/>`;
+    for(let yy=600-h+30;yy<580;yy+=48)for(let xx=x+20;xx<x+w-30;xx+=38)s+=`<rect x="${xx}" y="${yy}" width="20" height="26" rx="3" fill="#EEF2F6"/>`;s+='</g>'});
+  s+=`<g id="skCrane"><rect x="600" y="70" width="22" height="530" fill="#F2B705" stroke="#1E2A3E" stroke-width="4"/>
+     ${Array.from({length:10},(_,k)=>`<path d="M600 ${80+k*52} L622 ${126+k*52} M622 ${80+k*52} L600 ${126+k*52}" stroke="#1E2A3E" stroke-width="2.5"/>`).join('')}
+     <rect x="470" y="56" width="500" height="20" fill="#F2B705" stroke="#1E2A3E" stroke-width="4"/>
+     <rect x="470" y="76" width="60" height="44" fill="#5B6678"/><path d="M611 56 L611 20" stroke="#1E2A3E" stroke-width="5"/>
+     <path d="M611 20 L520 56 M611 20 L960 56" stroke="#1E2A3E" stroke-width="3"/><path d="M880 76 V250" stroke="#1E2A3E" stroke-width="3"/>
+     <path d="M872 250 h16 v10 a8 8 0 1 1 -16 0z" fill="#1E2A3E"/></g>`;
+  s+=`<rect x="0" y="600" width="1080" height="60" fill="#9AA6B5"/><rect x="0" y="600" width="1080" height="8" fill="#1E2A3E" opacity=".25"/>`;
+  $('#skyline').innerHTML=s;
+})();
+
+/* building (steps) */
+(function(){
+  let s=`<rect x="0" y="620" width="480" height="30" rx="4" fill="#9AA6B5"/>`;
+  s+=`<g id="crane"><rect x="40" y="40" width="26" height="580" fill="#F2B705" stroke="#1E2A3E" stroke-width="4"/>
+   ${Array.from({length:11},(_,k)=>`<path d="M40 ${50+k*52} L66 ${100+k*52} M66 ${50+k*52} L40 ${100+k*52}" stroke="#1E2A3E" stroke-width="2.5"/>`).join('')}
+   <rect x="0" y="40" width="470" height="20" fill="#F2B705" stroke="#1E2A3E" stroke-width="4"/>
+   <rect x="0" y="60" width="44" height="40" fill="#5B6678"/><path d="M53 40 V6 M53 6 L10 40 M53 6 L460 40" stroke="#1E2A3E" stroke-width="3"/>
+   <rect x="284" y="58" width="32" height="12" rx="3" fill="#1E2A3E"/></g>`;
+  s+=`<rect id="cable" x="298.5" y="66" width="3" height="520" fill="#1E2A3E" style="transform-origin:300px 66px;transform-box:view-box"/>`;
+  s+=`<g id="hook" style="transform-box:view-box"><path d="M292 66 h16 v10 a8 8 0 1 1 -16 0z" fill="#1E2A3E"/></g>`;
+  for(let i=0;i<5;i++){const top=620-100*(i+1);
+    s+=`<g id="fl${i}" style="transform-box:view-box">
+     <rect x="200" y="${top}" width="200" height="100" fill="#FFFFFF" stroke="#1E2A3E" stroke-width="4"/>
+     <rect x="200" y="${top}" width="200" height="14" fill="${C[i]}" stroke="#1E2A3E" stroke-width="4"/>
+     ${i===0?`<rect x="285" y="${top+46}" width="30" height="54" fill="#5B6678"/><rect x="220" y="${top+36}" width="40" height="36" rx="3" fill="#BFE6F7" stroke="#1E2A3E" stroke-width="3"/><rect x="340" y="${top+36}" width="40" height="36" rx="3" fill="#BFE6F7" stroke="#1E2A3E" stroke-width="3"/>`
+     :[0,1,2].map(k=>`<rect x="${220+k*60}" y="${top+34}" width="40" height="44" rx="3" fill="#BFE6F7" stroke="#1E2A3E" stroke-width="3"/>`).join('')}
+     <g id="tag${i}" style="transform-box:fill-box;transform-origin:center"><rect x="100" y="${top+30}" width="88" height="40" rx="20" fill="${C[i]}"/><text x="144" y="${top+58}" text-anchor="middle" font-family="Poppins" font-weight="800" font-size="22" fill="#fff">${STEPS[i].yr}</text></g>
+    </g>`;}
+  s+=`<g id="flag" style="transform-box:fill-box;transform-origin:bottom left"><path d="M300 120 V40" stroke="#1E2A3E" stroke-width="5"/><path d="M302 42 H360 L346 58 L360 74 H302 Z" fill="#E0337A" stroke="#1E2A3E" stroke-width="3"/></g>`;
+  s+=`<g id="spark">${Array.from({length:10},(_,k)=>{const a=k/10*Math.PI*2;return `<circle id="sp${k}" cx="${300+Math.cos(a)*10}" cy="${80+Math.sin(a)*10}" r="7" fill="${C[k%5]}"/>`}).join('')}</g>`;
+  $('#bld').innerHTML=s;
+})();
+
+/* ---------- animation engine ---------- */
+const TR=new Map();
+function K(el,prop,keys){ if(typeof el==='string') el=$(el); if(!el) throw new Error('missing el'); let m=TR.get(el); if(!m){m={};TR.set(el,m)}
+  (m[prop]=m[prop]||[]).push(...keys); m[prop].sort((a,b)=>a[0]-b[0]); }
+const E={lin:x=>x,out:x=>1-Math.pow(1-x,3),in:x=>x*x*x,io:x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2,
+ back:x=>{const c1=1.9,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)},
+ bounce:x=>{const n=7.5625,d=2.75;if(x<1/d)return n*x*x;if(x<2/d)return n*(x-=1.5/d)*x+.75;if(x<2.5/d)return n*(x-=2.25/d)*x+.9375;return n*(x-=2.625/d)*x+.984375}};
+function val(k,t){ if(t<=k[0][0]) return k[0][1]; for(let i=1;i<k.length;i++){ if(t<=k[i][0]){const [t0,v0]=k[i-1],[t1,v1,e]=k[i];const p=t1===t0?1:(t-t0)/(t1-t0);return v0+(v1-v0)*E[e||'out'](p);} } return k[k.length-1][1]; }
+const DEF={o:1,x:0,y:0,s:1,sx:1,sy:1,r:0};
+function render(t){
+  for(const [el,m] of TR){ const g=p=>m[p]?val(m[p],t):DEF[p];
+    if(m.o) el.style.opacity=g('o');
+    if(m.x||m.y||m.s||m.sx||m.sy||m.r) el.style.transform=`translate(${g('x')}px,${g('y')}px) rotate(${g('r')}deg) scale(${g('s')*g('sx')},${g('s')*g('sy')})`;
+    if(m.clip) el.style.clipPath=`inset(0 ${100-g('clip')}% 0 0)`;
+    if(m.dash) el.style.strokeDashoffset=g('dash');
+    if(m.w) el.style.width=g('w')+'px';
+  }
+  subs(t);
+}
+const SFX=[];function sfx(t,type,v=1){SFX.push({t:+t.toFixed(3),type,v})}
+function show(el,t0,t1,fi=.35,fo=.35){K(el,'o',[[t0,0],[t0+fi,1,'lin'],[t1-fo,1],[t1,0,'lin']])}
+function pop(el,t,d=.55,s0=.3){K(el,'o',[[t,0],[t+.12,1,'lin']]);K(el,'s',[[t,s0],[t+d,1,'back']])}
+function slide(el,t,dx,dy,d=.65){K(el,'o',[[t,0],[t+d*.45,1,'lin']]);K(el,'x',[[t,dx],[t+d,0]]);K(el,'y',[[t,dy],[t+d,0]])}
+function out(el,t,dx,dy,d=.4){K(el,'o',[[t,1],[t+d,0,'lin']]);K(el,'x',[[t,0],[t+d,dx,'in']]);K(el,'y',[[t,0],[t+d,dy,'in']])}
+
+/* ---------- timeline ---------- */
+const SC={};TIM.scenes.forEach(s=>SC[s.id]=s);
+function sceneVis(id,el){const s=SC[id];K(el,'o',[[s.start,0],[s.start+.3,1,'lin'],[s.end-.25,1],[s.end+.05,0,'lin']])}
+sceneVis('intro','#sc-intro');sceneVis('rule','#sc-rule');sceneVis('overview','#sc-overview');sceneVis('summary','#sc-summary');
+{const s=SC.cta;K('#sc-cta','o',[[s.start,0],[s.start+.3,1,'lin']]);}
+K('#sc-steps','o',[[SC.s1.start,0],[SC.s1.start+.3,1,'lin'],[SC.s5.end-.25,1],[SC.s5.end+.05,0,'lin']]);
+K('#brand','o',[[0,0],[.6,1,'lin'],[SC.cta.cues.end-.2,1],[SC.cta.cues.end+.3,0,'lin']]);
+
+/* INTRO */
+(function(){const s=SC.intro,c=s.cues;
+  sfx(.05,'riser',.7);
+  K('#qmark','o',[[.1,0],[.5,1,'lin'],[c.title-.2,1],[c.title+.3,0,'lin']]);K('#qmark','s',[[.1,.6],[.9,1,'back'],[c.title-.2,1.05,'lin'],[c.title+.3,1.4]]);
+  K('#qtext','o',[[.3,0],[.7,1,'lin'],[c.title-.25,1],[c.title+.1,0,'lin']]);K('#qtext','y',[[.3,60],[.9,0],[c.title-.25,0],[c.title+.15,-80,'in']]);
+  sfx(.3,'whoosh',.8);
+  slide('#it1',c.title,0,-60,.7);slide('#it2',c.title+.25,0,-60,.7);sfx(c.title,'impact',.9);
+  pop('#isub',c.sub,.6);sfx(c.sub,'pop');
+  pop('#iyears',c.co,.6);sfx(c.co,'ding',.7);
+  for(let i=0;i<8;i++){K('#sk'+i,'y',[[c.title+.1+i*.08,700],[c.title+.8+i*.08,0,'back']]);}
+  K('#skCrane','y',[[c.title+.2,700],[c.title+1.2,0,'out']]);K('#skyline','o',[[c.title,0],[c.title+.3,1,'lin']]);sfx(c.title+.2,'whoosh',.5);
+})();
+/* RULE */
+(function(){const s=SC.rule,c=s.cues;sfx(s.start,'whoosh');
+  pop('#rIcon',s.start+.15,.6);slide('#rLabel',s.start+.3,0,-40);
+  slide('#rCard',c.who-.3,0,80,.7);sfx(c.who-.3,'whoosh',.6);
+  K('#rHL','clip',[[c.next+.6,0],[c.next+1.2,100,'io']]);K('#rHL','o',[[0,1]]);sfx(c.next+.6,'swipe',.6);
+  slide('#rYes',c.next+1.1,-80,0,.5);sfx(c.next+1.1,'tick');
+  slide('#rNo',c.no,-80,0,.5);sfx(c.no,'buzz',.6);
+})();
+/* OVERVIEW */
+(function(){const s=SC.overview,c=s.cues;sfx(s.start,'whoosh');
+  K('#ovSide','x',[[s.start,-260],[s.start+.7,0]]);K('#ovSide','o',[[s.start,0],[s.start+.3,1,'lin']]);
+  const t0=s.start+.5,t1=c.years;
+  for(let i=0;i<5;i++){const t=t0+(t1-t0)*i/4.2;slide('#ov'+i,t,700,0,.6);sfx(t,'swoosh',.5);sfx(t+.45,'pop',.6);}
+  // highlights
+  K('#ov0','s',[[c.se,1],[c.se+.25,1.05],[c.se+.6,1]]);
+  K('#ov4','s',[[c.pm,1],[c.pm+.25,1.05],[c.pm+.6,1]]);sfx(c.pm,'ding',.5);
+})();
+/* STEPS */
+(function(){
+  const s1=SC.s1;
+  K('#tl','o',[[s1.start,0],[s1.start+.4,1,'lin']]);K('#tl','y',[[s1.start,-40],[s1.start+.5,0]]);
+  K('#crane','o',[[s1.start,0],[s1.start+.4,1,'lin']]);K('#crane','y',[[s1.start,40],[s1.start+.6,0]]);
+  K('#cable','sy',[[0,24/520]]);K('#hook','y',[[0,0]]);
+  for(let i=0;i<5;i++){const s=SC['s'+(i+1)],c=s.cues,inf='#inf'+i,dc='#dc'+i;
+    if(i>0) sfx(s.start,'whoosh');
+    slide(inf,s.start+.1,-120,0,.6);out(inf,s.end-.4,-140,0,.35);
+    slide(dc,s.start+.3,0,160,.7);out(dc,s.end-.4,0,120,.35);
+    K(inf+' .bigyr','s',[[s.start+.1,.6],[s.start+.8,1,'back']]);
+    K(inf+' .theme','o',[[c.theme-.2,0],[c.theme+.2,1,'lin']]);K(inf+' .theme','x',[[c.theme-.2,-40],[c.theme+.4,0]]);
+    ['b1','b2','b3'].forEach((b,j)=>{const t=c[b]-.15;K('#b'+i+'_'+j,'o',[[t,0],[t+.2,1,'lin']]);K('#b'+i+'_'+j,'x',[[t,60],[t+.45,0]]);
+      K(`#b${i}_${j} .ck`,'s',[[t,0],[t+.5,1,'back']]);sfx(t,'pop',.8)});
+    const kt=Math.min(c.b3+1.8,s.end-1.3);pop('#k'+i,kt,.6,.6);sfx(kt,'ding',.8);
+    // timeline
+    const tn=s.start+.5;K('#tlFill','w',[[tn,i?TLX[i-1]:0],[tn+.8,TLX[i],'io']]);
+    K('#ndi'+i,'o',[[tn+.6,0],[tn+.8,1,'lin']]);K('#nd'+i,'s',[[tn+.6,1],[tn+.9,1.35,'back'],[s.end-.2,1.35],[s.end+.2,1]]);sfx(tn+.7,'tick',.6);
+    K('#lb'+i,'o',[[0,.55],[tn+.6,.55],[tn+.8,1,'lin']]);
+    // floor drop
+    const top=620-100*(i+1),d0=-(top-90),fs=s.start+.6,fe=fs+1.4;
+    K('#fl'+i,'o',[[fs,0],[fs+.15,1,'lin']]);K('#fl'+i,'y',[[fs,d0],[fe,0,'io']]);
+    K('#cable','sy',[[fs,24/520],[fe,(top-66)/520,'io'],[fe+.3,(top-66)/520],[fe+1.1,24/520,'io']]);
+    K('#hook','y',[[fs,24],[fe,top-66,'io'],[fe+.3,top-66],[fe+1.1,24,'io']]);
+    sfx(fs,'winch',.5);sfx(fe,'clank',.9);
+    pop('#tag'+i,fe+.1,.5);
+  }
+  const e=SC.s5;const ft=e.start+2.5;
+  K('#flag','o',[[ft,0],[ft+.1,1,'lin']]);K('#flag','sy',[[ft,0],[ft+.6,1,'back']]);sfx(ft+.2,'success',.7);
+  for(let k=0;k<10;k++){const a=k/10*Math.PI*2;K('#sp'+k,'o',[[ft+.2,0],[ft+.3,1,'lin'],[ft+1.3,0,'lin']]);K('#sp'+k,'x',[[ft+.2,0],[ft+1.3,Math.cos(a)*120]]);K('#sp'+k,'y',[[ft+.2,0],[ft+1.3,Math.sin(a)*120-20]]);}
+})();
+/* SUMMARY */
+(function(){const s=SC.summary,c=s.cues;sfx(s.start,'whoosh');
+  K('#smSide','x',[[s.start,-260],[s.start+.6,0]]);K('#smSide','o',[[s.start,0],[s.start+.3,1,'lin']]);
+  for(let i=0;i<5;i++){const t=s.start+.15+i*.12;slide('#sm'+i,t,600,0,.5);pop('#stamp'+i,s.start+.9+i*.18,.4);sfx(s.start+.9+i*.18,'tick',.5);}
+  slide('#aiPanel',s.start+.4,0,300,.7);
+  for(let i=0;i<4;i++){pop('#chip'+i,c.tools+i*.35,.5);sfx(c.tools+i*.35,'pop',.7);}
+  slide('#review',c.review,-60,0,.5);sfx(c.review,'ding',.6);
+})();
+/* CTA */
+(function(){const s=SC.cta,c=s.cues;sfx(s.start,'whoosh');
+  slide('#ctaT',s.start+.1,0,-50,.6);slide('#ctaCard',s.start+.3,0,80,.6);
+  K('#ck1','dash',[[c.c1,60],[c.c1+.45,0,'out']]);sfx(c.c1,'tick');
+  K('#ck2','dash',[[c.c2,60],[c.c2+.45,0,'out']]);sfx(c.c2,'tick');
+  slide('#ctaEnd',c.end,0,50,.6);sfx(c.end,'swoosh',.6);
+  const b=c.end+1.6;pop('#endBrand',b,.7,.5);sfx(b,'success',.9);
+})();
+
+/* subtitles */
+const SUBS=TIM.scenes.flatMap(s=>s.subs);let lastSub=-2;
+function subs(t){let k=-1;for(let i=0;i<SUBS.length;i++){if(t>=SUBS[i].t0-.05&&t<SUBS[i].t1){k=i;break}}
+  const el=$('#sub');
+  if(k!==lastSub){$('#subT').innerHTML=k<0?'':SUBS[k].text.replace(/([A-Za-z][A-Za-z ,]*[A-Za-z])/g,'<b>$1</b>');lastSub=k}
+  el.style.opacity=k<0?0:1;}
+window.render=render;window.SFX=SFX;window.TOTAL=TIM.total;
+</script></body></html>
