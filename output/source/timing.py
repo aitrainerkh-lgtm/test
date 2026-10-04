@@ -34,7 +34,7 @@ def chunks(text):
             mid=min(sp,key=lambda i:abs(i-len(p)/2)); out.append(p[:mid]); p=p[mid+1:]
         out.append(p)
     return out
-LEAD0,GAP,TAIL=0.6,0.2,1.4
+LEAD0,GAP,TAIL=0.6,0.85,1.9
 t=0; scenes=[]
 for i,s in enumerate(S):
     d=D[s['id']]; start=t; vo=start+(LEAD0 if i==0 else GAP*0.5+0.15)
