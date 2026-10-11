@@ -1,0 +1,24 @@
+{
+  "name": "80-20-rule-at-work",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "script": "node gemini/generate-script.mjs",
+    "narrate": "node gemini/narrate.mjs",
+    "build": "node build/build-composition.mjs",
+    "make": "npm run script && npm run narrate && npm run build && npm run check",
+    "test:layout": "node test/make-fixture.mjs && node build/build-composition.mjs --script test/fixture/script.json --timing test/fixture/timing.json --audio test/fixture/silence.wav && npm run check",
+    "dev": "npx --yes hyperframes@0.8.145 preview",
+    "check": "npx --yes hyperframes@0.8.145 check",
+    "render": "npx --yes hyperframes@0.8.145 render --quality high --output renders/80-20-rule-at-work-km.mp4",
+    "publish": "npx --yes hyperframes@0.8.145 publish"
+  },
+  "devDependencies": {
+    "@fontsource/battambang": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/moul": "^5.3.0",
+    "@google/genai": "^2.28.0",
+    "gsap": "3.14.2",
+    "lucide-static": "^1.55.0"
+  }
+}
