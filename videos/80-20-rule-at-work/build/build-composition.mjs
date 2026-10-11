@@ -394,7 +394,7 @@ function exampleMotion(id) {
   sfx('pop', cta.start + 0.4, 0.25);
   sfx('pop', cta.start + 0.9, 0.25);
   sfx('pop', cta.end - 1.2, 0.3);
-  sfx('outro', brand.start, 0.45);
+  sfx('outro', brand.end - 0.15, 0.5);
   fromTo('#cl-c1', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, cta.start + 0.4);
   fromTo('#cl-c2', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, cta.start + 0.9);
   fromTo('#cl-stamp', { opacity: 0, scale: 1.6, rotation: -14 }, { opacity: 1, scale: 1, rotation: -4, duration: 0.45, ease: 'back.out(2)' }, cta.end - 1.2);
