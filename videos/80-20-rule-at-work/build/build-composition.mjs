@@ -8,6 +8,7 @@ import path from 'node:path';
 import { p, readJson } from '../gemini/lib.mjs';
 import { khmerLength } from '../gemini/plan.mjs';
 import { topItems } from '../gemini/schema.mjs';
+import { makeSfx } from './make-sfx.mjs';
 
 const arg = (name, def) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -65,6 +66,18 @@ const fromTo = (sel, from, to, at) => T.push(`tl.fromTo(${J(sel)},${J(from)},${J
 const to = (sel, vars, at) => T.push(`tl.to(${J(sel)},${J(vars)},${r3(at)});`);
 const pop = (sel, at, extra = {}) => fromTo(sel, { opacity: 0, y: 26, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'power3.out', ...extra }, at);
 
+// Sound effects: synthesized files placed as timed <audio> clips under the voice.
+const SFX = makeSfx();
+const sfxEls = [];
+// Each effect type gets two Studio lanes (alternating), so layered cues never share a lane.
+const SFX_LANE = { whoosh: 10, pop: 12, tick: 14, chime: 16, outro: 18 };
+const sfxCount = {};
+const sfx = (name, at, vol) => {
+  const f = SFX[name];
+  const lane = SFX_LANE[name] + ((sfxCount[name] = (sfxCount[name] || 0) + 1) % 2);
+  sfxEls.push(`<audio id="sfx-${sfxEls.length}" src="${f.src}" data-start="${r3(Math.max(0, at))}" data-duration="${r3(f.duration)}" data-track-index="${lane}" data-volume="${vol}"></audio>`);
+};
+
 const ui = script.ui;
 const tag = `<div class="tag">${icon('info', 'ic ic-s')}<span>${esc(script.illustrative_label)}</span></div>`;
 
@@ -95,6 +108,7 @@ const html = {};
   T.push(`tl.fromTo("#hook-hand-h",{rotation:40},{rotation:160,svgOrigin:"100 100",duration:${r3(s.duration)},ease:"none"},${r3(s.start)});`);
   script.hook.screen.busy_items.forEach((_, i) => {
     fromTo(`#hook-chip-${i}`, { opacity: 0, scale: 0.5, y: 60, rotation: (i % 2 ? 1 : -1) * 8 }, { opacity: 1, scale: 1, y: 0, rotation: (i % 2 ? -1 : 1) * 2, duration: 0.5, ease: 'back.out(1.8)' }, s.start + 0.25 + i * 0.22);
+    sfx('pop', s.start + 0.25 + i * 0.22, 0.22);
     fromTo(`#hook-chip-${i} .ping`, { scale: 0 }, { scale: 1, duration: 0.3, ease: 'back.out(3)' }, s.start + 0.55 + i * 0.22);
     to(`#hook-chip-${i}`, { x: (i % 2 ? 6 : -6), duration: 0.08, repeat: 7, yoyo: true, ease: 'none' }, pb.start + 0.1 + i * 0.12);
   });
@@ -132,6 +146,9 @@ const html = {};
   fromTo('#pr-b', { opacity: 0 }, { opacity: 1, duration: 0.3 }, rule.start - 0.1);
   pop('#pr-title', rule.start - 0.05);
   fromTo('#pr-ratio', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)' }, rule.start + 0.25);
+  sfx('pop', rule.start + 0.25, 0.3);
+  sfx('tick', rule.start + 0.6, 0.2);
+  sfx('pop', approx.start, 0.3);
   for (let i = 0; i < 10; i++) fromTo(`#pr-blk-${i}`, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(2)' }, rule.start + 0.6 + i * 0.05);
   pop('#pr-few', rule.start + 1.3);
   fromTo('#pr-arrow', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4 }, rule.start + 1.5);
@@ -179,6 +196,7 @@ function exampleMotion(id) {
     const g = seg(id, k);
     // Light the step when its narration starts, but not before its entry fade ends.
     to(`#${id}-st-${k}`, { opacity: 1, duration: 0.35 }, Math.max(g.start - 0.1, s.start + 0.86 + i * 0.08));
+    sfx('tick', Math.max(g.start - 0.1, s.start + 0.86 + i * 0.08), 0.2);
     fromTo(`#${id}-bar-${k}`, { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: 'power2.out' }, g.start - 0.1);
     fromTo(`#${id}-ic-${k}`, { scale: 1 }, { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1, ease: 'power1.inOut' }, g.start - 0.1);
     if (i < 3) to(`#${id}-st-${k}`, { opacity: 0.62, duration: 0.35 }, seg(id, STEP_KEYS[i + 1]).start - 0.1);
@@ -212,6 +230,7 @@ function exampleMotion(id) {
     else to(`#ex1-row-${i}`, { opacity: 0.45, duration: 0.4 }, a.start - 0.6);
   });
   pop('#ex1-sum', a.start - 0.2);
+  sfx('chime', a.start - 0.2, 0.3);
 }
 
 // Example 2: Pareto chart of sales share by product group, with the cumulative line.
@@ -254,6 +273,7 @@ function exampleMotion(id) {
   items.forEach((_, i) => fromTo(`#ex2-d-${i}`, { opacity: 0 }, { opacity: 1, duration: 0.2 }, m.start + 0.9 + (1.4 * (i + 0.5)) / items.length));
   fromTo('#ex2-mark', { opacity: 0 }, { opacity: 1, duration: 0.4 }, a.start - 0.5);
   pop('#ex2-call', a.start - 0.3);
+  sfx('chime', a.start - 0.3, 0.3);
 }
 
 // Example 3: the most common questions turn into approved Templates.
@@ -286,6 +306,8 @@ function exampleMotion(id) {
     if (!top.has(it)) to(`#ex3-q-${i}`, { opacity: 0.45, duration: 0.4 }, a.start - 0.4);
   });
   pop('#ex3-sum', m.start + 1.5);
+  sfx('pop', a.start - 0.3, 0.3);
+  sfx('chime', b.start - 0.2, 0.3);
   fromTo('#ex3-card', { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)' }, a.start - 0.3);
   items.forEach((it, i) => {
     if (top.has(it)) T.push(`tl.to("#ex3-l-${i}",{strokeDashoffset:0,duration:0.6,ease:"power2.inOut"},${r3(a.start + 0.1 + i * 0.12)});`);
@@ -319,6 +341,8 @@ function exampleMotion(id) {
     const dy = (rand() - 0.5) * 200;
     fromTo(`#ex4-c-${k}`, { opacity: 0, x: dx, y: dy, rotation: (rand() - 0.5) * 30 }, { opacity: 1, x: 0, y: 0, rotation: 0, duration: 0.7, ease: 'power3.inOut' }, m.start + 0.4 + i * 0.12);
   });
+  sfx('pop', m.start + 0.4, 0.2);
+  sfx('chime', a.start + 0.2, 0.3);
   fromTo('#ex4-dist', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, m.start + 1.2);
   c.distractions.forEach((x, i) => {
     fromTo(`#ex4-d-${i}`, { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: 'power2.out' }, m.start + 1.4 + i * 0.15);
@@ -339,6 +363,8 @@ function exampleMotion(id) {
   roles.forEach((r, i) => {
     const g = seg('summary', r);
     fromTo(`#sum-c-${i}`, { opacity: 0, y: 50, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'back.out(1.6)' }, g.start - 0.25);
+    sfx('pop', g.start - 0.25, 0.25);
+    sfx('tick', g.end - 0.5, 0.2);
     fromTo(`#sum-ok-${i}`, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' }, g.end - 0.5);
   });
 }
@@ -365,6 +391,10 @@ function exampleMotion(id) {
       ${sc.brand_tagline.trim() === 'AI For Business' ? '' : `<div class="tagline" id="tagline">${esc(sc.brand_tagline)}</div>`}
     </div>`;
   pop('#cl-title', cta.start - 0.3);
+  sfx('pop', cta.start + 0.4, 0.25);
+  sfx('pop', cta.start + 0.9, 0.25);
+  sfx('pop', cta.end - 1.2, 0.3);
+  sfx('outro', brand.start, 0.45);
   fromTo('#cl-c1', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, cta.start + 0.4);
   fromTo('#cl-c2', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, cta.start + 0.9);
   fromTo('#cl-stamp', { opacity: 0, scale: 1.6, rotation: -14 }, { opacity: 1, scale: 1, rotation: -4, duration: 0.45, ease: 'back.out(2)' }, cta.end - 1.2);
@@ -382,6 +412,7 @@ const sceneSections = timing.scenes.map((s, i) => {
   const last = i === timing.scenes.length - 1;
   fromTo(`#s-${s.id} > .scene-inner`, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: 'power1.out' }, s.start);
   if (!last) to(`#s-${s.id} > .scene-inner`, { opacity: 0, duration: 0.3, ease: 'power1.in' }, s.start + s.duration - 0.3);
+  if (i > 0) sfx('whoosh', s.start - 0.35, 0.5);
   if (i > 0) fromTo('#sweep', { xPercent: -130 }, { xPercent: 130, duration: 0.7, ease: 'power2.inOut', immediateRender: i === 1 }, s.start - 0.35);
   return `<section id="s-${s.id}" class="clip scene" data-start="${r3(s.start)}" data-duration="${r3(s.duration)}" data-track-index="1"><div class="scene-inner sc-${s.id}">${html[s.id]}</div></section>`;
 }).join('\n');
@@ -459,6 +490,7 @@ ${sceneSections}
         <div class="sweep" id="sweep"></div>
       </div>
       ${subs.join('\n      ')}
+ ${sfxEls.join('\n      ')}
       <audio id="narration" src="${audioSrc}" data-start="0" data-duration="${TOTAL}" data-track-index="9" data-volume="1"></audio>
     </div>
     <script>

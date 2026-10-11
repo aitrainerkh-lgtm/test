@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import { client, p, readJson, resolveTtsModel, withRetry, writeJson } from './lib.mjs';
 import { GAP_S, LEAD_IN_S, SCENES, TOTAL_TARGET_S, khmerLength, speechBudget, tailFor } from './plan.mjs';
 import { validateScript } from './schema.mjs';
-import { joinWav, synthesizeScene } from './tts.mjs';
+import { TEMPO, joinWav, synthesizeScene } from './tts.mjs';
 
 const ROUNDS = Number(process.env.FIT_ROUNDS || 2);
 const ai = client();
@@ -66,7 +66,7 @@ for (let round = 0; round <= ROUNDS; round++) {
 }
 
 // A segment far slower than the measured rate may mean the voice read the style note aloud.
-const cps = script.meta?.charsPerSecond;
+const cps = script.meta?.charsPerSecond && script.meta.charsPerSecond * TEMPO;
 if (cps) for (const scene of SCENES) for (const t of voiced[scene.id].takes) {
   if (t.duration > 1.6 * (khmerLength(t.text) / cps) + 0.5) console.warn(`CHECK AUDIO: ${scene.id}.${t.role} is ${t.duration.toFixed(1)} s, much longer than expected. Listen to ${t.file}.`);
 }

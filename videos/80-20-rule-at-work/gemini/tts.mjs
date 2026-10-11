@@ -5,6 +5,8 @@ import fs from 'node:fs';
 import { p, VOICE, withRetry } from './lib.mjs';
 
 export const SAMPLE_RATE = 24000;
+// Speaking speed applied to each line (pitch is kept). 1.2 = 20% faster than the model's natural pace.
+export const TEMPO = Number(process.env.VOICE_TEMPO || 1.2);
 // No style instruction by default: the TTS model was found reading it aloud (in Khmer).
 const STYLE = process.env.GEMINI_TTS_STYLE ?? '';
 
@@ -15,7 +17,7 @@ export function audioDuration(file) {
 
 // Returns { file, duration } for a mono 24 kHz WAV with leading and trailing silence trimmed.
 export async function synthesize(ai, model, text) {
-  const key = crypto.createHash('sha256').update([model, VOICE, STYLE, text].join('\n')).digest('hex').slice(0, 16);
+  const key = crypto.createHash('sha256').update(['v2', model, VOICE, STYLE, text].join('\n')).digest('hex').slice(0, 16);
   const dir = p('audio', 'cache');
   const file = `${dir}/${key}.wav`;
   fs.mkdirSync(dir, { recursive: true });
@@ -34,7 +36,11 @@ export async function synthesize(ai, model, text) {
     if (!part) throw new Error(`TTS returned no audio for: ${text.slice(0, 60)}`);
     const rate = Number(/rate=(\d+)/.exec(part.inlineData.mimeType || '')?.[1] || SAMPLE_RATE);
     const raw = `${dir}/${key}.pcm`;
-    fs.writeFileSync(raw, Buffer.from(part.inlineData.data, 'base64'));
+    // Gemini appends a C2PA content-credentials manifest to the PCM; played as audio it is a loud click.
+    let pcm = Buffer.from(part.inlineData.data, 'base64');
+    const c2pa = pcm.indexOf('C2PA');
+    if (c2pa > 0) pcm = pcm.subarray(0, c2pa - (c2pa % 2));
+    fs.writeFileSync(raw, pcm);
     const trim = 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05';
     execFileSync('ffmpeg', ['-v', 'error', '-y', '-f', 's16le', '-ar', String(rate), '-ac', '1', '-i', raw,
       '-af', `${trim},areverse,${trim},areverse`, '-ar', String(SAMPLE_RATE), '-ac', '1', '-c:a', 'pcm_s16le', file]);
@@ -75,37 +81,65 @@ export function joinWav(parts, outFile) {
 // splits the audio at the pauses between segments. Returns [{ file, duration }] per segment.
 export async function synthesizeScene(ai, model, texts) {
   const whole = await synthesize(ai, model, texts.join('\n\n'));
-  if (texts.length === 1) return [whole];
   const log = spawnSync('ffmpeg', ['-nostats', '-i', whole.file, '-af', 'silencedetect=noise=-38dB:d=0.15', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
-  const starts = [...log.matchAll(/silence_start: ([\d.]+)/g)].map((m) => +m[1]);
-  const ends = [...log.matchAll(/silence_end: ([\d.]+)/g)].map((m) => +m[1]);
-  const gaps = starts.map((s, i) => ({ mid: (s + (ends[i] ?? s)) / 2, len: (ends[i] ?? s) - s })).filter((g) => g.len > 0);
+  const silStart = [...log.matchAll(/silence_start: ([\d.]+)/g)].map((m) => +m[1]);
+  const silEnd = [...log.matchAll(/silence_end: ([\d.]+)/g)].map((m) => +m[1]);
+  const gaps = silStart.map((s, i) => ({ mid: (s + (silEnd[i] ?? s)) / 2, len: (silEnd[i] ?? s) - s })).filter((g) => g.len > 0);
 
-  // Expected cut points from text length; take the longest pause near each one, in order.
-  const lens = texts.map((t) => [...t.replace(/\s/g, '')].length);
-  const total = lens.reduce((a, b) => a + b, 0);
+  // Where each line starts: Gemini listens to the scene and marks the starts, then each
+  // cut snaps to the nearest real pause. Falls back to text length if that fails.
+  const starts = await lineStarts(ai, whole, texts);
   const cuts = [];
-  let acc = 0;
   let floor = 0;
-  for (let i = 0; i < texts.length - 1; i++) {
-    acc += lens[i];
-    const expect = (acc / total) * whole.duration;
-    const window = Math.max(1.5, whole.duration * 0.12);
-    const near = gaps.filter((g) => g.mid > floor + 0.3 && Math.abs(g.mid - expect) < window);
-    const pick = near.sort((a, b) => b.len - a.len || Math.abs(a.mid - expect) - Math.abs(b.mid - expect))[0];
-    if (!pick) console.warn(`  no pause found near ${expect.toFixed(1)} s in ${whole.file}; cutting by text length`);
-    const at = pick ? pick.mid : expect;
+  for (let i = 1; i < texts.length; i++) {
+    const want = starts[i];
+    const near = gaps.filter((g) => g.mid > floor + 0.3 && Math.abs(g.mid - want) < 0.7);
+    const pick = near.sort((a, b) => Math.abs(a.mid - want) - Math.abs(b.mid - want))[0];
+    const at = Math.max(floor + 0.3, pick ? pick.mid : want - 0.05);
     cuts.push(at);
     floor = at;
   }
   const bounds = [0, ...cuts, whole.duration];
   const trim = 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03';
   return texts.map((_, i) => {
-    const file = whole.file.replace(/\.wav$/, `.seg${i}.wav`);
+    const file = whole.file.replace(/\.wav$/, `.seg${i}.a3.t${TEMPO}.wav`);
     if (!fs.existsSync(file)) {
-      execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', whole.file, '-ss', String(bounds[i]), '-to', String(bounds[i + 1]),
-        '-af', `${trim},areverse,${trim},areverse`, '-c:a', 'pcm_s16le', file]);
+      // Trim, speed up, then fade the edges so no cut can click.
+      const fades = 'afade=t=in:d=0.012,areverse,afade=t=in:d=0.045,areverse';
+      // Cut on the input timeline (before the speed change), then filter.
+      execFileSync('ffmpeg', ['-v', 'error', '-y', '-ss', String(bounds[i]), '-to', String(bounds[i + 1]), '-i', whole.file,
+        '-af', `${trim},areverse,${trim},areverse,atempo=${TEMPO},${fades}`, '-c:a', 'pcm_s16le', file]);
     }
     return { file, duration: audioDuration(file) };
   });
+}
+
+// Asks Gemini (audio understanding) for the start time of each line in a scene recording.
+async function lineStarts(ai, whole, texts) {
+  const cache = whole.file.replace(/\.wav$/, '.starts.json');
+  if (fs.existsSync(cache)) return JSON.parse(fs.readFileSync(cache, 'utf8'));
+  const lens = texts.map((t) => [...t.replace(/\s/g, '')].length);
+  const total = lens.reduce((a, b) => a + b, 0);
+  let acc = 0;
+  const byLength = lens.map((l) => { const at = (acc / total) * whole.duration; acc += l; return at; });
+  try {
+    const res = await withRetry('align', () => ai.models.generateContent({
+      model: process.env.GEMINI_ALIGN_MODEL || 'gemini-3.8-flash',
+      contents: [{ role: 'user', parts: [
+        { text: `This Khmer narration (${whole.duration.toFixed(2)} s) reads these ${texts.length} lines in order:\n` +
+          texts.map((t, i) => `${i + 1}. ${t}`).join('\n') +
+          '\nReturn the time in seconds where each line starts being spoken (line 1 starts near 0).' },
+        { inlineData: { mimeType: 'audio/wav', data: fs.readFileSync(whole.file).toString('base64') } },
+      ] }],
+      config: { responseMimeType: 'application/json', responseJsonSchema: { type: 'object', properties: { starts: { type: 'array', items: { type: 'number' } } }, required: ['starts'] } },
+    }));
+    const starts = JSON.parse(res.text).starts;
+    const ok = starts.length === texts.length && starts.every((x, i) => x >= 0 && x < whole.duration && (!i || x > starts[i - 1]));
+    if (!ok) throw new Error(`bad starts ${JSON.stringify(starts)}`);
+    fs.writeFileSync(cache, JSON.stringify(starts));
+    return starts;
+  } catch (e) {
+    console.warn(`  line alignment failed (${e.message.slice(0, 80)}); cutting by text length`);
+    return byLength;
+  }
 }

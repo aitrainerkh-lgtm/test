@@ -43,6 +43,12 @@ Gemini quotas belong to the Google project, not the key: every key in a project 
 
 If Gemini 3.8 Flash TTS is not available on the key, the run stops and lists the TTS models that are. It never switches model on its own.
 
+## Sound
+
+- Narration: Kore, sped up 20% after recording (`VOICE_TEMPO`, default 1.2; pitch is kept). Each line is faded in and out so no cut can click.
+- Gemini attaches a C2PA content-credentials block to its raw audio; the pipeline strips it before processing (played as audio it is a loud click).
+- Sound effects are synthesized by `build/make-sfx.mjs` (whoosh, pop, tick, chime, outro chord); no stock audio. They sit well below the voice.
+
 ## Content checks (run on every Gemini answer)
 
 - Every on-screen string is Khmer-led, within its length limit, with no emoji.
