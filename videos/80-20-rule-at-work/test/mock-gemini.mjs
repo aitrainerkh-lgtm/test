@@ -9,6 +9,7 @@ import { khmerLength } from '../gemini/plan.mjs';
 const fixture = JSON.parse(fs.readFileSync(new URL('./fixture/script.json', import.meta.url)));
 fixture.problem.narration.rule = 'ច្បាប់ 80/20 ' + fixture.problem.narration.rule;
 let calls = 0;
+let tts = 0;
 
 http.createServer((req, res) => {
   let body = '';
@@ -24,10 +25,14 @@ http.createServer((req, res) => {
     const reply = (t) => send({ candidates: [{ content: { role: 'model', parts: [t] } }] });
     calls++;
     if ((cfg.responseModalities || []).includes('AUDIO')) {
+      console.log(`TTS call ${++tts}`);
       const spoken = text.split('\n').slice(1).join('\n') || text;
-      const secs = khmerLength(spoken) / 11.5; // pretend the voice is slower than the fixture assumed
-      const pcm = Buffer.alloc(Math.round(secs * 24000) * 2);
-      for (let i = 0; i < pcm.length / 2; i++) pcm.writeInt16LE(Math.round(6000 * Math.sin(i / 10)), i * 2);
+      // Tone for each paragraph (slower than the fixture assumed), 0.5 s of silence between paragraphs.
+      const pcm = Buffer.concat(spoken.split('\n\n').flatMap((para, k) => {
+        const tone = Buffer.alloc(Math.round((khmerLength(para) / 11.5) * 24000) * 2);
+        for (let i = 0; i < tone.length / 2; i++) tone.writeInt16LE(Math.round(6000 * Math.sin(i / 10)), i * 2);
+        return k ? [Buffer.alloc(24000), tone] : [tone];
+      }));
       return reply({ inlineData: { mimeType: 'audio/L16;codec=pcm;rate=24000', data: pcm.toString('base64') } });
     }
     if (cfg.responseMimeType === 'application/json') {

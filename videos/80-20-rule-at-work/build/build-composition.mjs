@@ -361,7 +361,7 @@ function exampleMotion(id) {
         <circle id="mk-80" cx="60" cy="60" r="46" class="mk-80" pathLength="100" transform="rotate(-90 60 60)" style="stroke-dasharray:80 100;stroke-dashoffset:80"/>
         <circle id="mk-20" cx="60" cy="60" r="46" class="mk-20" pathLength="100" transform="rotate(198 60 60)" style="stroke-dasharray:18 100;stroke-dashoffset:18"/></svg>
       <div class="wordmark" id="wordmark">AI For Business</div>
-      <div class="tagline" id="tagline">${esc(sc.brand_tagline)}</div>
+      ${sc.brand_tagline.trim() === 'AI For Business' ? '' : `<div class="tagline" id="tagline">${esc(sc.brand_tagline)}</div>`}
     </div>`;
   pop('#cl-title', cta.start - 0.3);
   fromTo('#cl-c1', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, cta.start + 0.4);
@@ -372,7 +372,7 @@ function exampleMotion(id) {
   T.push(`tl.to("#mk-80",{strokeDashoffset:0,duration:0.9,ease:"power2.out"},${r3(brand.start)});`);
   T.push(`tl.to("#mk-20",{strokeDashoffset:0,duration:0.5,ease:"power2.out"},${r3(brand.start + 0.7)});`);
   fromTo('#wordmark', { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out' }, brand.start + 0.3);
-  pop('#tagline', brand.start + 0.7);
+  if (sc.brand_tagline.trim() !== 'AI For Business') pop('#tagline', brand.start + 0.7);
   to('#brandbug', { opacity: 0, duration: 0.4 }, brand.start - 0.4);
 }
 

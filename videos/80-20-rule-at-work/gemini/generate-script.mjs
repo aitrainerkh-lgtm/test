@@ -29,14 +29,9 @@ if (!cal || cal.ttsModel !== ttsModel) {
   const sample = (await ask([{ role: 'user', parts: [{ text:
     'Write about 6 short sentences of natural spoken Khmer, as a friendly manager explaining to staff how to plan the working day. ' +
     'Use simple words, no numbers, no emoji, no English. Return only the Khmer text.' }] }], false)).trim();
-  const takes = [];
-  for (const sentence of sample.split(/(?<=[។?!])\s*/).filter((x) => x.trim())) {
-    const { duration } = await synthesize(ai, ttsModel, sentence);
-    takes.push({ sentence, chars: khmerLength(sentence), duration });
-  }
-  const chars = takes.reduce((a, t) => a + t.chars, 0);
-  const secs = takes.reduce((a, t) => a + t.duration, 0);
-  cal = { ttsModel, charsPerSecond: +(chars / secs).toFixed(2), takes };
+  // One TTS call for the whole sample (free-tier keys allow few calls a day).
+  const { duration } = await synthesize(ai, ttsModel, sample);
+  cal = { ttsModel, charsPerSecond: +(khmerLength(sample) / duration).toFixed(2), sample, duration };
   writeJson(calFile, cal);
 }
 console.log(`Measured speaking rate: ${cal.charsPerSecond} Khmer characters per second`);

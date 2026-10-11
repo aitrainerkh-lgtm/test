@@ -1,5 +1,5 @@
-// Gemini TTS: one call per narration segment, cached by text + voice + model.
-import { execFileSync } from 'node:child_process';
+// Gemini TTS, cached by text + voice + model. One call per scene keeps within free-tier daily limits.
+import { execFileSync, spawnSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { p, VOICE, withRetry } from './lib.mjs';
@@ -68,4 +68,43 @@ export function joinWav(parts, outFile) {
   header.write('data', 36);
   header.writeUInt32LE(data.length, 40);
   fs.writeFileSync(outFile, Buffer.concat([header, data]));
+}
+
+// Voices a whole scene in one call (segments read as separate paragraphs), then
+// splits the audio at the pauses between segments. Returns [{ file, duration }] per segment.
+export async function synthesizeScene(ai, model, texts) {
+  const whole = await synthesize(ai, model, texts.join('\n\n'));
+  if (texts.length === 1) return [whole];
+  const log = spawnSync('ffmpeg', ['-nostats', '-i', whole.file, '-af', 'silencedetect=noise=-38dB:d=0.15', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
+  const starts = [...log.matchAll(/silence_start: ([\d.]+)/g)].map((m) => +m[1]);
+  const ends = [...log.matchAll(/silence_end: ([\d.]+)/g)].map((m) => +m[1]);
+  const gaps = starts.map((s, i) => ({ mid: (s + (ends[i] ?? s)) / 2, len: (ends[i] ?? s) - s })).filter((g) => g.len > 0);
+
+  // Expected cut points from text length; take the longest pause near each one, in order.
+  const lens = texts.map((t) => [...t.replace(/\s/g, '')].length);
+  const total = lens.reduce((a, b) => a + b, 0);
+  const cuts = [];
+  let acc = 0;
+  let floor = 0;
+  for (let i = 0; i < texts.length - 1; i++) {
+    acc += lens[i];
+    const expect = (acc / total) * whole.duration;
+    const window = Math.max(1.5, whole.duration * 0.12);
+    const near = gaps.filter((g) => g.mid > floor + 0.3 && Math.abs(g.mid - expect) < window);
+    const pick = near.sort((a, b) => b.len - a.len || Math.abs(a.mid - expect) - Math.abs(b.mid - expect))[0];
+    if (!pick) console.warn(`  no pause found near ${expect.toFixed(1)} s in ${whole.file}; cutting by text length`);
+    const at = pick ? pick.mid : expect;
+    cuts.push(at);
+    floor = at;
+  }
+  const bounds = [0, ...cuts, whole.duration];
+  const trim = 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03';
+  return texts.map((_, i) => {
+    const file = whole.file.replace(/\.wav$/, `.seg${i}.wav`);
+    if (!fs.existsSync(file)) {
+      execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', whole.file, '-ss', String(bounds[i]), '-to', String(bounds[i + 1]),
+        '-af', `${trim},areverse,${trim},areverse`, '-c:a', 'pcm_s16le', file]);
+    }
+    return { file, duration: audioDuration(file) };
+  });
 }

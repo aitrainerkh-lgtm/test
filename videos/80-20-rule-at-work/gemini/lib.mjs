@@ -58,7 +58,9 @@ export async function resolveTextModel(ai) {
   return pro[0].n;
 }
 
-export async function withRetry(label, fn, tries = 5) {
+// Retries rate limits and server errors. Waits as long as the API asks (free-tier
+// per-minute limits), but stops at once when a daily quota is used up.
+export async function withRetry(label, fn, tries = 8) {
   let wait = 2000;
   for (let i = 1; ; i++) {
     try {
@@ -67,9 +69,15 @@ export async function withRetry(label, fn, tries = 5) {
       const status = e?.status || e?.code;
       const retryable = !status || status === 429 || status >= 500;
       if (i >= tries || !retryable) throw e;
-      console.warn(`${label}: attempt ${i} failed (${status || e.message}); retrying in ${wait / 1000}s`);
-      await new Promise((r) => setTimeout(r, wait));
-      wait *= 2;
+      const asked = Number(/"retryDelay":"(\d+)s"/.exec(e?.message || '')?.[1] || 0) * 1000;
+      if (asked > 5 * 60 * 1000) {
+        console.error(`${label}: daily quota used up (retry in ${Math.round(asked / 3600000)} h). Try again later or use a paid key.`);
+        throw e;
+      }
+      const delay = Math.max(wait, asked + 1000);
+      console.warn(`${label}: attempt ${i} failed (${status || e.message.slice(0, 80)}); retrying in ${Math.round(delay / 1000)}s`);
+      await new Promise((r) => setTimeout(r, delay));
+      wait = Math.min(wait * 2, 60000);
     }
   }
 }

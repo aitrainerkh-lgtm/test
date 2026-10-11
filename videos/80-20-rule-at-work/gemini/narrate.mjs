@@ -5,19 +5,21 @@ import fs from 'node:fs';
 import { client, p, readJson, resolveTtsModel, withRetry, writeJson } from './lib.mjs';
 import { GAP_S, LEAD_IN_S, SCENES, TOTAL_TARGET_S, khmerLength, speechBudget, tailFor } from './plan.mjs';
 import { validateScript } from './schema.mjs';
-import { joinWav, synthesize } from './tts.mjs';
+import { joinWav, synthesizeScene } from './tts.mjs';
 
-const ROUNDS = Number(process.env.FIT_ROUNDS || 3);
+const ROUNDS = Number(process.env.FIT_ROUNDS || 2);
 const ai = client();
 const script = readJson(p('script', 'script.json'));
-const ttsModel = script.meta?.ttsModel || (await resolveTtsModel(ai));
+const ttsModel = process.env.GEMINI_TTS_MODEL || script.meta?.ttsModel || (await resolveTtsModel(ai));
+script.meta = { ...script.meta, ttsModel };
 const textModel = script.meta?.textModel || process.env.GEMINI_TEXT_MODEL;
 
 const tolerance = (scene) => Math.max(0.5, scene.target * 0.05);
 
 async function voiceScene(scene) {
-  const takes = [];
-  for (const role of scene.roles) takes.push({ role, text: script[scene.id].narration[role], ...(await synthesize(ai, ttsModel, script[scene.id].narration[role])) });
+  const texts = scene.roles.map((role) => script[scene.id].narration[role]);
+  const clips = await synthesizeScene(ai, ttsModel, texts);
+  const takes = scene.roles.map((role, i) => ({ role, text: texts[i], ...clips[i] }));
   const speech = takes.reduce((a, t) => a + t.duration, 0);
   const natural = LEAD_IN_S + speech + GAP_S * (takes.length - 1) + tailFor(scene);
   return { takes, speech, natural };
