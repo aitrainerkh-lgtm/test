@@ -5,7 +5,8 @@ import fs from 'node:fs';
 import { p, VOICE, withRetry } from './lib.mjs';
 
 export const SAMPLE_RATE = 24000;
-const STYLE = process.env.GEMINI_TTS_STYLE ?? 'Read this in a warm, clear and friendly voice, at a steady and natural pace, like an experienced Cambodian manager explaining something useful to the team:';
+// No style instruction by default: the TTS model was found reading it aloud (in Khmer).
+const STYLE = process.env.GEMINI_TTS_STYLE ?? '';
 
 export function audioDuration(file) {
   const out = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file]);

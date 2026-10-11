@@ -177,7 +177,8 @@ function exampleMotion(id) {
   fromTo(`#${id}-panel`, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }, s.start + 0.35);
   STEP_KEYS.forEach((k, i) => {
     const g = seg(id, k);
-    to(`#${id}-st-${k}`, { opacity: 1, duration: 0.35 }, g.start - 0.1);
+    // Light the step when its narration starts, but not before its entry fade ends.
+    to(`#${id}-st-${k}`, { opacity: 1, duration: 0.35 }, Math.max(g.start - 0.1, s.start + 0.86 + i * 0.08));
     fromTo(`#${id}-bar-${k}`, { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: 'power2.out' }, g.start - 0.1);
     fromTo(`#${id}-ic-${k}`, { scale: 1 }, { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1, ease: 'power1.inOut' }, g.start - 0.1);
     if (i < 3) to(`#${id}-st-${k}`, { opacity: 0.62, duration: 0.35 }, seg(id, STEP_KEYS[i + 1]).start - 0.1);

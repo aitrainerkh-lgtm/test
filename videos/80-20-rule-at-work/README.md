@@ -25,13 +25,16 @@ npm run render    # renders/80-20-rule-at-work-km.mp4
    - Gives Gemini a character budget per narration segment from that measured rate, then asks for the full script as JSON (`gemini/script-prompt.md` holds every content rule from the brief).
    - Checks the result (`gemini/schema.mjs`) and sends any problems back to Gemini to fix, up to 3 times.
 2. `npm run narrate` (`gemini/narrate.mjs`)
-   - Voices every segment with Kore and measures it.
+   - Voices each scene with Kore in one request (about 9 requests for the whole video) and splits it into lines at the pauses.
+   - No style instruction is sent with the text: the voice model read such instructions aloud.
    - Any scene more than 5% (minimum 0.5 s) off its target is rewritten by Gemini to the measured length, then voiced again (up to 3 rounds).
    - Writes `assets/narration.wav`, `script/timing.json` and a readable `SCRIPT.md` with timecodes.
 3. `npm run build` (`build/build-composition.mjs`)
    - Builds `index.html`. Each visual beat is placed on the measured start time of its narration segment. Subtitles are timed inside each segment.
 
 ## Models
+
+Gemini quotas belong to the Google project, not the key: every key in a project shares the same daily limits. A free-tier project allows only 10 voice requests a day; use a project with billing turned on.
 
 | Use | Model | Override |
 |---|---|---|
