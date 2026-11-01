@@ -1,0 +1,13 @@
+{
+  "lang": "km",
+  "how_label": "របៀបធ្វើ",
+  "caption": "ការងារ ៤ យ៉ាង ដែលអ្នកអាចឲ្យ AI ជួយបានចាប់ពីថ្ងៃនេះ។\n\n១. សរសេរ Email បានលឿន\n២. សង្ខេបឯកសារវែងៗ\n៣. រៀបចំកិច្ចប្រជុំ\n៤. សរសេរ Post លើ Social Media\n\nសាកល្បងជាមួយ ChatGPT, Claude, Gemini ឬ Copilot។ តើអ្នកនឹងសាកល្បងមួយណាមុនគេ? សរសេរប្រាប់យើងនៅក្នុង Comment។\n\nតាមដាន AI For Business ដើម្បីទទួលបាន AI Tip ថ្មីៗរៀងរាល់ថ្ងៃ។\n\n#AIForBusiness #AI #ChatGPT #Claude #Gemini #Copilot #Cambodia",
+  "scenes": [
+    {"type": "hook", "dur": 5.0, "kicker": "AI Tip ប្រចាំថ្ងៃ", "title": "ប្រើ AI ជួយ|ការងារ ៤ យ៉ាង", "sub": "ងាយស្រួល អនុវត្តបានភ្លាម|មិនត្រូវការ Coding"},
+    {"type": "tip", "dur": 6.0, "n": "១", "title": "សរសេរ Email បានលឿន", "how": "ប្រាប់ AI ពីចំណុចសំខាន់ៗ។ សុំឲ្យវាសរសេរ Email ខ្លី និងគួរសម។"},
+    {"type": "tip", "dur": 6.0, "n": "២", "title": "សង្ខេបឯកសារវែងៗ", "how": "Paste របាយការណ៍ចូល។ សុំឲ្យ AI សង្ខេបជា ៥ ចំណុចសំខាន់។"},
+    {"type": "tip", "dur": 6.0, "n": "៣", "title": "រៀបចំកិច្ចប្រជុំ", "how": "ប្រាប់ AI ពីប្រធានបទ។ សុំ Agenda ដែលកំណត់ពេលវេលា សម្រាប់ចំណុចនីមួយៗ។"},
+    {"type": "tip", "dur": 6.0, "n": "៤", "title": "សរសេរ Post|លើ Social Media", "how": "ពិពណ៌នាពីផលិតផលរបស់អ្នក។ សុំគំនិត Caption ចំនួន ៣។"},
+    {"type": "cta", "dur": 6.0, "title": "ចាប់ផ្តើមពី|ការងារមួយ ថ្ងៃនេះ", "tools": "ChatGPT · Claude|Gemini · Copilot", "button": "តាមដាន AI For Business"}
+  ]
+}
