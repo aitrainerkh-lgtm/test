@@ -1,0 +1,11 @@
+{
+  "caption": "4 everyday work tasks you can hand to AI today.\n\n1. Write emails faster\n2. Summarize long documents\n3. Plan meetings\n4. Draft social media posts\n\nTry them with ChatGPT, Claude, Gemini or Copilot. Which one will you try first? Tell us in the comments.\n\nFollow AI For Business for a new practical AI tip every day.\n\n#AIForBusiness #AI #ChatGPT #Claude #Gemini #Copilot #Cambodia #Productivity",
+  "scenes": [
+    {"type": "hook", "dur": 4.5, "kicker": "DAILY AI TIP", "title": "4 Work Tasks to Give AI Today", "sub": "Simple. Practical. No coding."},
+    {"type": "tip", "dur": 5.5, "n": 1, "title": "Write emails faster", "how": "Give AI your key points. Ask for a short, polite email."},
+    {"type": "tip", "dur": 5.5, "n": 2, "title": "Summarize long documents", "how": "Paste the report. Ask for the 5 most important points."},
+    {"type": "tip", "dur": 5.5, "n": 3, "title": "Plan your meetings", "how": "Share the topics. Ask for an agenda with time for each item."},
+    {"type": "tip", "dur": 5.5, "n": 4, "title": "Draft social media posts", "how": "Describe your product. Ask for 3 caption ideas."},
+    {"type": "cta", "dur": 5.5, "title": "Start with one task today", "tools": "ChatGPT · Claude|Gemini · Copilot", "button": "Follow AI For Business"}
+  ]
+}
